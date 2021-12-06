@@ -1,6 +1,6 @@
 #include "../includes/Logger.h"
 
-unsigned int Logger::logging_level = BTrucks::Utils::LoggingLevel::WARNING;
+unsigned int Logger::logging_level = BTrucks::Utils::LoggingLevel::INFO;
 
 void Logger::SetLoggingLevel(BTrucks::Utils::LoggingLevel::Type level)
 {

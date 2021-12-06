@@ -1,14 +1,24 @@
 #pragma once
 #include "BTrucks.h"
-// #include "Logger.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <string.h>
+#include "Logger.h"
 
 namespace BTrucks{
     class Server{
         private:
-            void Setup();
+            int serverSocket;
+            const int ERROR_SOCKET = -1;
+            bool Setup();
+            int CheckResponse(int result, const char *errorMessage);
         public:
             Server();
-            void InitiateConnection();
+            int InitiateConnection();
+            std::string GetSocketMessage(int clientSocket);
+            bool SendMessage(int clientSocket);
+            int& getServerSocket();
             ~Server();
     };
 }
