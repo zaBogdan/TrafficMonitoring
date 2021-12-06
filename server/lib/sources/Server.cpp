@@ -54,16 +54,6 @@ int BTrucks::Server::CheckResponse(int result, const char *errorMessage)
     return result;
 }
 
-std::string BTrucks::Server::GetSocketMessage(int clientSocket)
-{
-    return "";
-}
-
-bool BTrucks::Server::SendMessage(int clientSocket)
-{
-    return true;
-}
-
 int& BTrucks::Server::getServerSocket()
 {
     return this->serverSocket;

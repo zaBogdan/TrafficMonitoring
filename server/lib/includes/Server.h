@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
-#include "Logger.h"
+#include "../../../shared/lib/includes/Logger.h"
 
 namespace BTrucks{
     class Server{
@@ -16,8 +16,6 @@ namespace BTrucks{
         public:
             Server();
             int InitiateConnection();
-            std::string GetSocketMessage(int clientSocket);
-            bool SendMessage(int clientSocket);
             int& getServerSocket();
             ~Server();
     };
