@@ -7,7 +7,7 @@
 
 name=$1
 echo "[ COMPILER ] Compilation started..."
-g++ -o ${name}.compiled ${name}/${name}.cpp $(find ${name}/lib -name '*.cpp') $(find shared/lib -name '*.cpp')
+g++ -std=c++0x -o ${name}.compiled ${name}/${name}.cpp $(find ${name}/lib -name '*.cpp') $(find shared/lib -name '*.cpp')
 [[ $? -ne 0 ]] && {
     echo "[ COMPILER ] Failed to compile the project"
     exit 1;
