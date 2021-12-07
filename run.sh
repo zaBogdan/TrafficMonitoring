@@ -13,4 +13,4 @@ g++ -std=c++0x -o ${name}.compiled ${name}/main.cpp $(find ${name}/lib -name '*.
     exit 1;
 } 
 echo "[ COMPILER ] Starting the instance"
-./${name}.compiled
+./${name}.compiled $2 $3

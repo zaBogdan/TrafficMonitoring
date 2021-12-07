@@ -16,9 +16,7 @@ SocketOperations* SocketOperations::GetInstance()
 
 std::string SocketOperations::GetMessage(int workingSocket)
 {
-    char* initialBuffer = (char*)malloc(5*sizeof(char));
-    initialBuffer = "1234";
-    std::cout << initialBuffer;
+    // char* initialBuffer = (char*)malloc(5*sizeof(char));
     return "";
 }
 
@@ -26,6 +24,8 @@ bool SocketOperations::SendMessage(int workingSocket, std::string msg)
 {
     return true;
 }
+
+// https://www.youtube.com/watch?v=Y6pFtgRdUts
 // std::string SocketOperations::GetSocketMessage(int clientSocket)
 // {
 //     bzero (msg, 100);

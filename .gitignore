@@ -1,2 +1,5 @@
 **/*.compiled
 **/.vscode
+documentation/*
+!**/documentation/*.tex
+!**/documentation/*.pdf

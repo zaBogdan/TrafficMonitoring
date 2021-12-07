@@ -37,7 +37,7 @@ void Logger::Debug(std::string msg)
 void Logger::Print(BTrucksShared::Utils::LoggingLevel::Type level, std::string msg)
 {
     if(level >= Logger::logging_level)
-        printf("%s[ SERVER ] %s\n", Logger::GetLevelString(level).c_str(), msg.c_str());
+        printf("%s - %s[ SERVER ] %s\n",BTrucksShared::Utils::CurrentDateTime().c_str(), Logger::GetLevelString(level).c_str(), msg.c_str());
 }
 
 std::string Logger::GetLevelString(BTrucksShared::Utils::LoggingLevel::Type level)
