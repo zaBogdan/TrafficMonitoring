@@ -3,22 +3,34 @@
 % \usepackage{amsmath}
 
 
-\author{Bogdan Zavadovschi B5}
+\author{Bogdan Zavadovschi \protect\\ 
+\protect\\
+\small Facultatea de Informatică, 
+\protect\\
+\small Universitatea "Alexandru Ioan Cuza" Iași,
+\protect\\ 
+\small bogdan.zavadovschi@info.uaic.ro}
 \title{
-    Retele de calculatoare: \protect\\ 
-    Monitorizarea traficului
-    }
+    \textbf{Monitorizarea traficului} 
+}
+\date{}
 
 
 \begin{document}
 \maketitle
 \begin{abstract}
-    Monitorizarea traficului este un proiect care consta in implementarea 
+    Monitorizarea traficului este un proiect care consta in implementarea unei aplicații prin care un participant la trafic poate transmite si primi informații despre diverse evenimente rutiere, transmițând totodata viteza și locația la un interval regulat de timp. Totodată acesta poate sa primească și diverse informații despre vreme, prețul combustibilului și ultimele evenimente sportive. Aceasta este alcătuită din două componente: un client și un server. Ambele folosesc tehnici de concurență, serverul acceptând mai multe conexiuni simultan, iar clientul poate transmite și primi date în același timp.
 \end{abstract}
 \section{Introducere}
-hello world
-hello world
+Aplicația de monitorizare a traficului constă în două componete cheie: un client și un server, ambele implementate concurent. Clientul are capacitatea de a procesa mesajele venite de la server și de a transmite informații in mod simultan, fără a fi nevoie să se aștepte terminarea unei cereri. Totodată acesta \textbf{simulează} doi sensori: unul de viteză și unul de locație. Acești senzori vor fi interogați la un interval fix de timp pe care fiecare client îl va putea seta, în funcție de preferință, iar informațiile vor fi transmise către server. Pe baza informațiilor primite serverul va returna incidentele din trafic (dacă există in regiunea sa) și va modifica ultima locație a utilizatorului în baza de date.
+
+Serverul are posibilitatea de a suporta mai mulți clienți simultan, prin implementarea concurentă reușind să răspundă la mai mulți clienți in același timp. La un interval regulat de timp, acesta va trimite informații către toți clienții (care au selectată opțiunea) informații despre vreme, evenimente sportive și ultimele prețuri la combustibil. In cazul în care este raportat un incident, serverul va transmite tuturor utilizatorilor din regiunea specificată evenimentul.   
+
+Având imaginea de ansamblu, detaliile privind implementarea și arhitectura aplicației vor fi prezentate în urmatoarele secțiuni, totodată fiind prezentate și anumite imbunătățiri pe partea de logică și performanță a aplicației. 
 \section{Tehnologii utilizate}
+Comunicarea dintre client/clienți și server este realizată prin  \textbf{Transmission Control Protocol (TCP)}. Decizia de utilizare a acestui protocol provine din faptul că toate pachetele de informație trebuie să ajungă în aceeași ordinea, ceea ce este important întrucât pe baza datelor primite de server este implementată logica de transmitere a evenimentelor rutiere, iar  mesajele de tip text primite de client trebuie să fie inteligibile. 
+
+Legat de comunicarea internă a aplicației avem clientul care utilizează două threaduri, unul pentru transmiterea datelor despre viteză și locație (și totodată primirea informațiilor referitoare la limitele de viteză de pe acel segment), iar unul pentru operațiile de bază (raportearea evenimentelor, primirea datelor media). Pe partea serverului avem
 \section{Arhitectura aplicatiei}
 \section{Detalii de implementare}
 \section{Concluzii}
