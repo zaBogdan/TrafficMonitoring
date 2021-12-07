@@ -28,12 +28,19 @@ Serverul are posibilitatea de a suporta mai mulți clienți simultan, prin imple
 
 Având imaginea de ansamblu, detaliile privind implementarea și arhitectura aplicației vor fi prezentate în urmatoarele secțiuni, totodată fiind prezentate și anumite imbunătățiri pe partea de logică și performanță a aplicației. 
 \section{Tehnologii utilizate}
+\subsection{Protocolul de comunicare}
 Comunicarea dintre client/clienți și server este realizată prin  \textbf{Transmission Control Protocol (TCP)}. Decizia de utilizare a acestui protocol provine din faptul că toate pachetele de informație trebuie să ajungă în aceeași ordinea, ceea ce este important întrucât pe baza datelor primite de server este implementată logica de transmitere a evenimentelor rutiere, iar  mesajele de tip text primite de client trebuie să fie inteligibile. 
 
-Legat de comunicarea internă a aplicației avem clientul care utilizează două threaduri, unul pentru transmiterea datelor despre viteză și locație (și totodată primirea informațiilor referitoare la limitele de viteză de pe acel segment), iar unul pentru operațiile de bază (raportearea evenimentelor, primirea datelor media). Pe partea serverului avem
+\subsection{Stocare datelor}
+Pentru a putea ține o anumită evidență a datelor, atât a utilizatorilor, cât și a evenimentelor media, incidente rutiere, limite de viteză șamd. aplicația utilizează o bază de date, \textit{sqlite3} ce asigură persistența și stocarea datelor. Folosindu-se de limbajul SQL, abstractizările la nivelul implementării sunt relativ ușor de făcut, scurtând timpul de implementare.
+
+\subsection{Securitate}
+Din motive de securitate, odată ce avem conexiunea între client și server, vom creea un nou context de tipul SSL, transmitând astfel datele criptate. Pentru acesta vom folosi librăria \textit{OpenSSL} din C++. Totodată stocarea parolele în plain-text nu este o soluție bună pentru zilele noastre, astfel că din aceeași librarie vom folosi agoritmul de hashing \textbf{SHA-256}.
+
 \section{Arhitectura aplicatiei}
+Legat de comunicarea internă a aplicației avem clientul care utilizează două threaduri, unul pentru transmiterea datelor despre viteză și locație (și totodată primirea informațiilor referitoare la limitele de viteză de pe acel segment), iar unul pentru operațiile de bază (raportearea evenimentelor, primirea datelor media) impreună cu Multiplexare I/O pentru comunicarea cu serverul. Pe partea serverului avem Multiplexare I/O pentru comunicarea cu clienții, iar pentru fiecare cerere realizată se va aloca un nou \textit{thread}, urmând să se dealoce după procesarea requestului.
 \section{Detalii de implementare}
 \section{Concluzii}
 \section{Bibliografie}
-
+- https://aticleworld.com/ssl-server-client-using-openssl-in-c/
 \end{document}
