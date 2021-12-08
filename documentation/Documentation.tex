@@ -81,28 +81,43 @@ Pentru a putea comunica între client și server am implementat următorul forma
     \begin{enumerate}
         \item Începe cu \textbar 
         \item (opțional) Urmează un sir de lungime de lungime 33 definit sub forma \(<Identifier>:<Validator>\) (doar pentru comenzile care necesită autentificare). Atât validatorul, cât și identificatorul au o lungime fixă de 16 caractere fiecare. La finalul celor 33 de caractere se va afla un \textbar, urmând mesajul propriu-zis.
+        \item În continuare avem o operație care va fi mereu trată ca \textbf{string} ce se termină în '\textbf{:}' (aceasta poate lua un număr fix de valori)
         \item Se citeste un char care poate sa fie: \textbf{a} (array), \textbf{i} (int), \textbf{s} (string), \textbf{c} (coordonates),\textbf{d} (dict) \textbf{n} (null - nu vom citi și valoarea).
-        \item Urmează o operație care va fi mereu trată ca \textbf{string} ce se termină în '\textbf{:}' (aceasta poate lua un număr fix de valori)
         \item Și în final avem valoarea (ce se va extinde până la final, dat de lungime) - în cazul în care primul caracter citit nu a fost \textbf{n}.
     \end{enumerate}
     Un exemplu pentru acesta ar fi: 
     
-    0051\(\vert\)dAuthenticate:\{suser:zabogdan,spassword:P@ssw0rd1\}
+    0051\(\vert\)Authenticate:d\{suser:zabogdan,spassword:P@ssw0rd1\}
 
     Iar pentru o comandă protejată:
 
-    0084\(\vert\)6dfb834db2b08404:93cb6971e7084ec4\(\vert\)dIncident:
+    0084\(\vert\)6dfb834db2b08404:93cb6971e7084ec4\(\vert\)Incident:
 
-    \{itype:1,cplace:[47.1731307,27.574399]\}
+    d\{itype:1,cplace:[47.1731307,27.574399]\}
 
     \textbf{Notă:} endline-ul într-un scenariu real nu ar exista.
 
-    \item Astfel, din schema enumerată mai sus, putem observa că fiecare cerere execută o singură comandă pe server.
+    \item Din schema enumerată mai sus, putem afirma că orice cerere am aveam, aceasta execută o singură comandă pe server.
 \end{enumerate}
 Folosind această metodă de transmitere a datelor, putem să asigurăm atât validarea userului cât și suportarea mai multor tipuri de date, într-un format standardizat și usor de modificat.
+
+
+\subsection{Validarea comenzilor}
+Întrucât ne-am asigurat că mesajele vin într-un format deja standardizat, înțeles atât de client cât și server, următorul pas ar fi să validăm datele primite. Astfel, pentru fiecare comandă pe care o putem executa pe server există un anumit set de reguli, care vor fi analizate imediat după parsarea mesajelor. Astfel că după parsare avem următoarele elemente:
+\begin{lstlisting}
+    parsedMessage: {
+        token: {
+            identifier: "6dfb834db2b08404",
+            validator: "93cb6971e7084ec4"
+        },
+        command: "Incident",
+        payload: "d{itype:1,cplace:[47.1731307,27.574399]}"
+    }    
+\end{lstlisting}
+Acum, ne cel mai mult ne interesează fieldul \textbf{command}. Pe baza lui, putem afla dacă comanda există, dacă necesită autentificare sau nu și putem valida payload-ul. În final, dacă primele două sunt adevărate, putem începe să parsăm \textbf{payload-ul} și să facem verificările de tip, specifice fiecărei comenzi. 
+
 \subsection{Simularea senzorilor}
 În încercarea de a face o migrare a aplicației cât mai ușoară către un scenariu realist, am implementat doi senzori care generează date random, în următorul mod:
-\vspace{10cm}
 \begin{lstlisting}
     //SpeedSensor.h
     #include <cstdlib>
@@ -172,7 +187,6 @@ Iar senzorul de viteză va avea aproximativ aceeași implementare, singura modif
 \end{lstlisting}
 
 Astfel, toate tabelele din baza noastră de date vor avea o clasă ce va asigura funcțiile esențiale. Obiectele vor fi populate cu date la inițializare, sau la chiar ulterior, folosind funcția Find();
-
 
 \section{Concluzii}
 Aplicația \textbf{Monitorizarea Traficului} implementează un set de funcționalități destul de minimalist, existând loc de îmbunătățiri atât pe partea de securitate cât și pe cea de performanță a aplicației. 
