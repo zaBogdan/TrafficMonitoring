@@ -27,26 +27,26 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-    Monitorizarea traficului este un proiect care consta in implementarea unei aplicații prin care un participant la trafic poate transmite si primi informații despre diverse evenimente rutiere, transmițând totodata viteza și locația la un interval regulat de timp. Totodată acesta poate sa primească și diverse informații despre vreme, prețul combustibilului și ultimele evenimente sportive. Aceasta este alcătuită din două componente: un client și un server. Ambele folosesc tehnici de concurență, serverul acceptând mai multe conexiuni simultan, iar clientul poate transmite și primi date în același timp.
+    Monitorizarea traficului este un proiect care constă în implementarea unei aplicații prin care un participant la trafic poate transmite si primi informații despre diverse evenimente rutiere, trimițând în mod automat viteza și locația la un interval regulat de timp. Acesta poate sa primească și diverse informații despre vreme, prețul combustibilului și ultimele evenimente sportive. Aplicația este alcătuită din două componente: un client și un server, care folosesc tehnici de concurență, din motive diferite: serverul trebuie să accepte mai multe conexiuni simultan, iar clientul poate transmite și primi date în același timp.
 \end{abstract}
 \section{Introducere}
-Aplicația de monitorizare a traficului constă în două componete cheie: un client și un server, ambele implementate concurent. Clientul are capacitatea de a procesa mesajele venite de la server și de a transmite informații in mod simultan, fără a fi nevoie să se aștepte terminarea unei cereri. Totodată acesta \textbf{simulează} doi sensori: unul de viteză și unul de locație. Acești senzori vor fi interogați la un interval fix de timp pe care fiecare client îl va putea seta, în funcție de preferință, iar informațiile vor fi transmise către server. Pe baza informațiilor primite serverul va returna incidentele din trafic (dacă există in regiunea sa) și va modifica ultima locație a utilizatorului în baza de date.
+Aplicația de monitorizare a traficului constă în două componete cheie: un client și un server, ambele implementate concurent. Clientul are capacitatea de a procesa mesajele venite de la server și de a transmite informații in mod simultan, fără a fi nevoie să se aștepte terminarea unei cereri. Totodată acesta \textbf{simulează} doi sensori: unul de viteză și unul de locație. Aceștia vor fi interogați la un interval regulat de timp pe care fiecare client îl va putea seta, în funcție de preferință, iar informațiile vor fi trimise către server. Pe baza datelor primite, serverul va returna incidentele din trafic (dacă există in regiunea sa), limita de viteză pe secțiunea de drum și va modifica ultima locație a utilizatorului în baza de date.
 
-Serverul are posibilitatea de a suporta mai mulți clienți simultan, prin implementarea concurentă reușind să răspundă la mai mulți clienți in același timp. La un interval regulat de timp, acesta va trimite informații către toți clienții (care au selectată opțiunea) informații despre vreme, evenimente sportive și ultimele prețuri la combustibil. In cazul în care este raportat un incident, serverul va transmite tuturor utilizatorilor din regiunea specificată evenimentul.   
+Serverul are posibilitatea de a suporta mai mulți clienți simultan, datorită implementării concurente. La un interval regulat de timp, acesta va trimite informații către toți clienții (care au selectată opțiunea) despre vreme, evenimente sportive și ultimele prețuri la combustibil. În cazul în care este raportat un incident, serverul va notifica toți utilizatorilor din regiunea în care s-a produs despre eveniment.   
 
-Având imaginea de ansamblu, detaliile privind implementarea și arhitectura aplicației vor fi prezentate în urmatoarele secțiuni, totodată fiind prezentate și anumite imbunătățiri pe partea de logică și performanță a aplicației. 
+Având imaginea de ansamblu, detaliile privind implementarea și arhitectura aplicației vor fi prezentate în urmatoarele secțiuni, iar la final voi propune și anumite imbunătățiri pe partea de securitate și performanță a aplicației. 
 \section{Tehnologii utilizate}
 \subsection{Protocolul de comunicare}
-Comunicarea dintre client/clienți și server este realizată prin  \textbf{Transmission Control Protocol (TCP)}. Decizia de utilizare a acestui protocol provine din faptul că toate pachetele de informație trebuie să ajungă în aceeași ordinea, ceea ce este important întrucât pe baza datelor primite de server este implementată logica de transmitere a evenimentelor rutiere, iar  mesajele de tip text primite de client trebuie să fie inteligibile. 
+Comunicarea dintre client/clienți și server este realizată prin  \textbf{Transmission Control Protocol (TCP)}. Decizia de utilizare a acestui protocol provine din faptul că toate pachetele de informație trebuie să ajungă și să fie în aceeași ordine, fiind un aspect important întrucât pe baza datelor primite de server este implementată logica de transmitere a evenimentelor rutiere, iar  mesajele de tip text primite de client trebuie să fie inteligibile. 
 
 \subsection{Stocare datelor}
-Pentru a putea ține o anumită evidență a datelor, atât a utilizatorilor, cât și a evenimentelor media, incidente rutiere, limite de viteză șamd. aplicația utilizează o bază de date, \textit{sqlite3} ce asigură persistența și stocarea datelor. Folosindu-se de limbajul SQL, abstractizările la nivelul implementării sunt relativ ușor de făcut, scurtând timpul de implementare.
+Pentru a putea ține o anumită evidență a datelor, atât a utilizatorilor, a evenimentelor media, incidente rutiere, limite de viteză șamd. aplicația utilizează o bază de date, \textbf{sqlite3} ce asigură persistența și stocarea datelor. Folosindu-se de limbajul SQL, abstractizările la nivelul implementării sunt relativ ușor de făcut, scurtând timpul de implementare.
 
 \subsection{Securitate}
-Din motive de securitate, odată ce avem conexiunea între client și server, vom creea un nou context de tipul SSL, transmitând astfel datele criptate. Pentru acesta vom folosi librăria \textit{OpenSSL} din C++. Totodată stocarea parolele în plain-text nu este o soluție bună pentru zilele noastre, astfel că din aceeași librarie vom folosi agoritmul de hashing \textbf{SHA-256}.
+Din motive de securitate, în momentul în care conexiunea între client și server s-a stabilit, vom creea un nou context de tipul SSL, transmitând astfel datele criptate. Pentru acesta vom folosi librăria \textit{OpenSSL} din C++. Totodată stocarea parolele în plain-text nu este o soluție bună pentru zilele noastre, astfel că din aceeași librarie vom folosi agoritmul de hashing \textbf{SHA-256}.
 
 \subsection{Simularea Senzorilor}
-În încercarea de a face cât mai ușoară tranziția de la o aplicație de calculator la una de mobile, am adăugat un feature prin care se pot simula doi senzori, unul de viteză și unul de locație, strâns legați între ei. Aceștia pot fi citiți, returnând date cu un anumit nivel de corentă între ele.
+În încercarea de a simula un mediu cât mai realist, am adăugat un feature prin care se pot simula doi senzori, unul de viteză și unul de locație, strâns legați între ei. Aceștia pot fi citiți, returnând date cu un anumit nivel de corență între ele.
 
 \section{Arhitectura aplicatiei}
 \subsection{Diagrama aplicației}
@@ -56,9 +56,9 @@ Pentru a putea explica diagrama de mai jos vom împărții în două secțiuni: 
 \subsection{Arhitectura Clientului}
 După cum se poate observa încă din diagramă clientul este bazat pe o arhitectură concurentă, având următoarele caracteristici:
 \begin{enumerate}
-    \item Inițial părintele încearcă să stabilească o conexiune cu serverul, folosind socketuri. 
+    \item Inițial părintele încearcă să stabilească o conexiune cu serverul, folosind socket-uri. 
     \item Dacă serverul acceptă conexiunea, în client se va forma un nou thread care va folosi socketul părinte sa trimită informațiile despre viteză și locație, în timp ce părintele va putea să trimită și să primească informații rutiere sau media.  
-    \item O dată la un interval de timp prestabilit se vor trimite informațiile despre viteză și locație
+    \item La un interval de timp prestabilit se vor trimite informațiile despre viteză și locație
     \item La un alt interval de timp, clientul va primi informații media (dacă a selectat această opțiune)
     \item Daca un client raportează un incident serverul îl va procesa și va încerca să facă boardcast la toți clienții aflați în aria în care s-a raportat incidentul. După cum se poate observa in pașii 6 și respectiv 6' informația nu este transmisă la toți clienții.
 \end{enumerate}
@@ -67,7 +67,7 @@ Severul folosește tot o arhitectură concurentă, prin care reușește să supo
 \begin{enumerate}
     \item Prin \textbf{multiplexarea I/O} se vor monitoriza descriptorii socketurilor asociate clienților remote, creându-se un nou thread la momentul în care o cerere noua ajunge. Astfel putem suporta mai multe cereri simultan.
     \item Primul pas prin care o cerere trece este procesul de autentificare, urmând ca mai apoi să fie validată comanda, iar în final să se încerce procesarea informației. 
-    \item Pentru validarea autentificării folosim tokenuri generate random, care sunt stocate în baza de date și sunt atribuite unui utilizator. Pentru a putea evita orice fel de manipulare a datelor, tokenul este format din doua componente: Identificatorul (care se află stocat în plain text în baza de date) și Validatorul (care se află într-o formă \textbf{hashed}, utilizatorul fiind singurul care are access la varianta plain text.)
+    \item Pentru validarea autentificării folosim tokenuri generate random, care sunt stocate în baza de date și sunt atribuite unui utilizator. Pentru a putea evita orice fel de manipulare a datelor, tokenul este format din două componente: Identificatorul (care se află stocat în plain text în baza de date) și Validatorul (care se află într-o formă \textbf{hashed}, utilizatorul având singura copie a acestuia.)
     \item Dacă autentificarea a avut success se va verifică dacă comanda dată de utilizator există, iar în caz afirmativ se va executa logica. 
     \item În final, indiferent de rezultatul execuției, serverul va trimite un răspuns clientului, urmând ca mai apoi să fie închis thread-ul ce s-a ocupat de răspuns.
 \end{enumerate}
@@ -76,16 +76,16 @@ Severul folosește tot o arhitectură concurentă, prin care reușește să supo
 \subsection{Trimiterea Mesajelor}
 Pentru a putea comunica între client și server am implementat următorul format prin care mesajele sunt parsate (pe baza aceasta se pot recreea și pașii de construire):
 \begin{enumerate}
-    \item Orice mesaj primit sau trimis este prefixat pe 4 biti cu lungimea acestuia (astfel că lungimea maximă a unui mesaj este de 9999 caractere). Prin simulările făcute, am observat că nu ar exista niciun caz în care are trebui să trimitem un mesaj mai mare de 10KB. Un exemplu pentru format ar fi: \textbf{0010helloworld}
+    \item Orice mesaj primit sau trimis este prefixat pe 4 biți cu lungimea acestuia (astfel că lungimea maximă a unui mesaj este de 9999 caractere). Prin simulările făcute, am observat că nu ar exista un caz în care are trebui să trimitem un mesaj mai mare de 10KB. Un exemplu pentru format ar fi: \textbf{0010helloworld}
     \item Fiecare element din mesaj este alcătuit din următoarele regului: 
     \begin{enumerate}
         \item Începe cu \textbar 
         \item (opțional) Urmează un sir de lungime de lungime 33 definit sub forma \(<Identifier>:<Validator>\) (doar pentru comenzile care necesită autentificare). Atât validatorul, cât și identificatorul au o lungime fixă de 16 caractere fiecare. La finalul celor 33 de caractere se va afla un \textbar, urmând mesajul propriu-zis.
         \item În continuare avem o operație care va fi mereu trată ca \textbf{string} ce se termină în '\textbf{:}' (aceasta poate lua un număr fix de valori)
-        \item Se citeste un char care poate sa fie: \textbf{a} (array), \textbf{i} (int), \textbf{s} (string), \textbf{c} (coordonates),\textbf{d} (dict) \textbf{n} (null - nu vom citi și valoarea).
+        \item Se citește un char care poate sa fie: \textbf{a} (array), \textbf{i} (int), \textbf{s} (string), \textbf{c} (coordonates),\textbf{d} (dict) \textbf{n} (null - parsarea se operește aici, nu avem payload).
         \item Și în final avem valoarea (ce se va extinde până la final, dat de lungime) - în cazul în care primul caracter citit nu a fost \textbf{n}.
     \end{enumerate}
-    Un exemplu pentru acesta ar fi: 
+    Un exemplu pentru o comandă ce nu necesită ca utilizatorul să fie autentificat ar fi: 
     
     0051\(\vert\)Authenticate:d\{suser:zabogdan,spassword:P@ssw0rd1\}
 
@@ -95,11 +95,9 @@ Pentru a putea comunica între client și server am implementat următorul forma
 
     d\{itype:1,cplace:[47.1731307,27.574399]\}
 
-    \textbf{Notă:} endline-ul într-un scenariu real nu ar exista.
-
     \item Din schema enumerată mai sus, putem afirma că orice cerere am aveam, aceasta execută o singură comandă pe server.
 \end{enumerate}
-Folosind această metodă de transmitere a datelor, putem să asigurăm atât validarea userului cât și suportarea mai multor tipuri de date, într-un format standardizat și usor de modificat.
+Folosind această metodă de transmitere a datelor, putem să asigurăm atât validarea userului cât și suportarea mai multor tipuri de date, într-un format standardizat și ușor de modificat.
 
 
 \subsection{Validarea comenzilor}
@@ -114,10 +112,11 @@ Folosind această metodă de transmitere a datelor, putem să asigurăm atât va
         payload: "d{itype:1,cplace:[47.1731307,27.574399]}"
     }    
 \end{lstlisting}
-Acum, ne cel mai mult ne interesează fieldul \textbf{command}. Pe baza lui, putem afla dacă comanda există, dacă necesită autentificare sau nu și putem valida payload-ul. În final, dacă primele două sunt adevărate, putem începe să parsăm \textbf{payload-ul} și să facem verificările de tip, specifice fiecărei comenzi. 
+Acum, cel mai mult ne interesează fieldul \textbf{command}. Pe baza lui, putem afla dacă comanda există, dacă necesită autentificare sau nu. În final, dacă trece de cele două verificări, putem începe să parsăm \textbf{payload-ul} și să facem validările de tip, specifice fiecărei comenzi. 
 
 \subsection{Simularea senzorilor}
 În încercarea de a face o migrare a aplicației cât mai ușoară către un scenariu realist, am implementat doi senzori care generează date random, în următorul mod:
+\vspace{0.5cm}
 \begin{lstlisting}
     //SpeedSensor.h
     #include <cstdlib>
@@ -186,7 +185,7 @@ Iar senzorul de viteză va avea aproximativ aceeași implementare, singura modif
     }
 \end{lstlisting}
 
-Astfel, toate tabelele din baza noastră de date vor avea o clasă ce va asigura funcțiile esențiale. Obiectele vor fi populate cu date la inițializare, sau la chiar ulterior, folosind funcția Find();
+Astfel, toate tabelele din baza noastră de date vor avea o clasă ce va asigura funcțiile esențiale. Obiectele vor fi populate cu date la inițializare, sau chiar ulterior, folosind funcția Find();
 
 \section{Concluzii}
 Aplicația \textbf{Monitorizarea Traficului} implementează un set de funcționalități destul de minimalist, existând loc de îmbunătățiri atât pe partea de securitate cât și pe cea de performanță a aplicației. 
