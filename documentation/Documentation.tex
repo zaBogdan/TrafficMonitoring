@@ -50,15 +50,39 @@ Din motive de securitate, odată ce avem conexiunea între client și server, vo
 \section{Arhitectura aplicatiei}
 \subsection{Diagrama aplicației}
 \includegraphics[scale=0.5]{DiagramaArhitectura.png}
-\subsection{Arhitectura Clientului}
 
+Pentru a putea explica diagrama de mai jos vom împărții în două secțiuni: clientul și serverul
+\subsection{Arhitectura Clientului}
+După cum se poate observa încă din diagramă clientul este bazat pe o arhitectură concurentă, având următoarele caracteristici:
+\begin{enumerate}
+    \item Inițial părintele încearcă să stabilească o conexiune cu serverul, folosind socketuri. 
+    \item Dacă serverul acceptă conexiunea, în client se va forma un nou thread care va folosi socketul părinte sa trimită informațiile despre viteză și locație, în timp ce părintele va putea să trimită și să primească informații rutiere sau media.  
+    \item O dată la un interval de timp prestabilit se vor trimite informațiile despre viteză și locație
+    \item La un alt interval de timp, clientul va primi informații media (dacă a selectat această opțiune)
+    \item Daca un client raportează un incident serverul îl va procesa și va încerca să facă boardcast la toți clienții aflați în aria în care s-a raportat incidentul. După cum se poate observa in pașii 6 și respectiv 6' informația nu este transmisă la toți clienții.
+\end{enumerate}
 \subsection{Arhitectura Serverului}
-Legat de comunicarea internă a aplicației avem clientul care utilizează două threaduri, unul pentru transmiterea datelor despre viteză și locație (și totodată primirea informațiilor referitoare la limitele de viteză de pe acel segment), iar unul pentru operațiile de bază (raportearea evenimentelor, primirea datelor media) impreună cu Multiplexare I/O pentru comunicarea cu serverul. Pe partea serverului avem Multiplexare I/O pentru comunicarea cu clienții, iar pentru fiecare cerere realizată se va aloca un nou \textit{thread}, urmând să se dealoce după procesarea requestului.
+Severul folosește tot o arhitectură concurentă, prin care reușește să suportate atât mai multe conexiuni simultan, cât și să răspundă la mai mulți clienți în același timp.
+\begin{enumerate}
+    \item Prin \textbf{multiplexarea I/O} se vor monitoriza descriptorii socketurilor asociate clienților remote, creându-se un nou thread la momentul în care o cerere noua ajunge. Astfel putem suporta mai multe cereri simultan.
+    \item Primul pas prin care o cerere trece este procesul de autentificare, urmând ca mai apoi să fie validată comanda, iar în final să se încerce procesarea informației. 
+    \item Pentru validarea autentificării folosim tokenuri generate random, care sunt stocate în baza de date și sunt atribuite unui utilizator. Pentru a putea evita orice fel de manipulare a datelor, tokenul este format din doua componente: Identificatorul (care se află stocat în plain text în baza de date) și Validatorul (care se află într-o formă \textbf{hashed}, utilizatorul fiind singurul care are access la varianta plain text.)
+    \item Dacă autentificarea a avut success se va verifică dacă comanda dată de utilizator există, iar în caz afirmativ se va executa logica. 
+    \item În final, indiferent de rezultatul execuției, serverul va trimite un răspuns clientului, urmând ca mai apoi să fie închis thread-ul ce s-a ocupat de răspuns.
+\end{enumerate}
 \section{Detalii de implementare}
 \section{Concluzii}
+Aplicația \textbf{Monitorizarea Traficului} implementează un set de feature-uri destul de minimalist, existând loc de îmbunătățiri atât pe partea de securitate cât și pe cea de performanță a aplicației. 
+
+În primul rând, pentru a putea să scalăm aplicația ar trebui modificată baza de date din \textbf{sqlite3} într-o bază de date de tipul NoSQL (precum MongoDB), iar pentru stocarea datelor de autentificare (token-urile) ar trebui folosit un in-memory database precum Redis (întrucât necesită un număr relativ mare de interogări, mai precis este strâns legat de numărul de cereri pe care le face utilizatorul).
+
+În al doilea rând, generarea unor thread-uri pentru fiecare cerere poate deveni destul de exhaustivă, astfel că nu am putea scala prea mult aplicația fără a a avea probleme majore. O implementare mai bună ar fi prin folosirea unor thread poll-uri, articol ce poate fi regăsit la punctul 3 din Bibliografie. 
+
+În final, pe partea de securitate a aplicației, am putea implementa JSON Web Tokens folosind diferite Key Set-uri, ceea ce ar ajuta foarte mult la scalarea aplicației, în cazul în care ne-am dori mai multe servere să fie pornite simultan.
 \section{Bibliografie}
 \begin{enumerate}
     \item   \href{https://aticleworld.com/ssl-server-client-using-openssl-in-c/}{SSL Server-Client using OpenSSL}
     \item   \href{https://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters}{Algorithm for offsetting coordonates by some amount of meters}
+    \item   \href{https://nachtimwald.com/2019/04/12/thread-pool-in-c/}{Using ThreadPools in C}
 \end{enumerate}
 \end{document}
