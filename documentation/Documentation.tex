@@ -1,6 +1,11 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
 % \usepackage{amsmath}
+\pagestyle{fancy}
 
 
 \author{Bogdan Zavadovschi \protect\\ 
@@ -14,7 +19,9 @@
     \textbf{Monitorizarea traficului} 
 }
 \date{}
-
+\lhead{Bogdan Zavadovschi}
+\rhead{\thepage}
+\cfoot{}
 
 \begin{document}
 \maketitle
@@ -37,10 +44,21 @@ Pentru a putea ține o anumită evidență a datelor, atât a utilizatorilor, c�
 \subsection{Securitate}
 Din motive de securitate, odată ce avem conexiunea între client și server, vom creea un nou context de tipul SSL, transmitând astfel datele criptate. Pentru acesta vom folosi librăria \textit{OpenSSL} din C++. Totodată stocarea parolele în plain-text nu este o soluție bună pentru zilele noastre, astfel că din aceeași librarie vom folosi agoritmul de hashing \textbf{SHA-256}.
 
+\subsection{Simularea Senzorilor}
+În încercarea de a face cât mai ușoară tranziția de la o aplicație de calculator la una de mobile, am adăugat un feature prin care se pot simula doi senzori, unul de viteză și unul de locație, strâns legați între ei. Aceștia pot fi citiți, returnând date cu un anumit nivel de corentă între ele.
+
 \section{Arhitectura aplicatiei}
+\subsection{Diagrama aplicației}
+\includegraphics[scale=0.5]{DiagramaArhitectura.png}
+\subsection{Arhitectura Clientului}
+
+\subsection{Arhitectura Serverului}
 Legat de comunicarea internă a aplicației avem clientul care utilizează două threaduri, unul pentru transmiterea datelor despre viteză și locație (și totodată primirea informațiilor referitoare la limitele de viteză de pe acel segment), iar unul pentru operațiile de bază (raportearea evenimentelor, primirea datelor media) impreună cu Multiplexare I/O pentru comunicarea cu serverul. Pe partea serverului avem Multiplexare I/O pentru comunicarea cu clienții, iar pentru fiecare cerere realizată se va aloca un nou \textit{thread}, urmând să se dealoce după procesarea requestului.
 \section{Detalii de implementare}
 \section{Concluzii}
 \section{Bibliografie}
-- https://aticleworld.com/ssl-server-client-using-openssl-in-c/
+\begin{enumerate}
+    \item   \href{https://aticleworld.com/ssl-server-client-using-openssl-in-c/}{SSL Server-Client using OpenSSL}
+    \item   \href{https://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters}{Algorithm for offsetting coordonates by some amount of meters}
+\end{enumerate}
 \end{document}
