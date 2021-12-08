@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
+\usepackage{listings}
 \graphicspath{ {./images/} }
 % \usepackage{amsmath}
 \pagestyle{fancy}
@@ -71,8 +72,110 @@ Severul folosește tot o arhitectură concurentă, prin care reușește să supo
     \item În final, indiferent de rezultatul execuției, serverul va trimite un răspuns clientului, urmând ca mai apoi să fie închis thread-ul ce s-a ocupat de răspuns.
 \end{enumerate}
 \section{Detalii de implementare}
+Întrucât am menționat destul de explicit modul în care se tratează cererile și cum este implementat clientul și serverul, în următoarele secțiuni voi detalia particularitățile aplicației.
+\subsection{Trimiterea Mesajelor}
+Pentru a putea comunica între client și server am implementat următorul format prin care mesajele sunt parsate (pe baza aceasta se pot recreea și pașii de construire):
+\begin{enumerate}
+    \item Orice mesaj primit sau trimis este prefixat pe 4 biti cu lungimea acestuia (astfel că lungimea maximă a unui mesaj este de 9999 caractere). Prin simulările făcute, am observat că nu ar exista niciun caz în care are trebui să trimitem un mesaj mai mare de 10KB. Un exemplu pentru format ar fi: \textbf{0010helloworld}
+    \item Fiecare element din mesaj este alcătuit din următoarele regului: 
+    \begin{enumerate}
+        \item Începe cu \textbar 
+        \item (opțional) Urmează un sir de lungime de lungime 33 definit sub forma \(<Identifier>:<Validator>\) (doar pentru comenzile care necesită autentificare). Atât validatorul, cât și identificatorul au o lungime fixă de 16 caractere fiecare. La finalul celor 33 de caractere se va afla un \textbar, urmând mesajul propriu-zis.
+        \item Se citeste un char care poate sa fie: \textbf{a} (array), \textbf{i} (int), \textbf{s} (string), \textbf{c} (coordonates),\textbf{d} (dict) \textbf{n} (null - nu vom citi și valoarea).
+        \item Urmează o operație care va fi mereu trată ca \textbf{string} ce se termină în '\textbf{:}' (aceasta poate lua un număr fix de valori)
+        \item Și în final avem valoarea (ce se va extinde până la final, dat de lungime) - în cazul în care primul caracter citit nu a fost \textbf{n}.
+    \end{enumerate}
+    Un exemplu pentru acesta ar fi: 
+    
+    0051\(\vert\)dAuthenticate:\{suser:zabogdan,spassword:P@ssw0rd1\}
+
+    Iar pentru o comandă protejată:
+
+    0084\(\vert\)6dfb834db2b08404:93cb6971e7084ec4\(\vert\)dIncident:
+
+    \{itype:1,cplace:[47.1731307,27.574399]\}
+
+    \textbf{Notă:} endline-ul într-un scenariu real nu ar exista.
+
+    \item Astfel, din schema enumerată mai sus, putem observa că fiecare cerere execută o singură comandă pe server.
+\end{enumerate}
+Folosind această metodă de transmitere a datelor, putem să asigurăm atât validarea userului cât și suportarea mai multor tipuri de date, într-un format standardizat și usor de modificat.
+\subsection{Simularea senzorilor}
+În încercarea de a face o migrare a aplicației cât mai ușoară către un scenariu realist, am implementat doi senzori care generează date random, în următorul mod:
+\vspace{10cm}
+\begin{lstlisting}
+    //SpeedSensor.h
+    #include <cstdlib>
+    #include <ctime>
+
+    class SpeedSensor : public Sensor{
+        private:
+            int currentSpeed;
+            Update();
+        public:
+            SpeedSensor();
+            Read();
+    }
+
+    //SpeedSensor.cpp
+    SpeedSensor::SpeedSensor(){
+        std::srand(std::time(nullptr));
+        //maxium car speed will be 200km/h
+        this->currentSpeed = std::rand()%200;
+    }
+    SpeedSensor::Read()
+    {
+        //we will first update the speed 
+        this->Update();
+        //then return the new one
+        return this->currentSpeed;
+    }
+    SpeedSensor::Update()
+    {
+        //the maximum difference that can happen
+        int maximumSpeedDifference = std::rand()%50;
+        //decide weather it will be increasing or 
+        //decreasing speed
+        this->currentSpeed = MAX(0,this->currentSpeed + 
+                    std::rand()%maximumSpeedDifference - 
+                    std::rand()%maximumSpeedDifference);
+    
+    }
+\end{lstlisting}
+Iar senzorul de viteză va avea aproximativ aceeași implementare, singura modificare fiind că vom calcula distanța parcursă bazată pe viteza de la momemntul în care citim din senzor. 
+
+\subsection{Baza de date}
+Întrucât avem nevoie de persistența datelor, acestea trebuiesc salvate într-o bază de date. În schimb, pentru a putea să avem access la date și să realizăm operațiile standard (\textbf{CRUD}) trebuie să facem o clasă care acționează pe post de Wrapper la API-ul de \textit{sqlite3}. Funcțiile pe care le vor moșteni clasele sunt definite astfel:
+
+\begin{lstlisting}
+    //SQLWrapper.h
+    class SQLWrapper{
+        private:
+            //fiecare clasa va avea un UUID
+            std::string UUID = "";
+            SQLWrapper();
+        public:
+            //va update fieldurile clasei
+            virtual bool Find(
+                    std::string key, 
+                    std::string value) = 0;
+            //va modifica adauga o linie baza de date 
+            //cu variabilele nenule din clasa
+            virtual bool Insert() = 0;
+            //va updata linia din clasa cu variabilele
+            //nenule din clasa
+            virtual bool Update() = 0;
+            //va sterge linia din tabel cu UUID-ul din 
+            //clasa
+            virtual bool Delete() = 0;            
+    }
+\end{lstlisting}
+
+Astfel, toate tabelele din baza noastră de date vor avea o clasă ce va asigura funcțiile esențiale. Obiectele vor fi populate cu date la inițializare, sau la chiar ulterior, folosind funcția Find();
+
+
 \section{Concluzii}
-Aplicația \textbf{Monitorizarea Traficului} implementează un set de feature-uri destul de minimalist, existând loc de îmbunătățiri atât pe partea de securitate cât și pe cea de performanță a aplicației. 
+Aplicația \textbf{Monitorizarea Traficului} implementează un set de funcționalități destul de minimalist, existând loc de îmbunătățiri atât pe partea de securitate cât și pe cea de performanță a aplicației. 
 
 În primul rând, pentru a putea să scalăm aplicația ar trebui modificată baza de date din \textbf{sqlite3} într-o bază de date de tipul NoSQL (precum MongoDB), iar pentru stocarea datelor de autentificare (token-urile) ar trebui folosit un in-memory database precum Redis (întrucât necesită un număr relativ mare de interogări, mai precis este strâns legat de numărul de cereri pe care le face utilizatorul).
 
