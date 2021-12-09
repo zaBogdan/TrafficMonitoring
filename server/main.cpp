@@ -1,10 +1,9 @@
-#include "lib/includes/BTrucks.h"
-#include "../shared/lib/includes/BTrucksShared.h"
-#include "lib/includes/Server.h"
-#include "../shared/lib/includes/Logger.h"
-#include "../shared/lib/includes/SocketOperations.h"
-#include "lib/includes/Tokens.h"
-#define DEBUG_MODE true
+#include "BTRCommon.h"
+#include "BTrucksShared.h"
+#include "Server.h"
+#include "Logger.h"
+#include "SocketOperations.h"
+#include "Tokens.h"
 
 int main()
 {
@@ -18,7 +17,9 @@ int main()
     }
     Logger::Info("Attempting to start the server");
     communcation->GetMessage(server.getServerSocket());
+    BTrucks::Tokens token;
 
+    Logger::Debug("You have here a token: "+ token.Generate());
     while(true)
     {
         Logger::Info("Waiting for new connections...");

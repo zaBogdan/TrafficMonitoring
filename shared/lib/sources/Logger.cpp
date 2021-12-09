@@ -1,4 +1,4 @@
-#include "../includes/Logger.h"
+#include "Logger.h"
 
 unsigned int Logger::logging_level = BTrucksShared::Utils::LoggingLevel::INFO;
 

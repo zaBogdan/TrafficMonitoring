@@ -1,6 +1,7 @@
-#include "BTrucks.h"
+#include "BTRCommon.h"
 #include <openssl/rand.h>
-
+#include <openssl/err.h>
+#include <iostream>
 
 namespace BTrucks{
     class Tokens{

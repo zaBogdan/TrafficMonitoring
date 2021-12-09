@@ -1,4 +1,4 @@
-#include "../includes/SocketOperations.h"
+#include "SocketOperations.h"
 
 SocketOperations *SocketOperations::instance = 0;
 

@@ -1,14 +1,14 @@
-#include "../includes/Server.h"
+#include "Server.h"
 
-BTrucks::Server::Server()
+BTrucks::Server::Server(int PORT, int BACKLOG)
 {
     Logger::Debug("Initiating socket connection");
-    if(!this->Setup())
+    if(!this->Setup(PORT, BACKLOG))
     {
         Logger::Critical("Failed to start the server. Exiting");
         exit(-1);
     }
-    Logger::Info("Started listening on port " + std::to_string(BTrucks::runningPort));
+    Logger::Info("Started listening on port " + std::to_string(PORT));
 }
 BTrucks::Server::~Server()
 {
@@ -28,7 +28,7 @@ int BTrucks::Server::InitiateConnection()
     return clientSocket;
 }
 
-bool BTrucks::Server::Setup()
+bool BTrucks::Server::Setup(int PORT, int BACKLOG)
 {
     this->CheckResponse((this->serverSocket = socket(AF_INET, SOCK_STREAM, 0)), "Failed to create the server socket");
     Logger::Debug("Successfully created the socket");
@@ -37,10 +37,10 @@ bool BTrucks::Server::Setup()
 
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = BTrucks::runningPort;
+    server.sin_port = PORT;
 
     this->CheckResponse(bind(this->serverSocket,(struct sockaddr*) &server, sizeof(server)), "Port is already used. Failed to bind.");
-    this->CheckResponse(listen(this->serverSocket, BTrucks::backLog), "Failed to listen on specified port.");
+    this->CheckResponse(listen(this->serverSocket, BACKLOG), "Failed to listen on specified port.");
     return true;
 }
 
