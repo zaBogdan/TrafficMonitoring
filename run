@@ -7,10 +7,10 @@
 
 name=$1
 echo "[ COMPILER ] Compilation started..."
-g++ -std=c++0x -o ${name}.compiled ${name}/main.cpp $(find ${name}/lib -name '*.cpp') $(find shared/lib -name '*.cpp')
+make b$name
 [[ $? -ne 0 ]] && {
     echo "[ COMPILER ] Failed to compile the project"
     exit 1;
 } 
 echo "[ COMPILER ] Starting the instance"
-./${name}.compiled $2 $3
+./build/b${name} $2 $3

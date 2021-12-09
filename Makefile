@@ -14,8 +14,13 @@ CRYPTO_FLAG = -L/usr/local/opt/openssl/lib -I/usr/local/opt/openssl/include -lss
 # flags for compiler
 C_FLAGS = -Wall -Wextra -pedantic -std=c++0x 
 
-server_s: 
+bserver: 
 	@mkdir -p build
-	${COMPILER} -o build/$@ ${C_FLAGS} ${CRYPTO_FLAG} ${LIBS_SERVER} ${SHARED_LIB} ${SERVER_SOURCES} server/main.cpp
+	${COMPILER} -o build/$@ ${C_FLAGS} ${CRYPTO_FLAG} ${LIBS_SERVER} ${SHARED_LIB} server/main.cpp
+
+bclient: 
+	@mkdir -p build
+	${COMPILER} -o build/$@ ${C_FLAGS} ${CRYPTO_FLAG} ${LIBS_CLIENT} ${SHARED_LIB} client/main.cpp
+
 clean:
-	rm -f *compiled
+	rm -rd build

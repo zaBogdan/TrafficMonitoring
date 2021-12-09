@@ -5,3 +5,4 @@ documentation/*
 !**/documentation/*.pdf
 !**/documentation/images/DiagramaArhitectura.png
 **/.DS_STORE
+**/build
