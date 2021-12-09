@@ -16,14 +16,11 @@ int main()
         Logger::Debug("Application is now running in verbose mode...");
     }
     Logger::Info("Attempting to start the server");
-    communcation->GetMessage(server.getServerSocket());
-    BTrucks::Tokens token;
 
-    Logger::Debug("You have here a token: "+ token.Generate());
     while(true)
     {
         Logger::Info("Waiting for new connections...");
-        int newSocket = server.InitiateConnection();
+        int newSocket = server.InitiateConnectionWithClient();
 
         // std::string message = server.GetSocketMessage(newSocket);
     }

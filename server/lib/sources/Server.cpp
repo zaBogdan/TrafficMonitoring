@@ -15,22 +15,22 @@ BTrucks::Server::~Server()
 
 }
 
-int BTrucks::Server::InitiateConnection()
+int BTrucks::Server::InitiateConnectionWithClient()
 {
     struct sockaddr_in client;
     int clientSocket;
     socklen_t clientSize = sizeof(sockaddr_in);
 
     memset(&client, 0, sizeof(client));
-
-    this->CheckResponse(clientSocket = accept(this->serverSocket, (struct sockaddr*) &client,(socklen_t*) &clientSocket), "Failed to accept client connection");
+    
+    BTrucks::Utils::CheckResponse(clientSocket = accept(this->serverSocket, (struct sockaddr*) &client,(socklen_t*) &clientSocket), "Failed to accept client connection");
 
     return clientSocket;
 }
 
 bool BTrucks::Server::Setup(int PORT, int BACKLOG)
 {
-    this->CheckResponse((this->serverSocket = socket(AF_INET, SOCK_STREAM, 0)), "Failed to create the server socket");
+    BTrucks::Utils::CheckResponse((this->serverSocket = socket(AF_INET, SOCK_STREAM, 0)), "Failed to create the server socket");
     Logger::Debug("Successfully created the socket");
     struct sockaddr_in server;
     memset(&server, 0, sizeof(server));
@@ -39,19 +39,9 @@ bool BTrucks::Server::Setup(int PORT, int BACKLOG)
     server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port = PORT;
 
-    this->CheckResponse(bind(this->serverSocket,(struct sockaddr*) &server, sizeof(server)), "Port is already used. Failed to bind.");
-    this->CheckResponse(listen(this->serverSocket, BACKLOG), "Failed to listen on specified port.");
+    BTrucks::Utils::CheckResponse(bind(this->serverSocket,(struct sockaddr*) &server, sizeof(server)), "Port is already used. Failed to bind.");
+    BTrucks::Utils::CheckResponse(listen(this->serverSocket, BACKLOG), "Failed to listen on specified port.");
     return true;
-}
-
-int BTrucks::Server::CheckResponse(int result, const char *errorMessage)
-{
-    if(result == this->ERROR_SOCKET)
-    {
-        Logger::Error(errorMessage);
-        exit(result);
-    }
-    return result;
 }
 
 int& BTrucks::Server::getServerSocket()
