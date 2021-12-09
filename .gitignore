@@ -4,3 +4,4 @@ documentation/*
 !**/documentation/*.tex
 !**/documentation/*.pdf
 !**/documentation/images/DiagramaArhitectura.png
+**/.DS_STORE

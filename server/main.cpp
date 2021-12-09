@@ -3,6 +3,7 @@
 #include "lib/includes/Server.h"
 #include "../shared/lib/includes/Logger.h"
 #include "../shared/lib/includes/SocketOperations.h"
+#include "lib/includes/Tokens.h"
 #define DEBUG_MODE true
 
 int main()
