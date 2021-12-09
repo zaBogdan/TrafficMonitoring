@@ -16,7 +16,6 @@ SocketOperations* SocketOperations::GetInstance()
 
 std::string SocketOperations::GetMessage(int workingSocket)
 {
-    // char* initialBuffer = (char*)malloc(5*sizeof(char));
     return "";
 }
 

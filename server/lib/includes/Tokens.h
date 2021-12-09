@@ -7,7 +7,7 @@
 namespace BTrucks{
     class Tokens{
         private:
-            const int tokenLength = 8;
+            const int tokenLength = TOKEN_SIZE;
         public:
             Tokens();
             std::string Generate();

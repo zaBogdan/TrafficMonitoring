@@ -1,6 +1,7 @@
-#include "../shared/lib/includes/BTrucksShared.h"
-#include "../shared/lib/includes/Logger.h"
-#define DEVELOPMENT_MODE true
+#include <stdlib.h>
+#include "BTRClient.h"
+#include "BTrucksShared.h"
+#include "Client.h"
 
 void printHelp(char* toolName)
 {
@@ -11,15 +12,26 @@ void printHelp(char* toolName)
 
 int main(int argc, char *argv[])
 {
-    if(DEVELOPMENT_MODE == true)
-    {
-        Logger::SetLoggingLevel(BTrucksShared::Utils::LoggingLevel::DEBUG);
-        Logger::Debug("Application is now running in verbose mode...");
-    }
     if(argc<2)
     {
         printHelp(argv[0]);
         return 1;
     }
+    if(DEBUG_MODE == true)
+    {
+        Logger::SetLoggingLevel(BTrucksShared::Utils::LoggingLevel::DEBUG);
+        Logger::Debug("Application is now running in verbose mode...");
+    }
+    Logger::Debug("Starting to initiate connection to the server");
+    //client trying to connect to the server∆
+    BTrucks::Client client(argv[1], atoi(argv[2]));
+
+    do{
+        char* msg = client.ReadFromCLI();
+        Logger::Debug("The message that we read was: "+std::string(msg));
+        //SocketOperation.formatMessage(msg); //i really should rename this class!
+        //client.SendMessage(msg);
+    }while(true);
+
     return 0;
 }
