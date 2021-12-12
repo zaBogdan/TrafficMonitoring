@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <time.h>
 #include <stddef.h>
 #include <stdint.h>

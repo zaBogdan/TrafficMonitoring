@@ -1,6 +1,6 @@
 #pragma once
 #include "BTRShared.h"
-#include "BTRShared.h"
+#include "PrimitiveTypes.h"
 
 namespace BTRShared {
     namespace Command{

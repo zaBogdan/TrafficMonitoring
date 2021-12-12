@@ -1,5 +1,6 @@
 #pragma once
 #define MESSAGE_SEPARATOR "|"
+#define TYPE_SEPARATOR ":"
 
 namespace BTRShared
 {
@@ -15,14 +16,26 @@ namespace BTRShared
         }
         
         namespace DataTypes{
-            enum Type: char{
-                NONE =  'n',
-                ARRAY =  'a',
-                INT =  'i',
-                STRING =  's',
-                COORDINATES =  'c',
-                DICT = 'd'
+            enum Type: const char{
+                NONE,
+                ARRAY,
+                INT,
+                STRING,
+                COORDINATES,
+                DICT
             };
+            inline const char* GetType(Type v)
+            {
+                switch (v)
+                {
+                    case ARRAY:   return "a";
+                    case INT:   return "i";
+                    case STRING:   return "s";
+                    case COORDINATES:   return "c";
+                    case DICT: return "d";
+                    default:      return "n";
+                }
+            }
         }
 
         namespace CommandsCRC {

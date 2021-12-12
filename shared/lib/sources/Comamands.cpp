@@ -31,7 +31,7 @@ std::string BTRShared::Commands::Evaluate(std::string command)
     uint32_t crcValue = BTRShared::Utils::CRCValue(userCmd);
 
 
-    printf("The command %s hash the crcValue: 0x%x",userCmd.c_str(),crcValue);
+    printf("The command %s hash the crcValue: 0x%x\n",userCmd.c_str(),crcValue);
 
     switch(crcValue)
     {
