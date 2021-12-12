@@ -24,21 +24,18 @@ int main(int argc, char *argv[])
         Logger::Debug("Application is now running in verbose mode...");
     }
 
-    std::string message = Message::Format("incident police");
-    std::cout << "\n\nMAIN: " <<  message << '\n';
-
-    //for now removed;
-    return 0;
     Logger::Debug("Starting to initiate connection to the server");
-    //client trying to connect to the server∆
-    BTrucks::Client client(argv[1], atoi(argv[2]));
-
-    do{
-        // char* msg = client.ReadFromCLI();
-        // Logger::Debug("The message that we read was: "+std::string(msg));
-        // msg = Message::Format(msg);
-        //client.SendMessage(msg);
-    }while(true);
+    //client trying to connect to the server
+    // BTrucks::Client client(argv[1], atoi(argv[2]));
+    std::string message = Message::Format("login zaBogdan:P@ssw0rd");
+    printf("Message to be sent to server is: '%s'\n", message.c_str());
+    // do{
+    //     // std::string msg = client.ReadFromCLI();
+    //     // Logger::Debug("The message that we read was: "+std::string(msg));
+    //     // msg = Message::Format(msg);
+    //     // // Logger::Debug("Final message is: '"+msg+"'");
+    //     //client.SendMessage(msg);
+    // }while(true);
 
     return 0;
 }

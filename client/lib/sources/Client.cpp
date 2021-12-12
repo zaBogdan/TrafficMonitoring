@@ -33,5 +33,6 @@ std::string BTrucks::Client::ReadFromCLI()
     fflush(stdout);
     read(0, message, MAXIMUM_READ_BUFFER);
     message[sizeof(message)+1] = '\0';
+    printf("Message is: %s", message);
     return std::string(message);
 }

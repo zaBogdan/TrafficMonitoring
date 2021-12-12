@@ -14,15 +14,21 @@ Message* Message::GetInstance()
     return instance;
 }
 
-std::string Message::Format(std::string msg)
+std::string Message::Format(std::string msg, std::string tokens)
 {
     std::string formatedMessage = BTRShared::Commands::Evaluate(msg);
     if(formatedMessage == "")
     {
         return "";
     }
-    //adding the formatter (here I should get the internal state of the app too - for login)
-    formatedMessage = MESSAGE_SEPARATOR + formatedMessage;
+
+    //added the authentication flow.
+    if(tokens != "")
+    {
+        tokens = MESSAGE_SEPARATOR + tokens;
+    }
+    
+    formatedMessage = tokens + MESSAGE_SEPARATOR + formatedMessage;
     
     //prefixing the message with it's length
     std::string messageLength = std::to_string(formatedMessage.length());
