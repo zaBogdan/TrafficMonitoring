@@ -19,8 +19,9 @@ namespace BTRShared
             strftime(buf, sizeof(buf), "%Y/%m/%d %X", timeStruct);
             return buf;
         }
-        static uint32_t CRCValue(const char *s, size_t n) {
+        static uint32_t CRCValue(std::string s) {
             uint32_t crc=0xFFFFFFFF;
+            size_t n = s.length();
 
             for(size_t i=0;i<n;i++) {
                 char ch=s[i];

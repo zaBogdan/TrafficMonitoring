@@ -1,6 +1,7 @@
 #pragma once
 #include "BTRShared.h"
 #include "Logger.h"
+#include "sourceCommands.h"
 
 namespace BTRShared{
     namespace Commands{

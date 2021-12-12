@@ -11,15 +11,36 @@ std::string BTRShared::Commands::HandleCommand(const char* command, const char* 
 std::string BTRShared::Commands::Evaluate(std::string command)
 {
     Logger::Debug("[EVALUATE] Starting to check the command.");
-    printf("command is: %s", command.c_str());
-    // uint32_t crcValue = BTRShared::Utils::CRCValue(command.c_str(), command.length())
-    // Logger::Debug("[EVALUATE] CrcValue:");
-    // printf("0x%x\n", BTRShared::Utils::CRCValue(command.c_str(), command.length()));
-    // Logger::Debug("[EVALUATE] Starting other shit now");
+    printf("command is: %s\n", command.c_str());
+    
+    //getting the position between command and payload
+    size_t spaceFind = command.find(" ");
+
+    //splitting them
+    std::string userCmd = command.substr(0, spaceFind);
+    std::string payload = command.substr(spaceFind+1);
+    
+    //Doing some normalization:
+    for(auto& c : userCmd)
+    {
+        c = tolower(c);
+    }
+
+    printf("userCmd is: '%s' and payload is: '%s'\n", userCmd.c_str(),payload.c_str());
+    // now we should handle each command with their ruleset.  Calculating crc
+    uint32_t crcValue = BTRShared::Utils::CRCValue(userCmd);
 
 
+    printf("The command %s hash the crcValue: 0x%x",userCmd.c_str(),crcValue);
 
-
-
-    return "Authenticate:d{suser:zaBogdan,spassword:P@ssw0rd1}";
+    switch(crcValue)
+    {
+        case BTRShared::Utils::CommandsCRC::AUTH:
+        case BTRShared::Utils::CommandsCRC::AUTHENTICATE:
+        case BTRShared::Utils::CommandsCRC::LOGIN:
+            return BTRShared::Command::CreateAuthenticateCommand(payload);
+        default:
+            Logger::Error("Command doesn't exist yet. Check the spelling.");
+            return "";
+    }
 }

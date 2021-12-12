@@ -25,10 +25,15 @@ namespace BTRShared
             };
         }
 
-        // namespace Commands {
-        //     enum Type: char{
+        namespace CommandsCRC {
+            enum Type: uint32_t{
+                AUTH = 0xf8deb059,
+                AUTHENTICATE = 0xe500db4,
+                LOGIN = 0xaa08cb10,
 
-        //     };
-        // }
+                LOGOUT = 0x35ccf52f,
+
+            };
+        }
     }
 }
