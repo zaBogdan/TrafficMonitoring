@@ -1,16 +1,16 @@
 #pragma once
-#include "BTrucksShared.h"
+#include "BTRShared.h"
 #include <cstdarg>
 #include <cstddef>
 
 class Logger{
     private:
         static unsigned int logging_level;
-        static std::string GetLevelString(BTrucksShared::Utils::LoggingLevel::Type level);
-        static void Print(BTrucksShared::Utils::LoggingLevel::Type level, std::string msg);
+        static std::string GetLevelString(BTRShared::Utils::LoggingLevel::Type level);
+        static void Print(BTRShared::Utils::LoggingLevel::Type level, std::string msg);
         Logger();
     public:
-        static void SetLoggingLevel(BTrucksShared::Utils::LoggingLevel::Type level);
+        static void SetLoggingLevel(BTRShared::Utils::LoggingLevel::Type level);
         static void Critical(std::string msg);
         static void Error(std::string msg);
         static void Warning(std::string msg);

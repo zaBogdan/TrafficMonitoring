@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "BTRClient.h"
-#include "BTrucksShared.h"
+#include "BTRShared.h"
+#include "Message.h"
 #include "Client.h"
 
 void printHelp(char* toolName)
@@ -19,17 +20,23 @@ int main(int argc, char *argv[])
     }
     if(DEBUG_MODE == true)
     {
-        Logger::SetLoggingLevel(BTrucksShared::Utils::LoggingLevel::DEBUG);
+        Logger::SetLoggingLevel(BTRShared::Utils::LoggingLevel::DEBUG);
         Logger::Debug("Application is now running in verbose mode...");
     }
+
+    std::string message = Message::Format("auth zaBogdan:P@ssw0rd1");
+    std::cout << "\n\nMAIN: " <<  message << '\n';
+
+    //for now removed;
+    return 0;
     Logger::Debug("Starting to initiate connection to the server");
     //client trying to connect to the server∆
     BTrucks::Client client(argv[1], atoi(argv[2]));
 
     do{
-        char* msg = client.ReadFromCLI();
-        Logger::Debug("The message that we read was: "+std::string(msg));
-        //SocketOperation.formatMessage(msg); //i really should rename this class!
+        // char* msg = client.ReadFromCLI();
+        // Logger::Debug("The message that we read was: "+std::string(msg));
+        // msg = Message::Format(msg);
         //client.SendMessage(msg);
     }while(true);
 

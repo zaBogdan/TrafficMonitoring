@@ -1,18 +1,17 @@
 #include "BTRCommon.h"
-#include "BTrucksShared.h"
+#include "BTRShared.h"
 #include "Server.h"
 #include "Logger.h"
-#include "SocketOperations.h"
 #include "Tokens.h"
 
 int main()
 {
     BTrucks::Server server;
-    SocketOperations *communcation = SocketOperations::GetInstance();
+    // SocketOperations *communcation = SocketOperations::GetInstance();
     
     if(DEBUG_MODE == true)
     {
-        Logger::SetLoggingLevel(BTrucksShared::Utils::LoggingLevel::DEBUG);
+        Logger::SetLoggingLevel(BTRShared::Utils::LoggingLevel::DEBUG);
         Logger::Debug("Application is now running in verbose mode...");
     }
     Logger::Info("Attempting to start the server");
