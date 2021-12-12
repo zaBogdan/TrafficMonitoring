@@ -3,7 +3,7 @@
 
 std::string BTRShared::Command::CreateIncidentCommand(std::string payload)
 {
-    
+
     return payload;
 }
 

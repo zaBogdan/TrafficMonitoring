@@ -5,14 +5,41 @@
 namespace BTRShared
 {
     namespace Utils{
+
+        struct Cords {
+            double longitute = 0.000000, latitude = 0.000000;
+            void print(bool prefix = true){
+                if(prefix)
+                    printf("[ Coordinates ] ");
+                printf("%.6f, %.6f", latitude, longitute);
+                if(prefix)
+                printf("\n");
+            } 
+        };
+
         struct KeyValue {
             std::string key="", value="";
-            bool isInteger = false, isCoordinates = false;
+            int number = 0;
+            Cords coordinates;
 
             void print(){
-                printf("[ KeyValue ] Key: %s, Value: %s\n",this->key.c_str(), this->value.c_str());
+                printf("[ KeyValue ] ");
+                if(key != "")
+                    printf("Key: '%s' ", key.c_str());
+                if(value != "")
+                    printf("StringValue: '%s' ", value.c_str());
+                else if(coordinates.latitude != 0 && coordinates.longitute != 0)
+                {
+                    printf("Coordinates: ");
+                    this->coordinates.print(false);                
+                }else{
+                    printf("Number: %d", number);
+                }
+                printf("\n");
             }
         };
+
+
 
         namespace LoggingLevel{
             enum Type : unsigned int{
@@ -27,17 +54,15 @@ namespace BTRShared
         namespace DataTypes{
             enum Type: const char{
                 NONE,
-                ARRAY,
-                INT,
-                STRING,
-                COORDINATES,
-                DICT
+                INT, //done
+                STRING, //done
+                COORDINATES, //done
+                DICT //done
             };
             inline const char* GetType(Type v)
             {
                 switch (v)
                 {
-                    case ARRAY:   return "a";
                     case INT:   return "i";
                     case STRING:   return "s";
                     case COORDINATES:   return "c";
