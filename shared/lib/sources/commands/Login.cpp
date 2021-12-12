@@ -21,7 +21,7 @@ std::string BTRShared::Command::CreateAuthenticateCommand(std::string payload)
     
     //getting the dictionary
     std::vector<std::string> finalDict {username, password};
-    std::string dict = PrimiteTypes::ToDict(finalDict, "hello");
+    std::string dict = PrimiteTypes::ToDict(finalDict);
 
     //finally build the command 
     std::string command = std::string(COMMAND_NAME) + std::string(":") + dict;

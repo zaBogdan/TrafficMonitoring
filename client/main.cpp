@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
         Logger::Debug("Application is now running in verbose mode...");
     }
 
-    std::string message = Message::Format("login zaBogdan:P@ssw0rd1");
+    std::string message = Message::Format("incident police");
     std::cout << "\n\nMAIN: " <<  message << '\n';
 
     //for now removed;

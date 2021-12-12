@@ -39,6 +39,10 @@ std::string BTRShared::Commands::Evaluate(std::string command)
         case BTRShared::Utils::CommandsCRC::AUTHENTICATE:
         case BTRShared::Utils::CommandsCRC::LOGIN:
             return BTRShared::Command::CreateAuthenticateCommand(payload);
+            
+        case BTRShared::Utils::CommandsCRC::INCIDENT:
+            return BTRShared::Command::CreateIncidentCommand(payload);
+        
         default:
             Logger::Error("Command doesn't exist yet. Check the spelling.");
             return "";

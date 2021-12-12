@@ -5,6 +5,15 @@
 namespace BTRShared
 {
     namespace Utils{
+        struct KeyValue {
+            std::string key="", value="";
+            bool isInteger = false, isCoordinates = false;
+
+            void print(){
+                printf("[ KeyValue ] Key: %s, Value: %s\n",this->key.c_str(), this->value.c_str());
+            }
+        };
+
         namespace LoggingLevel{
             enum Type : unsigned int{
                 CRITICAL =  50,
@@ -37,12 +46,14 @@ namespace BTRShared
                 }
             }
         }
-
+        
         namespace CommandsCRC {
             enum Type: uint32_t{
                 AUTH = 0xf8deb059,
                 AUTHENTICATE = 0xe500db4,
                 LOGIN = 0xaa08cb10,
+
+                INCIDENT = 0x3d03a11a,
 
                 LOGOUT = 0x35ccf52f,
 

@@ -4,10 +4,11 @@
 class PrimiteTypes{
     private:
         PrimiteTypes();
+        static BTRShared::Utils::KeyValue DynamicParsing(std::string data);
     public:
         static std::string ToString(std::string data, std::string key = "");
-        static std::string FromString(std::string data);
+        static BTRShared::Utils::KeyValue FromString(std::string data);
 
-        static std::string ToDict(std::vector<std::string> data, std::string key = "");
-        static std::string FromDict(std::string data);
+        static std::string ToDict(std::vector<std::string> data);
+        static std::vector<BTRShared::Utils::KeyValue> FromDict(std::string data);
 };

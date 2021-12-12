@@ -26,12 +26,12 @@ bool BTrucks::Client::InitiateConnection(const char* ip, int port)
     return true;
 }
 
-char* BTrucks::Client::ReadFromCLI()
+std::string BTrucks::Client::ReadFromCLI()
 {
     char* message = new char[MAXIMUM_READ_BUFFER+1];
     printf("[>] Enter a command: ");
     fflush(stdout);
     read(0, message, MAXIMUM_READ_BUFFER);
     message[sizeof(message)+1] = '\0';
-    return message;
+    return std::string(message);
 }
