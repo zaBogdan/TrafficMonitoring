@@ -29,10 +29,12 @@ bool BTrucks::Client::InitiateConnection(const char* ip, int port)
 std::string BTrucks::Client::ReadFromCLI()
 {
     char* message = new char[MAXIMUM_READ_BUFFER+1];
+    memset(message, 0, MAXIMUM_READ_BUFFER+1);
+    
     printf("[>] Enter a command: ");
     fflush(stdout);
     read(0, message, MAXIMUM_READ_BUFFER);
-    message[sizeof(message)+1] = '\0';
-    printf("Message is: %s", message);
+    message[strlen(message)-1] = 0;
+
     return std::string(message);
 }

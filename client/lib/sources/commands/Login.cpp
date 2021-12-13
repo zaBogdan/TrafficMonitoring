@@ -1,5 +1,4 @@
 #include "sourceCommands.h"
-#define COMMAND_NAME "Authenticate"
 
 std::string BTrucks::Commands::CreateAuthenticateCommand(std::string payload)
 {
@@ -24,7 +23,7 @@ std::string BTrucks::Commands::CreateAuthenticateCommand(std::string payload)
     std::string dict = PrimiteTypes::ToDict(finalDict);
 
     //finally build the command 
-    std::string command = std::string(COMMAND_NAME) + std::string(":") + dict;
+    std::string command = std::string(AUTHENTICATE_COMMAND) + std::string(":") + dict;
 
     //and that's the end.
     return command;

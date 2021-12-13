@@ -1,4 +1,5 @@
 #pragma once
+#include <cstring>
 #include "constants.h"
 #include "Logger.h"
 
