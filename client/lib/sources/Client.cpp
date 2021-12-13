@@ -38,3 +38,11 @@ std::string BTrucks::Client::ReadFromCLI()
 
     return std::string(message);
 }
+
+
+bool BTrucks::Client::SendMessage(std::string message)
+{
+    const char* cstrMsg = message.c_str();
+    printf("MEssage to be sent: '%s'\n", cstrMsg);
+    return true;
+}

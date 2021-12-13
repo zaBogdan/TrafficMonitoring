@@ -16,8 +16,6 @@ std::string BTrucks::Commands::CreateAuthenticateCommand(std::string payload)
     username = PrimiteTypes::ToString(username, "username");
     password = PrimiteTypes::ToString(password, "password");
 
-    printf("Username: '%s', password: '%s'\n", username.c_str(), password.c_str());
-    
     //getting the dictionary
     std::vector<std::string> finalDict {username, password};
     std::string dict = PrimiteTypes::ToDict(finalDict);

@@ -15,5 +15,6 @@ namespace BTrucks{
         public:
             Client(const char* ip, int port);
             std::string ReadFromCLI();
+            bool SendMessage(std::string message);
     };
 }

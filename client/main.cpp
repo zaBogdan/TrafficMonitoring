@@ -30,16 +30,13 @@ int main(int argc, char *argv[])
     //client trying to connect to the server
     BTrucks::Client client(argv[1], atoi(argv[2]));
 
-    // printf("Formated messsage is: %s\n", formatedMsg.c_str());
-    // std::string message = Message::Format(formatedMsg);
-    // printf("Message to be sent to server is: '%s'\n", message.c_str());
     do{
         std::string msg = client.ReadFromCLI();
         Logger::Debug("The message that we read was: "+msg);
         msg = BTrucks::CommandHandler::Create(msg);
         msg = Message::Format(msg);
         Logger::Debug("Final message is: '"+msg+"'");
-        //client.SendMessage(msg);
+        client.SendMessage(msg);
     }while(true);
 
     return 0;
