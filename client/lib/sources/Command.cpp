@@ -1,11 +1,8 @@
 #include "Command.h"
 
 
-std::string BTrucks::CommandHandler::Evaluate(std::string command, std::string token)
+std::string BTrucks::CommandHandler::Create(std::string command, std::string token)
 {
-    Logger::Debug("[EVALUATE] Starting to check the command.");
-    printf("command is: %s\n", command.c_str());
-    
     //getting the position between command and payload
     size_t spaceFind = command.find(" ");
 
@@ -19,13 +16,12 @@ std::string BTrucks::CommandHandler::Evaluate(std::string command, std::string t
         c = tolower(c);
     }
 
-    printf("userCmd is: '%s' and payload is: '%s'\n", userCmd.c_str(),payload.c_str());
     // now we should handle each command with their ruleset.  Calculating crc
     uint32_t crcValue = BTRShared::Utils::CRCValue(userCmd);
 
+    Logger::Info("Handling command '"+userCmd+"' with the crcValue: 0x"+BTrucks::Utils::IntToHex(crcValue));
 
-    printf("The command '%s' hash the crcValue: 0x%x\n",userCmd.c_str(),crcValue);
-
+    //getting the right handler
     switch(crcValue)
     {
         case BTrucks::Utils::Command::AUTH:
@@ -39,7 +35,7 @@ std::string BTrucks::CommandHandler::Evaluate(std::string command, std::string t
         case BTRShared::Utils::Command::RESPONSE:
             return BTRShared::Command::CreateResponseCommand(payload);
         default:
-            Logger::Error("Command doesn't exist yet. Check the spelling.");
+            Logger::Error("Command not found. Make sure you spelled it correctly.");
             return "";
     }
 }

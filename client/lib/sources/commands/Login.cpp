@@ -29,9 +29,3 @@ std::string BTrucks::Commands::CreateAuthenticateCommand(std::string payload)
     //and that's the end.
     return command;
 }
-
-std::string BTrucks::Commands::ParseAuthenticateCommand(std::string payload)
-{
-    //to be implemented
-    return payload;
-}
