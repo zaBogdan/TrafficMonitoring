@@ -1,9 +1,10 @@
 #pragma once
+#include "BTRClient.h"
 #include "BTRShared.h"
 #include "PrimitiveTypes.h"
 
-namespace BTRShared {
-    namespace Command{
+namespace BTrucks {
+    namespace Commands{
         std::string CreateAuthenticateCommand(std::string payload);
         std::string ParseAuthenticateCommand(std::string payload);
 

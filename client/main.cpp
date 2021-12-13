@@ -3,6 +3,7 @@
 #include "BTRShared.h"
 #include "Message.h"
 #include "Client.h"
+#include "Command.h"
 
 void printHelp(char* toolName)
 {
@@ -27,7 +28,10 @@ int main(int argc, char *argv[])
     Logger::Debug("Starting to initiate connection to the server");
     //client trying to connect to the server
     // BTrucks::Client client(argv[1], atoi(argv[2]));
-    std::string message = Message::Format("login zaBogdan:P@ssw0rd");
+    std::string formatedMsg = BTrucks::CommandHandler::Evaluate("Response zaBogdan:P@ssw0rd");
+
+    printf("Formated messsage is: %s\n", formatedMsg.c_str());
+    std::string message = Message::Format(formatedMsg);
     printf("Message to be sent to server is: '%s'\n", message.c_str());
     // do{
     //     // std::string msg = client.ReadFromCLI();

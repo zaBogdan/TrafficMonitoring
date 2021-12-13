@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "BTRShared.h"
 
 class PrimiteTypes{

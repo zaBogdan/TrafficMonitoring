@@ -14,21 +14,14 @@ Message* Message::GetInstance()
     return instance;
 }
 
-std::string Message::Format(std::string msg, std::string tokens)
+std::string Message::Format(std::string formatedMessage)
 {
-    std::string formatedMessage = BTRShared::Commands::Evaluate(msg);
     if(formatedMessage == "")
     {
         return "";
     }
-
-    //added the authentication flow.
-    if(tokens != "")
-    {
-        tokens = MESSAGE_SEPARATOR + tokens;
-    }
     
-    formatedMessage = tokens + MESSAGE_SEPARATOR + formatedMessage;
+    formatedMessage = MESSAGE_SEPARATOR + formatedMessage;
     
     //prefixing the message with it's length
     std::string messageLength = std::to_string(formatedMessage.length());

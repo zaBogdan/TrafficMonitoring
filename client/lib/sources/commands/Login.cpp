@@ -1,7 +1,7 @@
 #include "sourceCommands.h"
 #define COMMAND_NAME "Authenticate"
 
-std::string BTRShared::Command::CreateAuthenticateCommand(std::string payload)
+std::string BTrucks::Commands::CreateAuthenticateCommand(std::string payload)
 {
     size_t splitPosition = payload.find(":");
 
@@ -30,7 +30,7 @@ std::string BTRShared::Command::CreateAuthenticateCommand(std::string payload)
     return command;
 }
 
-std::string BTRShared::Command::ParseAuthenticateCommand(std::string payload)
+std::string BTrucks::Commands::ParseAuthenticateCommand(std::string payload)
 {
     //to be implemented
     return payload;
