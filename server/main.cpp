@@ -43,6 +43,10 @@ int main()
                     //starting to read
                     printf("Starting to read from old connection...");
                     std::string recvMessage = server.ReadMessage(i);
+                    if(recvMessage == "")
+                    {
+                        FD_CLR(i, &currentSockets);
+                    }
                 }
             }
         }
