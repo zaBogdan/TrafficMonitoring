@@ -44,5 +44,6 @@ bool BTrucks::Client::SendMessage(std::string message)
 {
     const char* cstrMsg = message.c_str();
     printf("MEssage to be sent: '%s'\n", cstrMsg);
+    BTrucks::Utils::CheckResponse(write(this->clientSocket, cstrMsg, message.length()*sizeof(char)), "Failed to send the message");
     return true;
 }

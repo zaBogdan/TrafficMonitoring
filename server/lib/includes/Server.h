@@ -4,7 +4,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 namespace BTrucks{
     class Server{
@@ -15,6 +16,7 @@ namespace BTrucks{
             Server(int PORT = RUNNING_PORT, int BACKLOG = BACK_LOG);
             int InitiateConnectionWithClient();
             int& getServerSocket();
+            std::string ReadMessage(int clientSocket);
             ~Server();
     };
 }

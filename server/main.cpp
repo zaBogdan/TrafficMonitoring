@@ -2,7 +2,7 @@
 #include "BTRShared.h"
 #include "Server.h"
 #include "Logger.h"
-#include "Tokens.h"
+#include "Message.h"
 
 int main()
 {
@@ -20,8 +20,9 @@ int main()
     {
         Logger::Info("Waiting for new connections...");
         int newSocket = server.InitiateConnectionWithClient();
-
-        // std::string message = server.GetSocketMessage(newSocket);
+        printf("Starting to read...");
+        std::string recvMessage = server.ReadMessage(newSocket);
+        // std::string message = Message::Parse(newSocket);
     }
 
     return 0;

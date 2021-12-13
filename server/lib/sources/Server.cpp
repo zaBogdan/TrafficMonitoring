@@ -44,6 +44,18 @@ bool BTrucks::Server::Setup(int PORT, int BACKLOG)
     return true;
 }
 
+
+std::string BTrucks::Server::ReadMessage(int clientSocket)
+{
+    char lengthChar[5];
+    size_t bytesRead;
+    bytesRead = read(clientSocket, lengthChar, 5*sizeof(char));
+
+    printf("BYtes: %s\n", lengthChar);
+
+    return "";
+}
+
 int& BTrucks::Server::getServerSocket()
 {
     return this->serverSocket;
