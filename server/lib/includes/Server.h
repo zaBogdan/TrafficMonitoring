@@ -11,6 +11,7 @@ namespace BTrucks{
     class Server{
         private:
             int serverSocket;
+
             bool Setup(int PORT, int BACKLOG);
         public:
             Server(int PORT = RUNNING_PORT, int BACKLOG = BACK_LOG);

@@ -7,7 +7,9 @@
 int main()
 {
     BTrucks::Server server;
-    // SocketOperations *communcation = SocketOperations::GetInstance();
+    fd_set currentSockets, readySockets;
+    FD_ZERO(&currentSockets);
+    FD_SET(server.getServerSocket(), &currentSockets);
     
     if(DEBUG_MODE == true)
     {
@@ -16,13 +18,34 @@ int main()
     }
     Logger::Info("Attempting to start the server");
 
+
     while(true)
     {
-        Logger::Info("Waiting for new connections...");
-        int newSocket = server.InitiateConnectionWithClient();
-        printf("Starting to read...");
-        std::string recvMessage = server.ReadMessage(newSocket);
-        // std::string message = Message::Parse(newSocket);
+        readySockets = currentSockets;
+
+        if(select(FD_SETSIZE, &readySockets, NULL, NULL, NULL) < 0)
+        {
+            Logger::Info("Failed for some reason.");
+            exit(0);
+        }
+        Logger::Info("Found some data to be reading onto.");
+
+        for(int i=0;i<FD_SETSIZE;i++)
+        {
+            if(FD_ISSET(i, &readySockets))
+            {
+                if(i == server.getServerSocket())
+                {
+                    //handling new connection
+                    int newSocket = server.InitiateConnectionWithClient();
+                    FD_SET(newSocket, &currentSockets);
+                }else{
+                    //starting to read
+                    printf("Starting to read from old connection...");
+                    std::string recvMessage = server.ReadMessage(i);
+                }
+            }
+        }
     }
 
     return 0;

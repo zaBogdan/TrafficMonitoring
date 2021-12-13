@@ -39,8 +39,10 @@ bool BTrucks::Server::Setup(int PORT, int BACKLOG)
     server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port = PORT;
 
+    //binding the port and starting to listen on it.
     BTrucks::Utils::CheckResponse(bind(this->serverSocket,(struct sockaddr*) &server, sizeof(server)), "Port is already used. Failed to bind.");
     BTrucks::Utils::CheckResponse(listen(this->serverSocket, BACKLOG), "Failed to listen on specified port.");
+    
     return true;
 }
 
@@ -49,11 +51,17 @@ std::string BTrucks::Server::ReadMessage(int clientSocket)
 {
     char lengthChar[5];
     size_t bytesRead;
-    bytesRead = read(clientSocket, lengthChar, 5*sizeof(char));
+    bytesRead = read(clientSocket, lengthChar, 4*sizeof(char));
+    lengthChar[4] = 0;
 
     printf("BYtes: %s\n", lengthChar);
+    size_t msgLen = std::atoi(lengthChar);
 
-    return "";
+    char *actualMessage = new char[msgLen+1];
+    bytesRead = read(clientSocket, actualMessage, msgLen*sizeof(char));
+    actualMessage[msgLen]=0;
+    printf("Data: '%s'\n", actualMessage);
+    return std::string(actualMessage);
 }
 
 int& BTrucks::Server::getServerSocket()
