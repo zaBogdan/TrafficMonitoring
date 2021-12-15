@@ -59,7 +59,7 @@ int main()
                         {
                             printf("[Proccess] Started working with on pid %d with parent %d.\n", getpid(), getppid());
                             std::string response = BTrucks::CommandHandler::Handle(recvMessage);
-                            printf("[Proccess] Task finished. Killing process %d...\n", getpid());
+                            printf("[Proccess] Task finished with response '%s'. Killing process %d...\n",response.c_str(), getpid());
                             kill(getpid(),SIGKILL);
                         }else{
                             printf("[zaBogdan] Returned to parent with pid %d\n", getpid());

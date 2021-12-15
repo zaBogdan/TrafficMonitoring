@@ -32,33 +32,47 @@ std::string Message::Format(std::string formatedMessage)
     return formatedMessage;
 }
 
-char* Message::Parse(const char* msg)
-{
-    char* data = new char[10];
-    Logger::Debug(msg);
-    return (char*)data;
-}
-// https://www.youtube.com/watch?v=Y6pFtgRdUts
-// std::string Message::GetSocketMessage(int clientSocket)
-// {
-//     bzero (msg, 100);
-//     printf ("[server]Asteptam mesajul...\n");
-//     fflush (stdout);
-      
-//     /* citirea mesajului */
-//     if (read (client, msg, 100) <= 0)
-// 	{
-// 	  perror ("[server]Eroare la read() de la client.\n");
-// 	  close (client);	/* inchidem conexiunea cu clientul */
-// 	  continue;		/* continuam sa ascultam */
-// 	}
-	
-//     printf ("[server]Mesajul a fost receptionat...%s\n", msg);
-      
-//     return "";
-// }
 
-// bool Message::SendMessage(int clientSocket)
-// {
-//     return true;
-// }   
+BTRShared::Utils::MessageFormat Message::Parse(std:: string command)
+{
+    BTRShared::Utils::MessageFormat msg;
+    if(command[0] != MESSAGE_SEPARATOR[0])
+    {
+        Logger::Error("Message syntax is invalid");
+        return msg;
+    }
+
+    size_t lastSeparatorPosition = command.find_last_of(MESSAGE_SEPARATOR);
+    if(lastSeparatorPosition == std::string::npos)
+    {
+        Logger::Error("Message syntax is invalid");
+        return msg;
+    }
+
+    if(lastSeparatorPosition != 0)
+    {
+        Logger::Debug("Starting to parse the tokens");
+        // std::string tokens = 
+        //trim the string also to be formated right and leave it |Command
+    }
+
+    //remove the |
+    command = command.substr(1);
+
+    size_t splitterLocation  = command.find(TYPE_SEPARATOR);
+    if(splitterLocation == std::string::npos)
+    {
+        Logger::Error("Message syntax is invalid");
+        return msg;
+    }
+
+    //splitting them into the right values
+    msg.command = command.substr(0, splitterLocation);
+    for(auto &x : msg.command)
+    {
+        x = std::tolower(x);
+    }
+    msg.payload = command.substr(splitterLocation+1);
+    msg.success = true;
+    return msg;
+}

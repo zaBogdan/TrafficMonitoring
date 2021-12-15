@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
         msg = Message::Format(msg);
         Logger::Debug("Final message is: '"+msg+"'");
         client.SendMessage(msg);
-        sleep(10000000);
-        // break;
+        // sleep(10000000);
+        break;
     }while(true);
 
     return 0;

@@ -5,7 +5,8 @@
 
 namespace BTrucks {
     namespace Commands{
-        std::string ParseAuthenticateCommand(std::string payload);
+        std::string HandleAuthenticateCommand(std::string payload);
+        std::string HandleValidateTokensCommand(std::string payload);
         std::string ParseIncidentCommand(std::string payload);
     }
 }

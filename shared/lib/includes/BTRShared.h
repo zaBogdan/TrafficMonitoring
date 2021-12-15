@@ -38,11 +38,25 @@ namespace BTRShared
         }
 
         struct TokenData {
-            std::string identifier, validator;
+            std::string identifier="", validator="";
         };
         struct MessageFormat {
             TokenData token;
-            std::string command, payload;
+            std::string command="", payload="";
+            bool success = false;
+
+            void print()
+            {
+                if(success == false)
+                {
+                    printf("[MessageFormat] Failed to populate the message.");
+                    return;
+                }
+                printf("[MessageFormat] Command = %s \n", command.c_str());
+                printf("[MessageFormat] Payload = %s \n", payload.c_str());
+                printf("[MessageFormat] Token.Identifier = %s \n", token.identifier.c_str());
+                printf("[MessageFormat] Token.Validator = %s \n", token.validator.c_str());
+            }
         };
     }
 }

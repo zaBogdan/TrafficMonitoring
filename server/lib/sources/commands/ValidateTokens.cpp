@@ -1,7 +1,7 @@
 #include "sourceCommands.h"
 #define COMMAND_NAME "Authenticate"
 
-std::string BTrucks::Commands::HandleAuthenticateCommand(std::string payload)
+std::string BTrucks::Commands::HandleValidateTokensCommand(std::string payload)
 {
     std::vector<BTRShared::Utils::KeyValue> loginCredentials = PrimiteTypes::FromDict(payload);
     printf("[Credentials] Username: %s\n", loginCredentials[0].value.c_str());

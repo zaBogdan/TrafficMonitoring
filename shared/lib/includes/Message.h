@@ -12,5 +12,5 @@ class Message{
     public:
         static Message* GetInstance();
         static std::string Format(std::string msg);
-        static char* Parse(const char* msg);
+        static BTRShared::Utils::MessageFormat Parse(std:: string command);
 };
