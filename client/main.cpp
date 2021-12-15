@@ -31,12 +31,15 @@ int main(int argc, char *argv[])
     BTrucks::Client client(argv[1], atoi(argv[2]));
 
     do{
-        std::string msg = client.ReadFromCLI();
+        // std::string msg = client.ReadFromCLI();
+        std::string msg = "login zaBogdan:P@ssw0rd1";
         Logger::Debug("The message that we read was: "+msg);
         msg = BTrucks::CommandHandler::Create(msg);
         msg = Message::Format(msg);
         Logger::Debug("Final message is: '"+msg+"'");
         client.SendMessage(msg);
+        sleep(10000000);
+        // break;
     }while(true);
 
     return 0;

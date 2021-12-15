@@ -54,13 +54,11 @@ std::string BTrucks::Server::ReadMessage(int clientSocket)
     bytesRead = read(clientSocket, lengthChar, 4*sizeof(char));
     lengthChar[4] = 0;
 
-    printf("BYtes: %s\n", lengthChar);
     size_t msgLen = std::atoi(lengthChar);
 
     char *actualMessage = new char[msgLen+1];
     bytesRead = read(clientSocket, actualMessage, msgLen*sizeof(char));
     actualMessage[msgLen]=0;
-    printf("Data: '%s'\n", actualMessage);
     return std::string(actualMessage);
 }
 
