@@ -12,32 +12,16 @@ void Logger::SetLoggingLevel(BTRShared::Utils::LoggingLevel::Type level)
     }
 }
 
-void Logger::Critical(std::string msg)
+void Logger::Print(BTRShared::Utils::LoggingLevel::Type level, const char* fmt...)
 {
-    Logger::Print(BTRShared::Utils::LoggingLevel::CRITICAL, msg);
-}
-void Logger::Error(std::string msg)
-{
-    Logger::Print(BTRShared::Utils::LoggingLevel::ERROR, msg);
-}
-void Logger::Warning(std::string msg)
-{
-    Logger::Print(BTRShared::Utils::LoggingLevel::WARNING, msg);
-}
-void Logger::Info(std::string msg)
-{
-    Logger::Print(BTRShared::Utils::LoggingLevel::INFO, msg);
-}
-void Logger::Debug(std::string msg)
-{
-    Logger::Print(BTRShared::Utils::LoggingLevel::DEBUG, msg);
-}
-
-
-void Logger::Print(BTRShared::Utils::LoggingLevel::Type level, std::string msg)
-{
-    if(level >= Logger::logging_level)
-        printf("%s - %s[ SERVER ] %s\n",BTRShared::Utils::CurrentDateTime().c_str(), Logger::GetLevelString(level).c_str(), msg.c_str());
+    if(level < Logger::logging_level)
+        return;
+    printf("%s - %s[ %s ] ",BTRShared::Utils::CurrentDateTime().c_str(),Logger::GetLevelString(level).c_str(), APPLICATION_NAME);
+    va_list args;
+    va_start(args, fmt);
+    vprintf(fmt, args);
+    va_end(args);
+    printf("\n");
 }
 
 std::string Logger::GetLevelString(BTRShared::Utils::LoggingLevel::Type level)

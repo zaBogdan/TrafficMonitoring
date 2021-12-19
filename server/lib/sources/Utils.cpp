@@ -16,7 +16,7 @@ int BTrucks::Utils::CheckResponse(int result, const char *errorMessage)
 {
     if(result == ERROR_SOCKET)
     {
-        Logger::Error(errorMessage);
+        LOG_ERROR(errorMessage);
         exit(result);
     }
     return result;

@@ -9,7 +9,7 @@ std::string BTrucks::CommandHandler::Handle(std::string command)
     uint32_t crcValue = BTRShared::Utils::CRCValue(message.command);
 
     message.print();
-    Logger::Info("Handling command '"+message.command+"' with the crcValue: 0x"+BTrucks::Utils::IntToHex(crcValue));
+    LOG_INFO("Handling command '%s' with the crcValue: 0x%x", message.command.c_str(), crcValue);
     
     //here I should check if the crcValue is in the list of "public" commands
     //todo

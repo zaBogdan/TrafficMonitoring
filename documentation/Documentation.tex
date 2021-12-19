@@ -65,11 +65,11 @@ După cum se poate observa încă din diagramă clientul este bazat pe o arhitec
 \subsection{Arhitectura Serverului}
 Severul folosește tot o arhitectură concurentă, prin care reușește să suportate atât mai multe conexiuni simultan, cât și să răspundă la mai mulți clienți în același timp.
 \begin{enumerate}
-    \item Prin \textbf{multiplexarea I/O} se vor monitoriza descriptorii socketurilor asociate clienților remote, creându-se un nou thread la momentul în care o cerere noua ajunge. Astfel putem suporta mai multe cereri simultan.
+    \item Prin \textbf{multiplexarea I/O} se vor monitoriza descriptorii socketurilor asociate clienților remote, creându-se un nou proces la momentul în care o cerere noua ajunge. Astfel putem suporta mai multe cereri simultan.
     \item Primul pas prin care o cerere trece este procesul de autentificare, urmând ca mai apoi să fie validată comanda, iar în final să se încerce procesarea informației. 
     \item Pentru validarea autentificării folosim tokenuri generate random, care sunt stocate în baza de date și sunt atribuite unui utilizator. Pentru a putea evita orice fel de manipulare a datelor, tokenul este format din două componente: Identificatorul (care se află stocat în plain text în baza de date) și Validatorul (care se află într-o formă \textbf{hashed}, utilizatorul având singura copie a acestuia.)
     \item Dacă autentificarea a avut success se va verifică dacă comanda dată de utilizator există, iar în caz afirmativ se va executa logica. 
-    \item În final, indiferent de rezultatul execuției, serverul va trimite un răspuns clientului, urmând ca mai apoi să fie închis thread-ul ce s-a ocupat de răspuns.
+    \item În final, indiferent de rezultatul execuției, serverul va trimite un răspuns clientului, urmând ca mai apoi să fie închis procesul ce s-a ocupat de răspuns.
 \end{enumerate}
 \section{Detalii de implementare}
 Întrucât am menționat destul de explicit modul în care se tratează cererile și cum este implementat clientul și serverul, în următoarele secțiuni voi detalia particularitățile aplicației.

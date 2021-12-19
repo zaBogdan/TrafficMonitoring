@@ -19,7 +19,7 @@ std::string BTrucks::CommandHandler::Create(std::string command, std::string tok
     // now we should handle each command with their ruleset.  Calculating crc
     uint32_t crcValue = BTRShared::Utils::CRCValue(userCmd);
 
-    Logger::Info("Handling command '"+userCmd+"' with the crcValue: 0x"+BTrucks::Utils::IntToHex(crcValue));
+    LOG_INFO("Handling command '%s' with the crcValue: 0x%x", userCmd.c_str(), crcValue);
 
     //getting the right handler
     switch(crcValue)
@@ -35,7 +35,7 @@ std::string BTrucks::CommandHandler::Create(std::string command, std::string tok
         case BTRShared::Utils::Command::RESPONSE:
             return BTRShared::Command::CreateResponseCommand(payload);
         default:
-            Logger::Error("Command not found. Make sure you spelled it correctly.");
+            LOG_ERROR("Command not found. Make sure you spelled it correctly.");
             return "";
     }
 }

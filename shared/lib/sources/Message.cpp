@@ -38,20 +38,20 @@ BTRShared::Utils::MessageFormat Message::Parse(std:: string command)
     BTRShared::Utils::MessageFormat msg;
     if(command[0] != MESSAGE_SEPARATOR[0])
     {
-        Logger::Error("Message syntax is invalid");
+        LOG_ERROR("Message syntax is invalid");
         return msg;
     }
 
     size_t lastSeparatorPosition = command.find_last_of(MESSAGE_SEPARATOR);
     if(lastSeparatorPosition == std::string::npos)
     {
-        Logger::Error("Message syntax is invalid");
+        LOG_ERROR("Message syntax is invalid");
         return msg;
     }
 
     if(lastSeparatorPosition != 0)
     {
-        Logger::Debug("Starting to parse the tokens");
+        LOG_DEBUG("Starting to parse the tokens");
         // std::string tokens = 
         //trim the string also to be formated right and leave it |Command
     }
@@ -62,7 +62,7 @@ BTRShared::Utils::MessageFormat Message::Parse(std:: string command)
     size_t splitterLocation  = command.find(TYPE_SEPARATOR);
     if(splitterLocation == std::string::npos)
     {
-        Logger::Error("Message syntax is invalid");
+        LOG_ERROR("Message syntax is invalid");
         return msg;
     }
 

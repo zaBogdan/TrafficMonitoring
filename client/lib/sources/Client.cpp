@@ -2,13 +2,13 @@
 
 BTrucks::Client::Client(const char* ip, int port)
 {
-    Logger::Info("Trying to connect to server...");
+    LOG_INFO("Trying to connect to server...");
     if(!this->InitiateConnection(ip, port))
     {
-        Logger::Error("Couldn't connect to the server. Try again.");
+        LOG_ERROR("Couldn't connect to the server. Try again.");
         exit(1);
     }
-    Logger::Info("Connection with server was successful.");
+    LOG_INFO("Connection with server was successful.");
 }
 
 bool BTrucks::Client::InitiateConnection(const char* ip, int port)
@@ -20,7 +20,7 @@ bool BTrucks::Client::InitiateConnection(const char* ip, int port)
     serverSocket.sin_addr.s_addr = inet_addr(ip);
     serverSocket.sin_port = port;
 
-    Logger::Debug("Initiating connection now.");
+    LOG_DEBUG("Initiating connection now.");
     BTrucks::Utils::CheckResponse(connect(this->clientSocket, (struct sockaddr*)&serverSocket, sizeof(struct sockaddr)),"Failed to initiate connection with the server.");
 
     return true;
@@ -45,7 +45,7 @@ bool BTrucks::Client::SendMessage(std::string message)
     if(message == "")
         return false;
     const char* cstrMsg = message.c_str();
-    printf("MEssage to be sent: '%s'\n", cstrMsg);
+    LOG_DEBUG("MEssage to be sent: '%s'\n", cstrMsg);
     BTrucks::Utils::CheckResponse(write(this->clientSocket, cstrMsg, message.length()*sizeof(char)), "Failed to send the message");
     return true;
 }

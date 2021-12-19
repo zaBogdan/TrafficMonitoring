@@ -2,13 +2,13 @@
 
 BTrucks::Server::Server(int PORT, int BACKLOG)
 {
-    Logger::Debug("Initiating socket connection");
+    LOG_INFO("Initiating socket connection");
     if(!this->Setup(PORT, BACKLOG))
     {
-        Logger::Critical("Failed to start the server. Exiting");
+        LOG_CRITICAL("Failed to start the server. Exiting");
         exit(-1);
     }
-    Logger::Info("Started listening on port " + std::to_string(PORT));
+    LOG_INFO("Started listening on port %d!",PORT));
 }
 BTrucks::Server::~Server()
 {
@@ -31,7 +31,7 @@ int BTrucks::Server::InitiateConnectionWithClient()
 bool BTrucks::Server::Setup(int PORT, int BACKLOG)
 {
     BTrucks::Utils::CheckResponse((this->serverSocket = socket(AF_INET, SOCK_STREAM, 0)), "Failed to create the server socket");
-    Logger::Debug("Successfully created the socket");
+    LOG_DEBUG("Successfully created the socket");
     struct sockaddr_in server;
     memset(&server, 0, sizeof(server));
 
