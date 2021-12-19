@@ -2,12 +2,12 @@
 #include "BTRShared.h"
 #include <cstdarg>
 #include <cstddef>
-#define APPLICATION_NAME "Shared"
-#ifdef __CLIENT__
-#define APPLICATION_NAME "Client"
-#endif
-#ifdef __SERVER__
-#define APPLICATION_NAME "Server"
+#if defined(__CLIENT__)
+#define APPLICATION_NAME "CLIENT"
+#elif defined(__SERVER__)
+#define APPLICATION_NAME "SERVER"
+#else
+#define APPLICATION_NAME "SHARED"
 #endif
 #define LOG_CRITICAL(...) Logger::Print(BTRShared::Utils::LoggingLevel::CRITICAL, __VA_ARGS__);
 #define LOG_ERROR(...) Logger::Print(BTRShared::Utils::LoggingLevel::ERROR, __VA_ARGS__);
