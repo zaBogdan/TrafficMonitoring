@@ -3,10 +3,13 @@
 #include "BTRShared.h"
 #include "PrimitiveTypes.h"
 
-namespace BTrucks {
-    namespace Commands{
-        std::string CreateAuthenticateCommand(std::string payload);
-
-        std::string CreateIncidentCommand(std::string payload);
+namespace BTruckers{
+    namespace Client{
+        namespace Commands{
+            //start commands code
+            std::string CreateAuthenticateCommand(std::string payload);
+            std::string CreateIncidentCommand(std::string payload);
+            //end commands code
+        }
     }
 }

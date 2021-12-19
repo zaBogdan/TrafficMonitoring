@@ -33,9 +33,9 @@ std::string Message::Format(std::string formatedMessage)
 }
 
 
-BTRShared::Utils::MessageFormat Message::Parse(std:: string command)
+BTruckers::Shared::Structures::Message Message::Parse(std:: string command)
 {
-    BTRShared::Utils::MessageFormat msg;
+    BTruckers::Shared::Structures::Message msg;
     if(command[0] != MESSAGE_SEPARATOR[0])
     {
         LOG_ERROR("Message syntax is invalid");

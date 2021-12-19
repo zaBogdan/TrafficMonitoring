@@ -1,6 +1,6 @@
 #include "sourceCommands.h"
 
-std::string BTrucks::Commands::CreateAuthenticateCommand(std::string payload)
+std::string BTruckers::Client::Commands::CreateAuthenticateCommand(std::string payload)
 {
     size_t splitPosition = payload.find(":");
 

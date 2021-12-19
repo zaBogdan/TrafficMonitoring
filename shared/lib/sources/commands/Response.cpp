@@ -1,7 +1,7 @@
 #include "sharedCommands.h"
 #define COMMAND_NAME "Response"
 
-std::string BTRShared::Command::CreateResponseCommand(std::string payload)
+std::string BTruckers::Shared::Commands::CreateResponseCommand(std::string payload)
 {
     printf("Create response\n");
 
@@ -9,7 +9,7 @@ std::string BTRShared::Command::CreateResponseCommand(std::string payload)
     return payload;
 }
 
-std::string BTRShared::Command::ParseResponseCommand(std::string payload)
+std::string BTruckers::Shared::Commands::ParseResponseCommand(std::string payload)
 {
     //to be implemented
     return payload;

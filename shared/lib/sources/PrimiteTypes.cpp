@@ -5,13 +5,13 @@ std::string PrimiteTypes::ToString(std::string data, std::string key){
     {
         key = key + TYPE_SEPARATOR;
     }
-    return std::string(BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::STRING)) + key + data;
+    return std::string(BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::STRING)) + key + data;
 }
 
-BTRShared::Utils::KeyValue PrimiteTypes::FromString(std::string data){
-    BTRShared::Utils::KeyValue pair;
+BTruckers::Shared::Structures::KeyValue PrimiteTypes::FromString(std::string data){
+    BTruckers::Shared::Structures::KeyValue pair;
 
-    if(data[0] != BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::STRING)[0])
+    if(data[0] != BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::STRING)[0])
         return pair;
 
     size_t hasKey = data.find(TYPE_SEPARATOR);
@@ -32,13 +32,13 @@ std::string PrimiteTypes::ToInteger(int data, std::string key){
     {
         key = key + TYPE_SEPARATOR;
     }
-    return std::string(BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::INT)) + key + std::to_string(data);
+    return std::string(BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::INT)) + key + std::to_string(data);
 }
 
 
-BTRShared::Utils::KeyValue PrimiteTypes::FromInteger(std::string data){
-    BTRShared::Utils::KeyValue pair;
-    if(data[0] != BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::INT)[0])
+BTruckers::Shared::Structures::KeyValue PrimiteTypes::FromInteger(std::string data){
+    BTruckers::Shared::Structures::KeyValue pair;
+    if(data[0] != BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::INT)[0])
         return pair;
 
     size_t hasKey = data.find(TYPE_SEPARATOR);
@@ -52,7 +52,7 @@ BTRShared::Utils::KeyValue PrimiteTypes::FromInteger(std::string data){
     return pair;
 }
 
-std::string PrimiteTypes::ToCoordinates(BTRShared::Utils::Cords data, std::string key)
+std::string PrimiteTypes::ToCoordinates(BTruckers::Shared::Structures::Cords data, std::string key)
 {
     if(key != "")
     {
@@ -61,13 +61,13 @@ std::string PrimiteTypes::ToCoordinates(BTRShared::Utils::Cords data, std::strin
 
     std::string coordsFormat = "["+std::to_string(data.latitude)+"_"+std::to_string(data.longitute)+"]";
 
-    return std::string(BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::COORDINATES)) + key + coordsFormat;
+    return std::string(BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::COORDINATES)) + key + coordsFormat;
 }
 
-BTRShared::Utils::KeyValue PrimiteTypes::FromCoordinates(std::string data)
+BTruckers::Shared::Structures::KeyValue PrimiteTypes::FromCoordinates(std::string data)
 {
-    BTRShared::Utils::KeyValue pair;
-    if(data[0] != BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::COORDINATES)[0])
+    BTruckers::Shared::Structures::KeyValue pair;
+    if(data[0] != BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::COORDINATES)[0])
         return pair;
     
     size_t hasKey = data.find(":");
@@ -101,7 +101,7 @@ BTRShared::Utils::KeyValue PrimiteTypes::FromCoordinates(std::string data)
 
 std::string PrimiteTypes::ToDict(std::vector<std::string> data)
 {
-    std::string dictData = std::string(BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::DICT)) + "{";
+    std::string dictData = std::string(BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::DICT)) + "{";
     for(size_t idx = 0; idx < data.size(); idx++)
     {
         dictData = dictData + data[idx] + ",";
@@ -110,12 +110,12 @@ std::string PrimiteTypes::ToDict(std::vector<std::string> data)
     return dictData;
 }
 
-std::vector<BTRShared::Utils::KeyValue> PrimiteTypes::FromDict(std::string data)
+std::vector<BTruckers::Shared::Structures::KeyValue> PrimiteTypes::FromDict(std::string data)
 {
-    std::vector<BTRShared::Utils::KeyValue> parsedDict = {};
+    std::vector<BTruckers::Shared::Structures::KeyValue> parsedDict = {};
     
     //checking to have the correct type
-    if(data[0] != BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::DICT)[0])
+    if(data[0] != BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::DICT)[0])
         return parsedDict;
 
     //checking if we have right delimiters
@@ -142,15 +142,15 @@ std::vector<BTRShared::Utils::KeyValue> PrimiteTypes::FromDict(std::string data)
 }
 
 //private methods
-BTRShared::Utils::KeyValue PrimiteTypes::DynamicParsing(std::string data)
+BTruckers::Shared::Structures::KeyValue PrimiteTypes::DynamicParsing(std::string data)
 {
-    BTRShared::Utils::KeyValue pair;
+    BTruckers::Shared::Structures::KeyValue pair;
     char dataType = data[0];
-    if(dataType == BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::STRING)[0])
+    if(dataType == BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::STRING)[0])
         return PrimiteTypes::FromString(data);
-    if(dataType == BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::INT)[0])
+    if(dataType == BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::INT)[0])
         return PrimiteTypes::FromInteger(data);
-    if(dataType == BTRShared::Utils::DataTypes::GetType(BTRShared::Utils::DataTypes::COORDINATES)[0])
+    if(dataType == BTruckers::Shared::Enums::DataTypes::GetType(BTruckers::Shared::Enums::DataTypes::COORDINATES)[0])
         return PrimiteTypes::FromCoordinates(data);
     return pair;
 }

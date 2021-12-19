@@ -1,22 +1,23 @@
 #include "Logger.h"
 
-unsigned int Logger::logging_level = BTRShared::Utils::LoggingLevel::INFO;
 
-void Logger::SetLoggingLevel(BTRShared::Utils::LoggingLevel::Type level)
+unsigned int Logger::logging_level = BTruckers::Shared::Enums::LoggingLevel::INFO;
+
+void Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::Type level)
 {
-    if(level>=BTRShared::Utils::LoggingLevel::DEBUG && level<=BTRShared::Utils::LoggingLevel::CRITICAL)
+    if(level>=BTruckers::Shared::Enums::LoggingLevel::DEBUG && level<=BTruckers::Shared::Enums::LoggingLevel::CRITICAL)
     {
         Logger::logging_level = level;
     }else{
-        Logger::logging_level = BTRShared::Utils::LoggingLevel::INFO;
+        Logger::logging_level = BTruckers::Shared::Enums::LoggingLevel::INFO;
     }
 }
 
-void Logger::Print(BTRShared::Utils::LoggingLevel::Type level, const char* fmt...)
+void Logger::Print(BTruckers::Shared::Enums::LoggingLevel::Type level, const char* fmt...)
 {
     if(level < Logger::logging_level)
         return;
-    printf("%s - %s[ %s ] ",BTRShared::Utils::CurrentDateTime().c_str(),Logger::GetLevelString(level).c_str(), APPLICATION_NAME);
+    printf("%s - %s[ %s ] ",BTruckers::Shared::Utils::CurrentDateTime().c_str(),Logger::GetLevelString(level).c_str(), APPLICATION_NAME);
     va_list args;
     va_start(args, fmt);
     vprintf(fmt, args);
@@ -24,18 +25,18 @@ void Logger::Print(BTRShared::Utils::LoggingLevel::Type level, const char* fmt..
     printf("\n");
 }
 
-std::string Logger::GetLevelString(BTRShared::Utils::LoggingLevel::Type level)
+std::string Logger::GetLevelString(BTruckers::Shared::Enums::LoggingLevel::Type level)
 {
     switch(level){
-        case BTRShared::Utils::LoggingLevel::CRITICAL:
+        case BTruckers::Shared::Enums::LoggingLevel::CRITICAL:
             return "[ CRITICAL ]";
-        case BTRShared::Utils::LoggingLevel::ERROR:
+        case BTruckers::Shared::Enums::LoggingLevel::ERROR:
             return "[ ERROR ]";
-        case BTRShared::Utils::LoggingLevel::WARNING:
+        case BTruckers::Shared::Enums::LoggingLevel::WARNING:
             return "[ WARNING ]";
-        case BTRShared::Utils::LoggingLevel::INFO:
+        case BTruckers::Shared::Enums::LoggingLevel::INFO:
             return "[ INFO ]";
-        case BTRShared::Utils::LoggingLevel::DEBUG:
+        case BTruckers::Shared::Enums::LoggingLevel::DEBUG:
             return "[ DEBUG ]";
         default:
             return "[ NONE ]";

@@ -4,59 +4,65 @@
 #include <time.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "sources.h"
+#include "constants.h"
+#include "Utils.h"
 
-namespace BTRShared
-{
-    namespace Utils{
-        
-        static std::string CurrentDateTime()
-        {
-            time_t     now;
-            struct tm  *timeStruct;
-            char       buf[80];
-            time(&now);
-            timeStruct = localtime(&now);
-            strftime(buf, sizeof(buf), "%Y/%m/%d %X", timeStruct);
-            return buf;
+namespace BTruckers{
+    namespace Shared{
+
+        namespace Utils{
+            static inline std::string CurrentDateTime();
+            static inline uint32_t CRCValue(std::string s);
         }
-        static uint32_t CRCValue(std::string s) {
-            uint32_t crc=0xFFFFFFFF;
-            size_t n = s.length();
-
-            for(size_t i=0;i<n;i++) {
-                char ch=s[i];
-                for(size_t j=0;j<8;j++) {
-                    uint32_t b=(ch^crc)&1;
-                    crc>>=1;
-                    if(b) crc=crc^0xEDB88320;
-                    ch>>=1;
-                }
+        
+        namespace Structures{
+            struct Tokens;
+            struct Message;
+            struct Cords;
+            struct KeyValue;
+        } 
+        
+        namespace Enums{
+            //start enums code
+            namespace LoggingLevel{
+                enum Type : unsigned int{
+                    CRITICAL =  50, //CRITICAL logging level
+                    ERROR =     40, //ERROR logging level
+                    WARNING =   30, //WARNING logging level 
+                    INFO =      20, //INFO logging level 
+                    DEBUG =     10  //DEBUG logging level 
+                };
             }
             
-            return ~crc;
-        }
-
-        struct TokenData {
-            std::string identifier="", validator="";
-        };
-        struct MessageFormat {
-            TokenData token;
-            std::string command="", payload="";
-            bool success = false;
-
-            void print()
-            {
-                if(success == false)
+            namespace DataTypes{
+                enum Type: const char{
+                    NONE,
+                    INT, //done
+                    STRING, //done
+                    COORDINATES, //done
+                    DICT //done
+                };
+                inline const char* GetType(Type v)
                 {
-                    printf("[MessageFormat] Failed to populate the message.");
-                    return;
+                    switch (v)
+                    {
+                        case INT:   return "i";
+                        case STRING:   return "s";
+                        case COORDINATES:   return "c";
+                        case DICT: return "d";
+                        default:      return "n";
+                    }
                 }
-                printf("[MessageFormat] Command = %s \n", command.c_str());
-                printf("[MessageFormat] Payload = %s \n", payload.c_str());
-                printf("[MessageFormat] Token.Identifier = %s \n", token.identifier.c_str());
-                printf("[MessageFormat] Token.Validator = %s \n", token.validator.c_str());
             }
-        };
-    }
-}
+
+            namespace CommandsCRC{
+                enum Type: uint32_t{
+                    RESPONSE =  0x3e7b0bfb,
+                };
+            }
+            //end enums code
+        }
+    };
+};
+#include "structures.h"
+#include "Logger.h"
