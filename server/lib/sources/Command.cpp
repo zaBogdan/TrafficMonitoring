@@ -1,12 +1,13 @@
 #include "Command.h"
 
-std::string BTrucks::CommandHandler::Handle(std::string command)
+
+std::string BTruckers::Server::Handler::Handle(std::string command)
 {
-    BTRShared::Utils::MessageFormat message = Message::Parse(command);
+    BTruckers::Shared::Structures::Message message = Message::Parse(command);
     if(!message.success)
         return "fCommand with invalid syntax.";
 
-    uint32_t crcValue = BTRShared::Utils::CRCValue(message.command);
+    uint32_t crcValue = BTruckers::Shared::Utils::CRCValue(message.command);
 
     message.print();
     LOG_INFO("Handling command '%s' with the crcValue: 0x%x", message.command.c_str(), crcValue);
@@ -18,8 +19,8 @@ std::string BTrucks::CommandHandler::Handle(std::string command)
     std::string response = "";
     switch(crcValue)
     {
-        case BTrucks::Command::AUTHENTICATE:
-            response = BTrucks::Commands::HandleAuthenticateCommand(message.payload);
+        case BTruckers::Server::Enums::CommandsCRC::AUTHENTICATE:
+            response = BTruckers::Server::Commands::HandleAuthenticateCommand(message.payload);
             break;
 
         default:

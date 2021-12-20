@@ -1,5 +1,5 @@
 #pragma once
-#include "BTRClient.h"
+#include "BTRShared.h"
 
 namespace BTruckers{
     namespace Shared{

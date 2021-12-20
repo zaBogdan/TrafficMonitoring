@@ -5,18 +5,54 @@
 #include "Logger.h"
 #include "Utils.h"
 
-namespace BTrucks
+namespace BTruckers
 {
-    class Server;
-    class Tokens;
-    namespace Command {
-        enum Type: uint32_t{
-            AUTHENTICATE = 0xE500DB4,
+    namespace Server
+    {
+        //start server code
 
-            INCIDENT = 0x3d03a11a,
+        namespace Core
+        {
+            class Server;
+            class Tokens;
+        }
 
-            LOGOUT = 0x35ccf52f,
+        namespace Utils
+        {
+            static inline std::string IntToHex(int x);
+            static inline int CheckResponse(int result, const char *errorMessage);
+        }
 
-        };
+        namespace Commands
+        {
+            //goto: sourceCommands.h
+        }
+
+        namespace Handler
+        {
+            // std::string Create(std::string command);
+            std::string Handle(std::string command);        
+        }
+        
+        namespace Enums
+        {
+            //start enums code
+            namespace CommandsCRC
+            {
+                enum Type: uint32_t
+                {
+                    AUTHENTICATE = 0xE500DB4,
+
+                    INCIDENT = 0x3d03a11a,
+
+                    LOGOUT = 0x35ccf52f,
+                };
+            }
+            //end enums code
+        }
+        
+        
+        
+        //end server code
     }
 }

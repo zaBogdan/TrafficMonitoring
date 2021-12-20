@@ -1,6 +1,7 @@
 #include "Server.h"
 
-BTrucks::Server::Server(int PORT, int BACKLOG)
+
+BTruckers::Server::Core::Server::Server(int PORT, int BACKLOG)
 {
     LOG_INFO("Initiating socket connection");
     if(!this->Setup(PORT, BACKLOG))
@@ -10,12 +11,12 @@ BTrucks::Server::Server(int PORT, int BACKLOG)
     }
     LOG_INFO("Started listening on port %d!",PORT);
 }
-BTrucks::Server::~Server()
+BTruckers::Server::Core::Server::~Server()
 {
 
 }
 
-int BTrucks::Server::InitiateConnectionWithClient()
+int BTruckers::Server::Core::Server::InitiateConnectionWithClient()
 {
     struct sockaddr_in client;
     int clientSocket;
@@ -23,14 +24,15 @@ int BTrucks::Server::InitiateConnectionWithClient()
 
     memset(&client, 0, sizeof(client));
     
-    BTrucks::Utils::CheckResponse(clientSocket = accept(this->serverSocket, (struct sockaddr*) &client,(socklen_t*) &clientSocket), "Failed to accept client connection");
+    
+    BTruckers::Server::Utils::CheckResponse(clientSocket = accept(this->serverSocket, (struct sockaddr*) &client,(socklen_t*) &clientSocket), "Failed to accept client connection");
 
     return clientSocket;
 }
 
-bool BTrucks::Server::Setup(int PORT, int BACKLOG)
+bool BTruckers::Server::Core::Server::Setup(int PORT, int BACKLOG)
 {
-    BTrucks::Utils::CheckResponse((this->serverSocket = socket(AF_INET, SOCK_STREAM, 0)), "Failed to create the server socket");
+    BTruckers::Server::Utils::CheckResponse((this->serverSocket = socket(AF_INET, SOCK_STREAM, 0)), "Failed to create the server socket");
     LOG_DEBUG("Successfully created the socket");
     struct sockaddr_in server;
     memset(&server, 0, sizeof(server));
@@ -40,14 +42,14 @@ bool BTrucks::Server::Setup(int PORT, int BACKLOG)
     server.sin_port = PORT;
 
     //binding the port and starting to listen on it.
-    BTrucks::Utils::CheckResponse(bind(this->serverSocket,(struct sockaddr*) &server, sizeof(server)), "Port is already used. Failed to bind.");
-    BTrucks::Utils::CheckResponse(listen(this->serverSocket, BACKLOG), "Failed to listen on specified port.");
+    BTruckers::Server::Utils::CheckResponse(bind(this->serverSocket,(struct sockaddr*) &server, sizeof(server)), "Port is already used. Failed to bind.");
+    BTruckers::Server::Utils::CheckResponse(listen(this->serverSocket, BACKLOG), "Failed to listen on specified port.");
     
     return true;
 }
 
 
-std::string BTrucks::Server::ReadMessage(int clientSocket)
+std::string BTruckers::Server::Core::Server::ReadMessage(int clientSocket)
 {
     char lengthChar[5];
     size_t bytesRead;
@@ -62,7 +64,7 @@ std::string BTrucks::Server::ReadMessage(int clientSocket)
     return std::string(actualMessage);
 }
 
-int& BTrucks::Server::getServerSocket()
+int& BTruckers::Server::Core::Server::getServerSocket()
 {
     return this->serverSocket;
 }
