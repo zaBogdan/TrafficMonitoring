@@ -10,10 +10,15 @@ namespace BTruckers
         {
                class DBHandler
                {
-                    std::string tableName;
-                    
+                    protected:
+                        static sqlite3 *connection;
+                    private: 
+                        static int CallbackFunction(void *NotUsed, int argc, char **argv, char **azColName);
+                        bool InitiateConnection();
                     public:
                         DBHandler();
+                        ~DBHandler();
+                        bool Execute(const char* sql);
 
                };
         }  

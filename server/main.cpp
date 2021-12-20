@@ -7,6 +7,8 @@
 #include "DBHandler.h"
 #include <signal.h>
 
+#include <iostream>
+
 int main()
 {
     if(DEBUG_MODE == true)
@@ -16,6 +18,7 @@ int main()
         LOG_DEBUG("Application is now running in verbose mode...");
     }
     BTruckers::Server::Core::DBHandler db;
+    db.Execute("select * from users;");
 
     return 0;
     // fd_set currentSockets, readySockets;
