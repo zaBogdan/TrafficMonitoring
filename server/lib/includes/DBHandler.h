@@ -12,15 +12,16 @@ namespace BTruckers
                {
                     protected:
                         static sqlite3 *connection;
+
                     private: 
-                        static int CallbackFunction(void *NotUsed, int argc, char **argv, char **azColName);
+                        static int CallbackFunction(void *instance, int argc, char **argv, char **azColName);
                         bool InitiateConnection();
                     public:
                         DBHandler();
                         ~DBHandler();
-                        bool Execute(const char* sql);
-
+                        static bool Execute(const char* sql);
                };
         }  
     }     
 }
+//Some of the code comes from https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm

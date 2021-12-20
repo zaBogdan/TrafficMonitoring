@@ -30,6 +30,12 @@ namespace BTruckers
             //goto: sourceCommands.h
         }
         
+        namespace Models
+        {
+            //insert all the database models that are to be used
+            class Users;
+        }
+
         namespace Enums
         {
             //start enums code

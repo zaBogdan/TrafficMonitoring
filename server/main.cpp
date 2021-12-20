@@ -5,6 +5,7 @@
 #include "protocols/TCP.h"
 #include "CPV.h"
 #include "DBHandler.h"
+#include "models/Users.h"
 #include <signal.h>
 
 #include <iostream>
@@ -19,6 +20,8 @@ int main()
     }
     BTruckers::Server::Core::DBHandler db;
     db.Execute("select * from users;");
+    // BTruckers::Server::Models::Users user;
+    // user.Execute("select * from users");
 
     return 0;
     // fd_set currentSockets, readySockets;
