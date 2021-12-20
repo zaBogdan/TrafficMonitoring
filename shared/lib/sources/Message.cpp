@@ -14,25 +14,6 @@ Message* Message::GetInstance()
     return instance;
 }
 
-std::string Message::Format(std::string formatedMessage)
-{
-    if(formatedMessage == "")
-    {
-        return "";
-    }
-    
-    formatedMessage = MESSAGE_SEPARATOR + formatedMessage;
-    
-    //prefixing the message with it's length
-    std::string messageLength = std::to_string(formatedMessage.length());
-    messageLength.insert(0, 4-messageLength.length(),'0');
-    formatedMessage = messageLength+formatedMessage;
-
-    //returning the message
-    return formatedMessage;
-}
-
-
 BTruckers::Shared::Structures::Message Message::Parse(std:: string command)
 {
     BTruckers::Shared::Structures::Message msg;

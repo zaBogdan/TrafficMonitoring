@@ -48,22 +48,6 @@ bool BTruckers::Server::Core::Server::Setup(int PORT, int BACKLOG)
     return true;
 }
 
-
-std::string BTruckers::Server::Core::Server::ReadMessage(int clientSocket)
-{
-    char lengthChar[5];
-    size_t bytesRead;
-    bytesRead = read(clientSocket, lengthChar, 4*sizeof(char));
-    lengthChar[4] = 0;
-
-    size_t msgLen = std::atoi(lengthChar);
-
-    char *actualMessage = new char[msgLen+1];
-    bytesRead = read(clientSocket, actualMessage, msgLen*sizeof(char));
-    actualMessage[msgLen]=0;
-    return std::string(actualMessage);
-}
-
 int& BTruckers::Server::Core::Server::getServerSocket()
 {
     return this->serverSocket;

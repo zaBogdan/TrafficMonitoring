@@ -39,17 +39,6 @@ std::string BTruckers::Client::Communcation::ReadFromCLI()
     return std::string(message);
 }
 
-
-bool BTruckers::Client::Communcation::SendMessage(std::string message)
-{
-    if(message == "")
-        return false;
-    const char* cstrMsg = message.c_str();
-    LOG_DEBUG("MEssage to be sent: '%s'\n", cstrMsg);
-    BTruckers::Shared::Utils::CheckResponse(write(this->clientSocket, cstrMsg, message.length()*sizeof(char)), "Failed to send the message");
-    return true;
-}
-
 int BTruckers::Client::Communcation::GetClientSocket()
 {
     return this->clientSocket;

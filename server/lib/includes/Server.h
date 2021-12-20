@@ -24,7 +24,6 @@ namespace BTruckers
                     Server(int PORT = RUNNING_PORT, int BACKLOG = BACK_LOG);
                     int InitiateConnectionWithClient();
                     int& getServerSocket();
-                    std::string ReadMessage(int clientSocket);
                     ~Server();
             };
          }
