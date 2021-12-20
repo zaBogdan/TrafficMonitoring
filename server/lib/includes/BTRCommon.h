@@ -16,6 +16,7 @@ namespace BTruckers
             class Server;
             class Tokens;
             class CPV;
+            class DBHandler;
         }
 
         namespace Utils

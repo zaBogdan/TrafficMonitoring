@@ -6,3 +6,4 @@ documentation/*
 !**/documentation/images/DiagramaArhitectura.png
 **/.DS_STORE
 **/build
+**/*.db

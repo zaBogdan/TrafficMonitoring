@@ -10,7 +10,7 @@ SHARED_LIB =  $(shell find shared/lib -name '*.cpp')
 
 #FLAGS
 CLIENT_FLAGS = -D "__CLIENT__"
-SERVER_FLAGS = -D "__SERVER__"
+SERVER_FLAGS = -D "__SERVER__" -lsqlite3
 
 # includes folder
 INCLUDES_SERVER = -I./server/lib/includes
