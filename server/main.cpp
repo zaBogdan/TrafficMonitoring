@@ -3,6 +3,7 @@
 #include "Server.h"
 #include "Logger.h"
 #include "Message.h"
+#include "Communication.h"
 #include "Command.h"
 #include <signal.h>
 
@@ -45,7 +46,8 @@ int main()
                     LOG_DEBUG("Starting to read from old connection...");
 
                     // printf("Starting to read from old connection...");
-                    std::string recvMessage = server.ReadMessage(i);
+                    // std::string recvMessage = server.ReadMessage(i);
+                    std::string recvMessage = BTruckers::Shared::TCPCommunication::Receive(i); 
                     if(recvMessage == "")
                     {
                         LOG_INFO("Connection killed.");

@@ -32,7 +32,16 @@ namespace BTruckers{
                 
                 return ~crc;
             }
-
+            
+            static inline int CheckResponse(int result, const char *errorMessage)
+            {
+                if(result == ERROR_SOCKET)
+                {
+                    perror(errorMessage);
+                    exit(result);
+                }
+                return result;
+            }
         }
     }
 }

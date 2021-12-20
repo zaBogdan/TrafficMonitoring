@@ -10,7 +10,6 @@ namespace BTruckers{
         class Communcation;
 
         namespace Utils{
-            static inline int CheckResponse(int result, const char *errorMessage);
             static inline std::string IntToHex(int x);
         }
 

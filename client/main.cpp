@@ -4,6 +4,7 @@
 #include "Message.h"
 #include "Client.h"
 #include "Command.h"
+#include "Communication.h"
 
 void printHelp(char* toolName)
 {
@@ -35,9 +36,10 @@ int main(int argc, char *argv[])
         std::string msg = "login zaBogdan:P@ssw0rd1";
         LOG_DEBUG("The message that we read was %s",msg.c_str());
         msg = BTruckers::Client::Handler::Create(msg);
-        msg = Message::Format(msg);
-        LOG_DEBUG("Final message is: '%s'", msg.c_str());
-        client.SendMessage(msg);
+        // msg = Message::Format(msg);
+        // LOG_DEBUG("Final message is: '%s'", msg.c_str());
+        // client.SendMessage(msg);
+        BTruckers::Shared::TCPCommunication::Send(client.GetClientSocket(), msg);
         // sleep(10000000);
         break;
     }while(true);

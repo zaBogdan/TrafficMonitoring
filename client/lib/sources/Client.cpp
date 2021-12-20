@@ -13,7 +13,7 @@ BTruckers::Client::Communcation::Communcation(const char* ip, int port)
 
 bool BTruckers::Client::Communcation::InitiateConnection(const char* ip, int port)
 {
-    BTruckers::Client::Utils::CheckResponse(this->clientSocket = socket(AF_INET, SOCK_STREAM, 0),"Failed to create a socket");
+    BTruckers::Shared::Utils::CheckResponse(this->clientSocket = socket(AF_INET, SOCK_STREAM, 0),"Failed to create a socket");
     struct sockaddr_in serverSocket;
 
     serverSocket.sin_family = AF_INET;
@@ -21,7 +21,7 @@ bool BTruckers::Client::Communcation::InitiateConnection(const char* ip, int por
     serverSocket.sin_port = port;
 
     LOG_DEBUG("Initiating connection now.");
-    BTruckers::Client::Utils::CheckResponse(connect(this->clientSocket, (struct sockaddr*)&serverSocket, sizeof(struct sockaddr)),"Failed to initiate connection with the server.");
+    BTruckers::Shared::Utils::CheckResponse(connect(this->clientSocket, (struct sockaddr*)&serverSocket, sizeof(struct sockaddr)),"Failed to initiate connection with the server.");
 
     return true;
 }
@@ -46,6 +46,11 @@ bool BTruckers::Client::Communcation::SendMessage(std::string message)
         return false;
     const char* cstrMsg = message.c_str();
     LOG_DEBUG("MEssage to be sent: '%s'\n", cstrMsg);
-    BTruckers::Client::Utils::CheckResponse(write(this->clientSocket, cstrMsg, message.length()*sizeof(char)), "Failed to send the message");
+    BTruckers::Shared::Utils::CheckResponse(write(this->clientSocket, cstrMsg, message.length()*sizeof(char)), "Failed to send the message");
     return true;
+}
+
+int BTruckers::Client::Communcation::GetClientSocket()
+{
+    return this->clientSocket;
 }

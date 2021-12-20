@@ -10,9 +10,15 @@
 namespace BTruckers{
     namespace Shared{
 
+        namespace TCPCommunication
+        {
+            //goto: Communication.h for definitions
+        }
+
         namespace Utils{
             static inline std::string CurrentDateTime();
             static inline uint32_t CRCValue(std::string s);
+            static inline int CheckResponse(int result, const char *errorMessage);
         }
         
         namespace Structures{

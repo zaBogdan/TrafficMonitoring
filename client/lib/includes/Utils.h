@@ -7,16 +7,6 @@
 namespace BTruckers{
     namespace Client{
         namespace Utils{
-            static inline int CheckResponse(int result, const char *errorMessage)
-            {
-                if(result == ERROR_SOCKET)
-                {
-                    perror(errorMessage);
-                    exit(result);
-                }
-                return result;
-            }
-
             static inline std::string IntToHex(int x)
             {
                 char *hexString = new char[30];
