@@ -15,6 +15,7 @@ namespace BTruckers
         {
             class Server;
             class Tokens;
+            class CPV;
         }
 
         namespace Utils
@@ -26,12 +27,6 @@ namespace BTruckers
         namespace Commands
         {
             //goto: sourceCommands.h
-        }
-
-        namespace Handler
-        {
-            // std::string Create(std::string command);
-            std::string Handle(std::string command);        
         }
         
         namespace Enums

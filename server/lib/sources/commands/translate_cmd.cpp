@@ -1,9 +1,7 @@
-#include "Command.h"
+#include "sourceCommands.h"
 
-
-std::string BTruckers::Server::Handler::Handle(std::string command)
+std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::Message message)
 {
-    BTruckers::Shared::Structures::Message message = Message::Parse(command);
     if(!message.success)
         return "fCommand with invalid syntax.";
 

@@ -1,29 +1,21 @@
-#include "Message.h"
+#include "CPV.h"
 
-Message *Message::instance = 0;
-
-Message::Message()
+std::string BTruckers::Server::Core::CPV::Craft(std::string Payload)
 {
-
+    LOG_DEBUG("The payload to be crafted is: %s", Payload.c_str())
+    return Payload;
 }
 
-Message* Message::GetInstance()
-{
-    if(!instance)
-        instance = new Message;
-    return instance;
-}
-
-BTruckers::Shared::Structures::Message Message::Parse(std:: string command)
+BTruckers::Shared::Structures::Message BTruckers::Server::Core::CPV::Parse(std::string payload)
 {
     BTruckers::Shared::Structures::Message msg;
-    if(command[0] != MESSAGE_SEPARATOR[0])
+    if(payload[0] != MESSAGE_SEPARATOR[0])
     {
         LOG_ERROR("Message syntax is invalid");
         return msg;
     }
 
-    size_t lastSeparatorPosition = command.find_last_of(MESSAGE_SEPARATOR);
+    size_t lastSeparatorPosition = payload.find_last_of(MESSAGE_SEPARATOR);
     if(lastSeparatorPosition == std::string::npos)
     {
         LOG_ERROR("Message syntax is invalid");
@@ -38,9 +30,9 @@ BTruckers::Shared::Structures::Message Message::Parse(std:: string command)
     }
 
     //remove the |
-    command = command.substr(1);
+    payload = payload.substr(1);
 
-    size_t splitterLocation  = command.find(TYPE_SEPARATOR);
+    size_t splitterLocation  = payload.find(TYPE_SEPARATOR);
     if(splitterLocation == std::string::npos)
     {
         LOG_ERROR("Message syntax is invalid");
@@ -48,12 +40,19 @@ BTruckers::Shared::Structures::Message Message::Parse(std:: string command)
     }
 
     //splitting them into the right values
-    msg.command = command.substr(0, splitterLocation);
+    msg.command = payload.substr(0, splitterLocation);
     for(auto &x : msg.command)
     {
         x = std::tolower(x);
     }
-    msg.payload = command.substr(splitterLocation+1);
+    msg.payload = payload.substr(splitterLocation+1);
     msg.success = true;
     return msg;
+}
+
+bool BTruckers::Server::Core::CPV::Validate(std::string payload)
+{
+    LOG_DEBUG("The payload to validate is: %s", payload.c_str())
+
+    return false;
 }

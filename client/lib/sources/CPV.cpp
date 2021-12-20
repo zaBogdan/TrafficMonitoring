@@ -1,14 +1,13 @@
-#include "Command.h"
+#include "CPV.h"
 
-
-std::string BTruckers::Client::Handler::Create(std::string command, std::string token)
+std::string BTruckers::Client::Core::CPV::Craft(std::string Payload)
 {
     //getting the position between command and payload
-    size_t spaceFind = command.find(" ");
+    size_t spaceFind = Payload.find(" ");
 
     //splitting them
-    std::string userCmd = command.substr(0, spaceFind);
-    std::string payload = command.substr(spaceFind+1);
+    std::string userCmd = Payload.substr(0, spaceFind);
+    std::string payload = Payload.substr(spaceFind+1);
     
     //Doing some normalization:
     for(auto& c : userCmd)
@@ -16,7 +15,8 @@ std::string BTruckers::Client::Handler::Create(std::string command, std::string 
         c = tolower(c);
     }
 
-    LOG_DEBUG("Token is: %s", token.c_str());
+    // here i will get the token from the internal state class
+    // LOG_DEBUG("Token is: %s", token.c_str());
     
     // now we should handle each command with their ruleset.  Calculating crc
     uint32_t crcValue = BTruckers::Shared::Utils::CRCValue(userCmd);
@@ -40,4 +40,18 @@ std::string BTruckers::Client::Handler::Create(std::string command, std::string 
             LOG_ERROR("Command not found. Make sure you spelled it correctly.");
             return "";
     }
+}
+
+BTruckers::Shared::Structures::Message BTruckers::Client::Core::CPV::Parse(std::string payload)
+{
+    LOG_DEBUG("The payload to parse is: %s", payload.c_str())
+    BTruckers::Shared::Structures::Message data;
+    return data;
+}
+
+bool BTruckers::Client::Core::CPV::Validate(std::string payload)
+{
+    LOG_DEBUG("The payload to validate is: %s", payload.c_str())
+
+    return false;
 }

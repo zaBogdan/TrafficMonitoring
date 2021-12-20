@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include "BTRClient.h"
 #include "BTRShared.h"
-#include "Message.h"
+// #include "Message.h"
 #include "Client.h"
-#include "Command.h"
-#include "Communication.h"
+#include "CPV.h"
+#include "protocols/TCP.h"
 
 void printHelp(char* toolName)
 {
@@ -30,17 +30,14 @@ int main(int argc, char *argv[])
 
     //client trying to connect to the server
     BTruckers::Client::Communcation client(argv[1], atoi(argv[2]));
+    BTruckers::Client::Core::CPV cpv;
 
     do{
         // std::string msg = client.ReadFromCLI();
         std::string msg = "login zaBogdan:P@ssw0rd1";
         LOG_DEBUG("The message that we read was %s",msg.c_str());
-        msg = BTruckers::Client::Handler::Create(msg);
-        // msg = Message::Format(msg);
-        // LOG_DEBUG("Final message is: '%s'", msg.c_str());
-        // client.SendMessage(msg);
-        BTruckers::Shared::TCPCommunication::Send(client.GetClientSocket(), msg);
-        // sleep(10000000);
+        msg = cpv.Craft(msg);
+        BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), msg);
         break;
     }while(true);
 

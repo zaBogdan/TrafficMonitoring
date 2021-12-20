@@ -1,6 +1,6 @@
-#include "Communication.h"
+#include "protocols/TCP.h"
 
-bool BTruckers::Shared::TCPCommunication::Send(int socket,std::string msg)
+bool BTruckers::Shared::Protocols::TCP::Send(int socket,std::string msg)
 {
     LOG_DEBUG("Starting to format the message. Adding the prefix");
     if(msg == "")
@@ -23,7 +23,7 @@ bool BTruckers::Shared::TCPCommunication::Send(int socket,std::string msg)
     return true;
 }
 
-std::string BTruckers::Shared::TCPCommunication::Receive(int socket)
+std::string BTruckers::Shared::Protocols::TCP::Receive(int socket)
 {
     LOG_DEBUG("Reading the first 4 bytes of the message");
     char messagePrefix[5];

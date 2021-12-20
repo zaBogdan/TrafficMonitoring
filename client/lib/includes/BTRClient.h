@@ -1,13 +1,22 @@
 #pragma once
 #include <cstring>
 #include <string>
+#include "BTRShared.h"
 #include "constants.h"
+#include "Logger.h"
 #include "Utils.h"
 
-namespace BTruckers{
-    namespace Client{
+
+namespace BTruckers
+{
+    namespace Client
+    {
         //start client namespace code
-        class Communcation;
+        namespace Core
+        {
+            class Communcation;
+            class CPV;
+        }
 
         namespace Utils{
             static inline std::string IntToHex(int x);

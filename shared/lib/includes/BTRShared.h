@@ -4,11 +4,17 @@
 #include <time.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "constants.h"
+#include "static/constants.h"
 #include "Utils.h"
 
 namespace BTruckers{
     namespace Shared{
+        
+        namespace Core
+        {
+            //craft parse validate class
+            class CPV;
+        }
 
         namespace TCPCommunication
         {
@@ -70,5 +76,5 @@ namespace BTruckers{
         }
     };
 };
-#include "structures.h"
+#include "static/structures.h"
 #include "Logger.h"

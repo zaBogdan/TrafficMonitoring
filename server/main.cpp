@@ -2,8 +2,8 @@
 #include "BTRShared.h"
 #include "Server.h"
 #include "Logger.h"
-#include "Message.h"
-#include "Communication.h"
+#include "protocols/TCP.h"
+#include "CPV.h"
 #include "Command.h"
 #include <signal.h>
 
@@ -18,6 +18,7 @@ int main()
     }
     LOG_INFO("Attempting to start the server");
     BTruckers::Server::Core::Server server;
+    BTruckers::Server::Core::CPV cpv;
 
     //initializing the multiplexing
     FD_ZERO(&currentSockets);
@@ -47,7 +48,7 @@ int main()
 
                     // printf("Starting to read from old connection...");
                     // std::string recvMessage = server.ReadMessage(i);
-                    std::string recvMessage = BTruckers::Shared::TCPCommunication::Receive(i); 
+                    std::string recvMessage = BTruckers::Shared::Protocols::TCP::Receive(i); 
                     if(recvMessage == "")
                     {
                         LOG_INFO("Connection killed.");
@@ -61,7 +62,9 @@ int main()
                         if(newRequestProcess==0)
                         {
                             printf("[Proccess] Started working with on pid %d with parent %d.\n", getpid(), getppid());
-                            std::string response = BTruckers::Server::Handler::Handle(recvMessage);
+
+                            BTruckers::Shared::Structures::Message request = cpv.Parse(recvMessage);
+                            std::string response = BTruckers::Server::Commands::Handler(request);
                             printf("[Proccess] Task finished with response '%s'. Killing process %d...\n",response.c_str(), getpid());
                             kill(getpid(),SIGKILL);
                         }else{
