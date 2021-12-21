@@ -22,16 +22,23 @@ int main()
 
     
     BTruckers::Server::Models::Users user;
-    // user.Execute("select * from users;");
-    if(!user.GetUserByUsername("gigi"))
-    {
-        LOG_ERROR("Failed to retrieve the user");
-    }
-    else{
-        LOG_DEBUG("Now I am acting as user: %s", user.username.c_str());
-        if(user.Delete())
-            LOG_DEBUG("Successfully deleted the user!");
-    }
+    user.username = "gigimuschi";
+    user.uuid = "hello";
+    user.email = "hello@world.co";
+    user.lastname = "buna";
+    user.company = "zabogdan";
+    user.firstname = "siua";
+    user.Create();
+
+    // if(!user.GetUserByUsername("gigi"))
+    // {
+    //     LOG_ERROR("Failed to retrieve the user");
+    // }
+    // else{
+    //     LOG_DEBUG("Now I am acting as user: %s", user.username.c_str());
+    //     // if(user.Delete())
+    //     //     LOG_DEBUG("Successfully deleted the user!");
+    // }
 
     return 0;
     // fd_set currentSockets, readySockets;
