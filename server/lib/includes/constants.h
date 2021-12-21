@@ -7,3 +7,4 @@
 #define MAXIMUM_MESSAGE_SIZE 4
 #define ERROR_SOCKET -1
 #define DATABASE_FILENAME "btruckers.db"
+#define CHECK_BREAK(cond, code) {if((cond)) { (code); break;}}

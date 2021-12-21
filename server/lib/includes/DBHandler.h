@@ -1,6 +1,7 @@
 #pragma once
 #include "BTRCommon.h"
 #include <sqlite3.h> 
+#include <cstdarg>
 
 namespace BTruckers
 {
@@ -19,6 +20,7 @@ namespace BTruckers
                     public:
                         DBHandler();
                         ~DBHandler();
+                        static std::string PrepareSQL(std::string sql,...);
                         static bool Execute(const char* sql, std::vector<BTruckers::Server::Structures::SQLiteResponse>& response);
                };
         }  

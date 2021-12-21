@@ -18,13 +18,18 @@ int main()
         Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
         LOG_DEBUG("Application is now running in verbose mode...");
     }
-    // std::vector<BTruckers::Server::Structures::SQLiteResponse> response;
     BTruckers::Server::Core::DBHandler db;
-    // db.Execute("select * from users;", response);
 
     
     BTruckers::Server::Models::Users user;
-    user.Execute("select * from users;");
+    // user.Execute("select * from users;");
+    if(!user.GetUserBy("username", "testulescu"))
+    {
+        LOG_ERROR("Failed to retrieve the user");
+    }
+    else{
+        LOG_DEBUG("Now I am acting as user: %s", user.username.c_str());
+    }
 
     return 0;
     // fd_set currentSockets, readySockets;

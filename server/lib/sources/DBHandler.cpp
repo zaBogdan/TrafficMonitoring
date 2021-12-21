@@ -30,11 +30,44 @@ bool BTruckers::Server::Core::DBHandler::Execute(const char* sql, std::vector<BT
     
     char *zErrMsg = 0;
     int rc = sqlite3_exec(BTruckers::Server::Core::DBHandler::connection, sql, BTruckers::Server::Core::DBHandler::CallbackFunction, &response, &zErrMsg);
-    LOG_DEBUG("RC is: %d", rc);
+
     if(!rc)
         return true;
+
     LOG_WARNING("Failed to run the query '%s' with the following error: '%s'", sql, zErrMsg);
     return false;
+}
+
+std::string BTruckers::Server::Core::DBHandler::PrepareSQL(std::string sql,...)
+{
+    //get the number of arguments (I will always override this one)
+    size_t count = std::count(sql.begin(), sql.end(), '?');
+
+    //for each argument we will replace the '?'
+    va_list args;
+    va_start(args, sql);
+    for(size_t idx=0;idx<count;++idx)
+    {
+        size_t pos = sql.find("?");
+        std::string substituter = va_arg(args, char*);
+
+        //doing some sanitization (not the best it should do the trick)
+        substituter.erase(std::remove(substituter.begin(), substituter.end(), '\''), substituter.end());
+        substituter.erase(std::remove(substituter.begin(), substituter.end(), ';'), substituter.end());
+        substituter.erase(std::remove(substituter.begin(), substituter.end(), '\"'), substituter.end());
+
+        if(pos == std::string::npos)
+        {
+            LOG_WARNING("Failed to find the place where to substitute '%s'. Exiting...", substituter.c_str());
+            break;
+        }
+        //erase the ?
+        sql.erase(pos,1);
+        //insert the value
+        sql.insert(pos,substituter);
+    }
+    va_end(args);
+    return sql;
 }
 
 /**
@@ -74,6 +107,6 @@ bool BTruckers::Server::Core::DBHandler::InitiateConnection()
 //destructor
 BTruckers::Server::Core::DBHandler::~DBHandler()
 {
-    LOG_DEBUG("Closing the database connection");
+    LOG_INFO("Closing the connection to database");
     sqlite3_close(BTruckers::Server::Core::DBHandler::connection);    
 }

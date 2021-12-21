@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <algorithm>
 #include "constants.h"
 #include "Logger.h"
 #include "Utils.h"
