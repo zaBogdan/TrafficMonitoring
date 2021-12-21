@@ -1,10 +1,16 @@
 #include "DBHandler.h"
 
 sqlite3* BTruckers::Server::Core::DBHandler::connection = nullptr;
+std::vector<BTruckers::Server::Structures::SQLiteResponse> BTruckers::Server::Core::DBHandler::nothingToRespondTo = {};
 
 int BTruckers::Server::Core::DBHandler::CallbackFunction(void *instance, int argc, char **argv, char **azColName)
 {
     std::vector<BTruckers::Server::Structures::SQLiteResponse> *tmpVector = (std::vector<BTruckers::Server::Structures::SQLiteResponse>*) instance;
+    if(tmpVector == &BTruckers::Server::Core::DBHandler::nothingToRespondTo)
+    {
+        LOG_DEBUG("Nothing to do here. No need for response");
+        return 0;
+    }
     BTruckers::Server::Structures::SQLiteResponse tmp;
     BTruckers::Shared::Structures::KeyValue pair;
     tmp.count = argc;

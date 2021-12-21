@@ -13,6 +13,7 @@ namespace BTruckers
                {
                     protected:
                         static sqlite3 *connection;
+                        static std::vector<BTruckers::Server::Structures::SQLiteResponse> nothingToRespondTo;
 
                     private: 
                         static int CallbackFunction(void *instance, int argc, char **argv, char **azColName);
@@ -21,7 +22,7 @@ namespace BTruckers
                         DBHandler();
                         ~DBHandler();
                         static std::string PrepareSQL(std::string sql,...);
-                        static bool Execute(const char* sql, std::vector<BTruckers::Server::Structures::SQLiteResponse>& response);
+                        static bool Execute(const char* sql, std::vector<BTruckers::Server::Structures::SQLiteResponse>& response = BTruckers::Server::Core::DBHandler::nothingToRespondTo);
                };
         }  
     }     

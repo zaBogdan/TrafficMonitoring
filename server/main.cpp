@@ -23,12 +23,14 @@ int main()
     
     BTruckers::Server::Models::Users user;
     // user.Execute("select * from users;");
-    if(!user.GetUserBy("username", "testulescu"))
+    if(!user.GetUserByUsername("gigi"))
     {
         LOG_ERROR("Failed to retrieve the user");
     }
     else{
         LOG_DEBUG("Now I am acting as user: %s", user.username.c_str());
+        if(user.Delete())
+            LOG_DEBUG("Successfully deleted the user!");
     }
 
     return 0;

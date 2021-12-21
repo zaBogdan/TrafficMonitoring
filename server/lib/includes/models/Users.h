@@ -19,14 +19,22 @@ namespace BTruckers
                     std::string lastname = "";
                     std::string company = "";
                 private:
-                    const char* tabelName = "users";
+                    const std::string tabelName = "users";
                     static bool PopulateClass(BTruckers::Server::Models::Users& current, BTruckers::Server::Structures::SQLiteResponse& data);
                 public:
                     Users() = default;
-                    bool Execute(const char* sql);
                     void Print();
 
+                    //the Read Functions
                     bool GetUserBy(std::string key, std::string value);
+                    bool GetUserByUUID(std::string value);
+                    bool GetUserByUsername(std::string value);
+                    bool GetUserByEmail(std::string value);
+                    
+                    //the CUD functions
+                    bool Create();
+                    bool Update();
+                    bool Delete();
             };
         }
     }

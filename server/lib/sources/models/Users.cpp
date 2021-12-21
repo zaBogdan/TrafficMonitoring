@@ -3,14 +3,20 @@
 
 
 //create a wrapper for DBHandler
-bool BTruckers::Server::Models::Users::Execute(const char* sql)
+bool BTruckers::Server::Models::Users::GetUserBy(std::string key, std::string value)
 {
     std::vector<BTruckers::Server::Structures::SQLiteResponse> response;
-
-    if(!BTruckers::Server::Core::DBHandler::Execute(sql, response))
+    std::string sql = BTruckers::Server::Core::DBHandler::PrepareSQL("SELECT * FROM "+this->tabelName+" WHERE ?='?' LIMIT 1;", key.c_str(), value.c_str());
+    LOG_DEBUG("SQL to be executed is: %s", sql.c_str());
+    
+    if(!BTruckers::Server::Core::DBHandler::Execute(sql.c_str(), response))
         return false;
 
+    if(!response.size())
+        return false;
+    
     BTruckers::Server::Models::Users::PopulateClass(*this, response[0]);
+    //this will work only on debug context
     this->Print();
     return true;
 }
@@ -48,21 +54,38 @@ void BTruckers::Server::Models::Users::Print()
     LOG_DEBUG("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 }
 
-bool BTruckers::Server::Models::Users::GetUserBy(std::string key, std::string value)
+bool BTruckers::Server::Models::Users::Create()
 {
-    std::vector<BTruckers::Server::Structures::SQLiteResponse> response;
-    std::string sql = BTruckers::Server::Core::DBHandler::PrepareSQL("SELECT * FROM users WHERE ?='?' LIMIT 1;", key.c_str(), value.c_str());
-    LOG_DEBUG("SQL to be executed is: %s", sql.c_str());
-    
-    if(!BTruckers::Server::Core::DBHandler::Execute(sql.c_str(), response))
+    return false;
+}
+bool BTruckers::Server::Models::Users::Update()
+{
+    return false;
+}
+
+bool BTruckers::Server::Models::Users::Delete()
+{
+    //if the user isn't yet populated with the UUID we can't run this method.
+    if(this->uuid == "")
         return false;
 
-    if(!response.size())
+    std::string sql = BTruckers::Server::Core::DBHandler::PrepareSQL("DELETE FROM "+this->tabelName+" WHERE uuid='?';", this->uuid.c_str());
+    if(!BTruckers::Server::Core::DBHandler::Execute(sql.c_str()))
         return false;
-    
-    BTruckers::Server::Models::Users::PopulateClass(*this, response[0]);
-    //this will work only on debug context
-    this->Print();
     return true;
+}
 
+
+//per model functions
+bool BTruckers::Server::Models::Users::GetUserByUUID(std::string value)
+{
+    return this->GetUserBy("uuid", value);
+}
+bool BTruckers::Server::Models::Users::GetUserByUsername(std::string value)
+{
+    return this->GetUserBy("username", value);
+}
+bool BTruckers::Server::Models::Users::GetUserByEmail(std::string value)
+{
+    return this->GetUserBy("email", value);
 }
