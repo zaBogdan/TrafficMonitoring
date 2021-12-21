@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <vector>
 #include <string>
 #include "constants.h"
 #include "Logger.h"
@@ -34,6 +34,15 @@ namespace BTruckers
         {
             //insert all the database models that are to be used
             class Users;
+        }
+
+        namespace Structures
+        {
+            struct SQLiteResponse
+            {
+                int count = 0;
+                std::vector<BTruckers::Shared::Structures::KeyValue> values;
+            };
         }
 
         namespace Enums

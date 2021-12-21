@@ -19,7 +19,7 @@ namespace BTruckers
                     public:
                         DBHandler();
                         ~DBHandler();
-                        static bool Execute(const char* sql);
+                        static bool Execute(const char* sql, std::vector<BTruckers::Server::Structures::SQLiteResponse>& response);
                };
         }  
     }     

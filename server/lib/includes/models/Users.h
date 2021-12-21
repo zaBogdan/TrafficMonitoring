@@ -11,7 +11,7 @@ namespace BTruckers
             class Users
             {
                 private:
-                    int CallbackFunction(void* notUsed, int argc, char **argv, char **azColName);
+                    
                     const char* tabelName = "users";
 
                     std::string uuid;
