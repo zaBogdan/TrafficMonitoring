@@ -41,6 +41,37 @@ bool BTruckers::Server::Models::Users::PopulateClass(BTruckers::Server::Models::
     return true;
 }
 
+
+std::string BTruckers::Server::Models::Users::SQLStatemFromVariables(std::string syntax)
+{
+    std::string sqlStatement = "";
+    sqlStatement = BTruckers::Server::Utils::FormatFromString(syntax, "_","uuid", this->uuid.c_str());
+    BTruckers::Server::Utils::AddNewChar(sqlStatement, ",)", "_,");  
+    sqlStatement = BTruckers::Server::Utils::FormatFromString(sqlStatement, "_","username", this->username.c_str());
+    BTruckers::Server::Utils::AddNewChar(sqlStatement, ",)", "_,");
+    sqlStatement = BTruckers::Server::Utils::FormatFromString(sqlStatement, "_","email", this->email.c_str());
+    BTruckers::Server::Utils::AddNewChar(sqlStatement, ",)", "_,");
+    sqlStatement = BTruckers::Server::Utils::FormatFromString(sqlStatement, "_","password", this->password.c_str());
+    BTruckers::Server::Utils::AddNewChar(sqlStatement, ",)", "_,");
+    sqlStatement = BTruckers::Server::Utils::FormatFromString(sqlStatement, "_","firstname", this->firstname.c_str());
+    BTruckers::Server::Utils::AddNewChar(sqlStatement, ",)", "_,");
+    sqlStatement = BTruckers::Server::Utils::FormatFromString(sqlStatement, "_","lastname", this->lastname.c_str());
+    BTruckers::Server::Utils::AddNewChar(sqlStatement, ",)", "_,");
+    sqlStatement = BTruckers::Server::Utils::FormatFromString(sqlStatement, "_","company", this->company.c_str());
+    // sqlStatement += 
+    // "_ = _"
+    // "(_) VALUES (_)"
+    // SET column1 = value1, column2 = value2, ...
+
+    // (column1, column2, column3, ...)
+    // VALUES (value1, value2, value3, ...);
+    // return BTruckers::Server::Core::DBHandler::PrepareSQL(
+    //     statement,
+    // ); 
+    return sqlStatement;
+}
+
+
 void BTruckers::Server::Models::Users::Print()
 {
     LOG_DEBUG("-=-=-=-=-= User Model -=-=-=-=-=");
@@ -56,6 +87,12 @@ void BTruckers::Server::Models::Users::Print()
 
 bool BTruckers::Server::Models::Users::Create()
 {
+    if(this->GetUserByUUID())
+    {
+        LOG_WARNING("The user with uuid '%s' already exists.");
+        return false;
+    }
+    this->SQLStatemFromVariables("(_,) VALUES (_,)");
     return false;
 }
 bool BTruckers::Server::Models::Users::Update()
@@ -72,6 +109,7 @@ bool BTruckers::Server::Models::Users::Delete()
     std::string sql = BTruckers::Server::Core::DBHandler::PrepareSQL("DELETE FROM "+this->tabelName+" WHERE uuid='?';", this->uuid.c_str());
     if(!BTruckers::Server::Core::DBHandler::Execute(sql.c_str()))
         return false;
+    
     return true;
 }
 
@@ -79,13 +117,19 @@ bool BTruckers::Server::Models::Users::Delete()
 //per model functions
 bool BTruckers::Server::Models::Users::GetUserByUUID(std::string value)
 {
+    if(value == "")
+        value = this->uuid;
     return this->GetUserBy("uuid", value);
 }
 bool BTruckers::Server::Models::Users::GetUserByUsername(std::string value)
 {
+    if(value == "")
+        value = this->username;
     return this->GetUserBy("username", value);
 }
 bool BTruckers::Server::Models::Users::GetUserByEmail(std::string value)
 {
+    if(value == "")
+        value = this->email;
     return this->GetUserBy("email", value);
 }
