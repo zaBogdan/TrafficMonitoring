@@ -76,6 +76,16 @@ std::string BTruckers::Server::Core::DBHandler::PrepareSQL(std::string sql,...)
     return sql;
 }
 
+bool BTruckers::Server::Core::DBHandler::AddIfNotNULL(std::string& sql,const char* key, std::string variable, std::string syntax)
+{
+    if(variable == "")
+        return false;
+    sql = BTruckers::Server::Utils::FormatFromString(syntax, "_",key, variable.c_str());
+    BTruckers::Server::Utils::AddNewChar(sql, ",)", "'_',");
+    return true;  
+}
+
+
 /**
  * @brief Constructor and destructor with their aid functions 
  */

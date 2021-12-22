@@ -11,7 +11,6 @@ namespace BTruckers
             class Users
             {
                 public: 
-                    std::string uuid = "";
                     std::string username = "";
                     std::string password = "";
                     std::string email = "";
@@ -19,13 +18,19 @@ namespace BTruckers
                     std::string lastname = "";
                     std::string company = "";
                 private:
+                    std::string uuid = "";
                     const std::string tabelName = "users";
+                    std::vector<BTruckers::Server::Structures::SQLiteResponse> response;
+
                     static bool PopulateClass(BTruckers::Server::Models::Users& current, BTruckers::Server::Structures::SQLiteResponse& data);
                     std::string SQLStatemFromVariables(std::string syntax);
+                    bool Execute(std::string sql,bool populate = true);
                 public:
                     Users() = default;
                     void Print();
 
+                    std::string GetUserUUID();
+                    
                     //the Read Functions
                     bool GetUserBy(std::string key, std::string value);
                     bool GetUserByUUID(std::string value = "");
