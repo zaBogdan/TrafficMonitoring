@@ -19,11 +19,11 @@ namespace BTruckers
                     std::string company = "";
                 private:
                     std::string uuid = "";
+                    bool PopulateClassDisabled = false;
                     const std::string tabelName = "users";
                     std::vector<BTruckers::Server::Structures::SQLiteResponse> response;
 
                     static bool PopulateClass(BTruckers::Server::Models::Users& current, BTruckers::Server::Structures::SQLiteResponse& data);
-                    std::string SQLStatemFromVariables(std::string syntax);
                     bool Execute(std::string sql,bool populate = true);
                 public:
                     Users() = default;

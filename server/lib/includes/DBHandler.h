@@ -24,7 +24,6 @@ namespace BTruckers
                         ~DBHandler();
                         static std::string PrepareSQL(std::string sql,...);
                         static bool Execute(const char* sql, std::vector<BTruckers::Server::Structures::SQLiteResponse>& response = BTruckers::Server::Core::DBHandler::nothingToRespondTo);
-                        static bool AddIfNotNULL(std::string& sql,const char* key, std::string variable, std::string syntax);
                };
         }  
     }     

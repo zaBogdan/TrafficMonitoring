@@ -24,8 +24,6 @@ namespace BTruckers
         {
             static inline std::string IntToHex(int x);
             static inline int CheckResponse(int result, const char *errorMessage);
-            static inline std::string FormatFromString(std::string format, std::string substitution, ...);
-            static inline bool AddNewChar(std::string& format, std::string delimiter, std::string character);
         }
 
         namespace Commands

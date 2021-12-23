@@ -21,25 +21,11 @@ int main()
     BTruckers::Server::Core::DBHandler db;
     
     BTruckers::Server::Models::Users user;
-    user.username = "gigimuschi";
-    user.email = "hello@world.co";
-    user.lastname = "buna";
-    user.password = "P@ssw0rd1";
-    user.company = "zabogdan";
-    user.firstname = "siua";
-    user.Create();
-    // user.Update("6ca8222d-4a25-42f3-9f6a-6a0f6aa396cd")
-    // user.Delete();
-
-    if(!user.GetUserByUsername("gigimuschi"))
-    {
-        LOG_ERROR("Failed to retrieve the user");
-    }
-    else{
-        LOG_DEBUG("Now I am acting as user: %s", user.username.c_str());
-        // if(user.Delete())
-        //     LOG_DEBUG("Successfully deleted the user!");
-    }
+    user.GetUserByUsername("gigimuschi");
+    user.lastname = "Hellomania";
+    user.company = "Doodler";
+    user.Update();
+    user.GetUserByUUID();
 
     return 0;
     // fd_set currentSockets, readySockets;
