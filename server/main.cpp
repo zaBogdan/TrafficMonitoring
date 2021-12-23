@@ -12,6 +12,8 @@
 
 int main()
 {
+    // Deriv d;
+    // d.Print(); //20
     if(DEBUG_MODE == true)
     {
         
@@ -20,16 +22,21 @@ int main()
     }
     BTruckers::Server::Core::DBHandler db;
     
-    BTruckers::Server::Models::Users user;
-    user.FindBy("username", "gigimuschi");
-    // user.UpdateField("password", "P@ssw0rd2");
+    // BTruckers::Server::Models::Entertainment data;
+    BTruckers::Server::Models::Users data("username", "zaBogdan");
+    // data.FindBy("username", "zaBogdan");
+    data.Print();
+    // user.FindBy("username", "gigimuschi");
+    // data.UpdateField("password", "P@ssw0rd2");
     // user.UpdateField("email", "zabogdan@world.ro");
     // user.UpdateField("firstname", "Bobo");
     // user.UpdateField("lastname", "BZV");
     // user.UpdateField("username", "zaBogdan_2");
     // user.UpdateField("company", "Bitdefender");
-    user.Delete();
-    user.Print();
+    // data.Update();
+    // data.Print();
+    // user.Delete();
+    // user.Print();
     // user.GetUserByUsername("gigimuschi");
     // user.lastname = "Hellomania";
     // user.company = "Doodler";
@@ -102,3 +109,4 @@ int main()
 
     // return 0;
 }
+

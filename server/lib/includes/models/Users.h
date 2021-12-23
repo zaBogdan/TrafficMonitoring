@@ -1,6 +1,7 @@
 #pragma once
 #include "BTRCommon.h"
 #include "DBHandler.h"
+#include "models/BaseModel.h"
 #include <unordered_map>
 
 namespace BTruckers
@@ -9,7 +10,7 @@ namespace BTruckers
     {
         namespace Models
         {
-            class Users
+            class Users : public BaseModel
             {
                 private:
                     const std::string tableName = "users";
@@ -22,30 +23,20 @@ namespace BTruckers
                         {"lastname", BTruckers::Shared::Structures::TrackChanges{}},
                         {"company", BTruckers::Shared::Structures::TrackChanges{}},
                     };
-                    
+                
                     bool lockClassChanges = false;
                     bool hasBeenInitialized = false;
                     bool allowUUIDChanges = false;
-                    static bool Populate(BTruckers::Server::Models::Users& current, BTruckers::Server::Structures::SQLiteResponse& data);
-                    bool Execute(std::string sql);
-
                 public:
                     Users();
                     Users(std::string identifier, std::string value);
 
-                    //CRUD
-                    bool FindBy(std::string identifier, std::string value);
-                    bool Create();
-                    bool Update();
-                    bool Delete();
-
-                    //Update field
-                    bool UpdateField(std::string key, std::string value);
-                    std::string GetField(std::string key);
-
-                    //print the variables
-                    void Print();
-
+                    //override virtual functions
+                    bool& IsLocked() override;
+                    bool& IsInitialized() override;
+                    bool& AllowUUIDChanges() override;
+                    const std::string& GetTableName() override;
+                    DB_FIELDS& GetDBFields() override;
             };
         }
     }
