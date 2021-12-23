@@ -21,11 +21,20 @@ int main()
     BTruckers::Server::Core::DBHandler db;
     
     BTruckers::Server::Models::Users user;
-    user.GetUserByUsername("gigimuschi");
-    user.lastname = "Hellomania";
-    user.company = "Doodler";
-    user.Update();
-    user.GetUserByUUID();
+    user.FindBy("username", "gigimuschi");
+    // user.UpdateField("password", "P@ssw0rd2");
+    // user.UpdateField("email", "zabogdan@world.ro");
+    // user.UpdateField("firstname", "Bobo");
+    // user.UpdateField("lastname", "BZV");
+    // user.UpdateField("username", "zaBogdan_2");
+    // user.UpdateField("company", "Bitdefender");
+    user.Delete();
+    user.Print();
+    // user.GetUserByUsername("gigimuschi");
+    // user.lastname = "Hellomania";
+    // user.company = "Doodler";
+    // user.Update();
+    // user.GetUserByUUID();
 
     return 0;
     // fd_set currentSockets, readySockets;

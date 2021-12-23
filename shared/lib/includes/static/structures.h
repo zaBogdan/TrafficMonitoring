@@ -58,6 +58,11 @@ namespace BTruckers{
                         printf("\n");
                     }
                 };
+
+                struct TrackChanges{
+                    std::string value = "";
+                    bool hasChanged = false;
+                };
         }       
     }
 }

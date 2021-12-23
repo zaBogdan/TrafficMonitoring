@@ -1,6 +1,7 @@
 #pragma once
 #include "BTRCommon.h"
 #include "DBHandler.h"
+#include <unordered_map>
 
 namespace BTruckers
 {
@@ -10,37 +11,41 @@ namespace BTruckers
         {
             class Users
             {
-                public: 
-                    std::string username = "";
-                    std::string password = "";
-                    std::string email = "";
-                    std::string firstname = "";
-                    std::string lastname = "";
-                    std::string company = "";
                 private:
-                    std::string uuid = "";
-                    bool PopulateClassDisabled = false;
-                    const std::string tabelName = "users";
-                    std::vector<BTruckers::Server::Structures::SQLiteResponse> response;
+                    const std::string tableName = "users";
+                    DB_FIELDS fields = {
+                        {"uuid", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"username", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"email", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"password", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"firstname", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"lastname", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"company", BTruckers::Shared::Structures::TrackChanges{}},
+                    };
+                    
+                    bool lockClassChanges = false;
+                    bool hasBeenInitialized = false;
+                    bool allowUUIDChanges = false;
+                    static bool Populate(BTruckers::Server::Models::Users& current, BTruckers::Server::Structures::SQLiteResponse& data);
+                    bool Execute(std::string sql);
 
-                    static bool PopulateClass(BTruckers::Server::Models::Users& current, BTruckers::Server::Structures::SQLiteResponse& data);
-                    bool Execute(std::string sql,bool populate = true);
                 public:
-                    Users() = default;
-                    void Print();
+                    Users();
+                    Users(std::string identifier, std::string value);
 
-                    std::string GetUserUUID();
-                    
-                    //the Read Functions
-                    bool GetUserBy(std::string key, std::string value);
-                    bool GetUserByUUID(std::string value = "");
-                    bool GetUserByUsername(std::string value = "");
-                    bool GetUserByEmail(std::string value = "");
-                    
-                    //the CUD functions
+                    //CRUD
+                    bool FindBy(std::string identifier, std::string value);
                     bool Create();
                     bool Update();
                     bool Delete();
+
+                    //Update field
+                    bool UpdateField(std::string key, std::string value);
+                    std::string GetField(std::string key);
+
+                    //print the variables
+                    void Print();
+
             };
         }
     }
