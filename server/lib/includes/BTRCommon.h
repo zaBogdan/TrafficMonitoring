@@ -24,6 +24,7 @@ namespace BTruckers
         {
             static inline std::string IntToHex(int x);
             static inline int CheckResponse(int result, const char *errorMessage);
+            static inline void SignalHandler(int signal);
         }
 
         namespace Commands

@@ -5,58 +5,38 @@
 #include "protocols/TCP.h"
 #include "CPV.h"
 #include "DBHandler.h"
-#include "models/Users.h"
 #include <signal.h>
-
 #include <iostream>
 
 int main()
 {
-    // Deriv d;
-    // d.Print(); //20
+    signal(SIGINT, BTruckers::Server::Utils::SignalHandler);
     if(DEBUG_MODE == true)
     {
         
         Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
         LOG_DEBUG("Application is now running in verbose mode...");
     }
+
+
+    //declarations...
     BTruckers::Server::Core::DBHandler db;
-    
-    // BTruckers::Server::Models::Entertainment data;
-    BTruckers::Server::Models::Users data("username", "zaBogdan");
-    // data.FindBy("username", "zaBogdan");
-    data.Print();
-    // user.FindBy("username", "gigimuschi");
-    // data.UpdateField("password", "P@ssw0rd2");
-    // user.UpdateField("email", "zabogdan@world.ro");
-    // user.UpdateField("firstname", "Bobo");
-    // user.UpdateField("lastname", "BZV");
-    // user.UpdateField("username", "zaBogdan_2");
-    // user.UpdateField("company", "Bitdefender");
-    // data.Update();
-    // data.Print();
-    // user.Delete();
-    // user.Print();
-    // user.GetUserByUsername("gigimuschi");
-    // user.lastname = "Hellomania";
-    // user.company = "Doodler";
-    // user.Update();
-    // user.GetUserByUUID();
+    fd_set currentSockets, readySockets;
 
-    return 0;
-    // fd_set currentSockets, readySockets;
+    LOG_INFO("Attempting to start the server");
+    //the server instance
+    BTruckers::Server::Core::Server server;
+    //the handler for the messages
+    BTruckers::Server::Core::CPV cpv;
 
-    // LOG_INFO("Attempting to start the server");
-    // BTruckers::Server::Core::Server server;
-    // BTruckers::Server::Core::CPV cpv;
+    //initializing the multiplexing
+    FD_ZERO(&currentSockets);
+    FD_SET(server.getServerSocket(), &currentSockets);
 
-    // //initializing the multiplexing
-    // FD_ZERO(&currentSockets);
-    // FD_SET(server.getServerSocket(), &currentSockets);
+    while(true)
+    {
+        readySockets = currentSockets;
 
-    // while(true)
-    // {
-    //     //to be improved
     //     readySockets = currentSockets;
     //     LOG_DEBUG("Waiting for select to find something.");
     //     BTruckers::Server::Utils::CheckResponse(select(FD_SETSIZE, &readySockets, NULL, NULL, NULL), "Select failed.");
@@ -105,8 +85,8 @@ int main()
     //         }
     //     }
     //     LOG_INFO("Finished the handler. ");
-    // }
-
-    // return 0;
+    }
+    LOG_INFO("The server is now shutting down...");
+    return 0;
 }
 

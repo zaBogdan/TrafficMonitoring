@@ -21,7 +21,7 @@ INCLUDES_SHARED = -I./shared/lib/includes
 CRYPTO_FLAG = -L/usr/local/opt/openssl/lib -I/usr/local/opt/openssl/include -lssl -lcrypto
 
 # flags for compiler
-C_FLAGS = -Wextra -pedantic -std=c++0x 
+C_FLAGS = -Wextra -pedantic -std=c++0x  -lpthread
 
 all: bserver bclient
 

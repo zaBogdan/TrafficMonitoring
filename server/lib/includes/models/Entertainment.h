@@ -1,7 +1,7 @@
 #pragma once
 #include "BTRCommon.h"
 #include "DBHandler.h"
-#include "models/Users.h"
+#include "models/BaseModel.h"
 #include <unordered_map>
 
 namespace BTruckers
@@ -10,25 +10,31 @@ namespace BTruckers
     {
         namespace Models
         {
-            // class Entertainment : public Users
-            // {
-            //     private:
-            //         const std::string tableName = "multimedia";
-            //         DB_FIELDS fields = {
-            //             {"uuid", BTruckers::Shared::Structures::TrackChanges{}},
-            //             {"timestamp", BTruckers::Shared::Structures::TrackChanges{}},
-            //             {"eventType", BTruckers::Shared::Structures::TrackChanges{}},
-            //             {"message", BTruckers::Shared::Structures::TrackChanges{}},
-            //         };
-            //         bool lockClassChanges = false;
-            //         bool hasBeenInitialized = false;
-            //         bool allowUUIDChanges = false;
-            //         static bool Populate(BTruckers::Server::Models::Users& current, BTruckers::Server::Structures::SQLiteResponse& data);
-            //         bool Execute(std::string sql);
+            class Entertainment : public BaseModel
+            {
+                private:
+                    const std::string tableName = "multimedia";
+                    DB_FIELDS fields = {
+                        {"uuid", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"timestamp", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"eventType", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"message", BTruckers::Shared::Structures::TrackChanges{}},
+                    };
+                
+                    bool lockClassChanges = false;
+                    bool hasBeenInitialized = false;
+                    bool allowUUIDChanges = false;
+                public:
+                    Entertainment();
+                    Entertainment(std::string identifier, std::string value);
 
-            //     public:
-
-            // };
+                    //override virtual functions
+                    bool& IsLocked() override;
+                    bool& IsInitialized() override;
+                    bool& AllowUUIDChanges() override;
+                    const std::string& GetTableName() override;
+                    DB_FIELDS& GetDBFields() override;
+            };
         }
     }
 }
