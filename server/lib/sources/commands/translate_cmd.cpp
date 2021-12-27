@@ -22,8 +22,16 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
             break;
 
         default:
-            return "fCommand doesn't exist.";
+            response = BTruckers::Server::Commands::Craft::CommandFailed("Command doesn't exist.");
     }
+
+    //just an error checking
+    if(response == "")
+    {
+        LOG_ERROR("Something went wrong... setting the response to failed just in case");
+        return BTruckers::Server::Commands::Craft::CommandFailed("Something went wrong.");
+    }
+
     LOG_DEBUG("The response for the command is: %s", response.c_str());
     return response;
 }

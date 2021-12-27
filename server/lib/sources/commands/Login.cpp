@@ -27,12 +27,11 @@ std::string BTruckers::Server::Commands::Handle::Authentication(BTruckers::Serve
     BTruckers::Server::Models::Users user(db, "username", username);
 
     //checking if the user exists and if the password matches
-    // if(user.GetField("uuid") == "" || !user.CheckPassword(password))
-    // {
-    //     return BTruckers::Server::Commands::Craft::CommandFailed("Wrong username of password");
-    // }
+    if(user.GetField("uuid") == "" || !user.CheckPassword(password))
+    {
+        return BTruckers::Server::Commands::Craft::CommandFailed("Wrong username of password");
+    }
 
     //now that everything is alright we will generate the tokens (using user uuid)
-    // return BTruckers::Server::Commands::Craft::SetToken(user.GetField("uuid"));
-    return "zabogdanisthebest";
+    return BTruckers::Server::Commands::Craft::SetToken(db,user.GetField("uuid"));
 }

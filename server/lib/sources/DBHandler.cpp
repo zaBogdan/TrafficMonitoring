@@ -34,10 +34,7 @@ bool BTruckers::Server::Core::DBHandler::Execute(const char* sql, std::vector<BT
     }
 
     char *zErrMsg = 0;
-    // sqlite3_mutex_enter(sqlite3_db_mutex(BTruckers::Server::Core::DBHandler::connection));
-    // LOG_DEBUG("Entering now...");
     int rc = sqlite3_exec(this->connection, sql, BTruckers::Server::Core::DBHandler::CallbackFunction, &response, nullptr);
-    // sqlite3_mutex_leave(sqlite3_db_mutex(BTruckers::Server::Core::DBHandler::connection));
 
     if(!rc)
         return true;

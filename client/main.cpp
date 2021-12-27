@@ -38,7 +38,8 @@ int main(int argc, char *argv[])
 
     do{
         // std::string msg = client.ReadFromCLI();
-        std::string msg = "login zaBogdan:P@ssw0rd2";
+        // std::string msg = "login zaBogdan:P@ssw0rd2";
+        std::string msg = argv[3];
         LOG_DEBUG("The message that we read was %s",msg.c_str());
         msg = cpv.Craft(msg);
         BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), msg);

@@ -1,14 +1,14 @@
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Application is now running in verbose mode...
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Starting to initiate connection to the server
-2021/12/27 22:11:19 - [ INFO ][ CLIENT ] Trying to connect to server...
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Initiating connection now.
-2021/12/27 22:11:19 - [ INFO ][ CLIENT ] Connection with server was successful.
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] The message that we read was login zaBogdan:P@ssw0rd2
-2021/12/27 22:11:19 - [ INFO ][ CLIENT ] Handling command 'login' with the crcValue: 0xaa08cb10
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Starting to format the message. Adding the prefix
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] The new message is: 0055|Authenticate:d{susername:zaBogdan,spassword:P@ssw0rd2}
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Successfully sent to the server
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Reading the first 4 bytes of the message
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Reading the next 18 bytes of the message
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Final message is: |zabogdanisthebest
-2021/12/27 22:11:19 - [ DEBUG ][ CLIENT ] Response is: |zabogdanisthebest
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Application is now running in verbose mode...
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Starting to initiate connection to the server
+2021/12/27 22:34:10 - [ INFO ][ CLIENT ] Trying to connect to server...
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Initiating connection now.
+2021/12/27 22:34:10 - [ INFO ][ CLIENT ] Connection with server was successful.
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] The message that we read was login zaBogdan:P@ssw0rd2
+2021/12/27 22:34:10 - [ INFO ][ CLIENT ] Handling command 'login' with the crcValue: 0xaa08cb10
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Starting to format the message. Adding the prefix
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] The new message is: 0055|Authenticate:d{susername:zaBogdan,spassword:P@ssw0rd2}
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Successfully sent to the server
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Reading the first 4 bytes of the message
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Reading the next 24 bytes of the message
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Final message is: |sSuccessfully logged in
+2021/12/27 22:34:10 - [ DEBUG ][ CLIENT ] Response is: |sSuccessfully logged in
