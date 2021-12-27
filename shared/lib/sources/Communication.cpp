@@ -32,6 +32,8 @@ std::string BTruckers::Shared::Protocols::TCP::Receive(int socket)
 
     //transforming it to integer
     size_t msgLen = std::atoi(messagePrefix);
+    if(msgLen == 0)
+        return "";
     LOG_DEBUG("Reading the next %u bytes of the message", msgLen);
     //reading the next bytes
     char *actualMessage = new char[msgLen+1];

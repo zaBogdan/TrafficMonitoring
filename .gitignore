@@ -7,3 +7,4 @@ documentation/*
 **/.DS_STORE
 **/build
 **/*.db
+**/dump

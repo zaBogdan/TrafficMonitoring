@@ -34,7 +34,14 @@ namespace BTruckers
                 switch(signal)
                 {
                     case SIGINT:
+                        LOG_INFO("Received SIGINT. Starting the shutdown procedure...");
+                        exit(0);
+
+                    case SIGKILL:
                         LOG_INFO("Received SIGKILL. Starting the shutdown procedure...");
+                        exit(0);
+                    case SIGTERM:
+                        LOG_INFO("Received SIGTERM. Starting the shutdown procedure...");
                         exit(0);
                     default:
                         LOG_INFO("The signal '%d' isn't yet treated.", signal);
