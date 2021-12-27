@@ -1,0 +1,50 @@
+2021/12/27 18:22:44 - [ DEBUG ][ SERVER ] Application is now running in verbose mode...
+2021/12/27 18:22:44 - [ INFO ][ SERVER ] Connection to the database 'btruckers.db' established successfully.
+2021/12/27 18:22:44 - [ INFO ][ SERVER ] Initiating socket connection
+2021/12/27 18:22:44 - [ DEBUG ][ SERVER ] Successfully created the socket
+2021/12/27 18:22:44 - [ INFO ][ SERVER ] Started listening on port 1337!
+2021/12/27 18:22:44 - [ DEBUG ][ SERVER ] [ THREAD 0 ] I'm initialized now.
+2021/12/27 18:22:44 - [ DEBUG ][ SERVER ] [ THREAD 1 ] I'm initialized now.
+2021/12/27 18:22:46 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:46 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:47 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:47 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:48 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:48 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:49 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:49 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:50 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:50 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:51 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:51 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:51 - [ INFO ][ SERVER ] New client connection: 6 and sending to to thread 0
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Client '6' is ready.
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] Reading the first 4 bytes of the message
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] Reading the next 55 bytes of the message
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] Final message is: |Authenticate:d{susername:zaBogdan,spassword:P@ssw0rd1}
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Client '6' send us: '|Authenticate:d{susername:zaBogdan,spassword:P@ssw0rd1}'
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Client '6' is ready.
+2021/12/27 18:22:52 - [ DEBUG ][ SERVER ] Reading the first 4 bytes of the message
+2021/12/27 18:22:52 - [ INFO ][ SERVER ] [ THREAD 0 ] Ended the connection with client '6'.
+2021/12/27 18:22:53 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:53 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:53 - [ INFO ][ SERVER ] New client connection: 6 and sending to to thread 0
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Client '6' is ready.
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] Reading the first 4 bytes of the message
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] Reading the next 55 bytes of the message
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] Final message is: |Authenticate:d{susername:zaBogdan,spassword:P@ssw0rd1}
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Client '6' send us: '|Authenticate:d{susername:zaBogdan,spassword:P@ssw0rd1}'
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Client '6' is ready.
+2021/12/27 18:22:54 - [ DEBUG ][ SERVER ] Reading the first 4 bytes of the message
+2021/12/27 18:22:54 - [ INFO ][ SERVER ] [ THREAD 0 ] Ended the connection with client '6'.
+2021/12/27 18:22:55 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:55 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:56 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:56 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:57 - [ DEBUG ][ SERVER ] [ THREAD 0 ] Select returned timeout: 0
+2021/12/27 18:22:57 - [ DEBUG ][ SERVER ] [ THREAD 1 ] Select returned timeout: 0
+2021/12/27 18:22:57 - [ INFO ][ SERVER ] Received SIGINT. Starting the shutdown procedure...

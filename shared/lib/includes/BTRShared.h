@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 #include "static/constants.h"
 #include "Utils.h"
 

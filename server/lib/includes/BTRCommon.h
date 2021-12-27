@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <sys/socket.h>
 #include <stdlib.h>
 #include "constants.h"
 #include "Logger.h"
@@ -46,6 +47,14 @@ namespace BTruckers
             {
                 int count = 0;
                 std::vector<BTruckers::Shared::Structures::KeyValue> values;
+            };
+            struct Thread
+            {
+                int idx = 0;
+                int count = 0;
+                int serverSocket = 0;
+                fd_set currentSockets;
+                std::vector<int> sockets;
             };
         }
 

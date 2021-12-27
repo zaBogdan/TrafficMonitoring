@@ -20,9 +20,11 @@
 
 class Logger{
     private:
+        static FILE *fp;
         static unsigned int logging_level;
         static std::string GetLevelString(BTruckers::Shared::Enums::LoggingLevel::Type level);
         Logger();
+        ~Logger();
     public:
         static void Print(BTruckers::Shared::Enums::LoggingLevel::Type level, const char* fmt...);
         static void SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::Type level);
