@@ -17,6 +17,8 @@ INCLUDES_SERVER = -I./server/lib/includes
 INCLUDES_CLIENT = -I./client/lib/includes
 INCLUDES_SHARED = -I./shared/lib/includes
 
+# SQLITE3_THREADSAFE = -o sqlite3_threadsafe
+
 # flags for libraries that we include
 CRYPTO_FLAG = -L/usr/local/opt/openssl/lib -I/usr/local/opt/openssl/include -lssl -lcrypto
 

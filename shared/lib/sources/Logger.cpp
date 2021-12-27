@@ -8,8 +8,6 @@ Logger::Logger()
 {
     std::string filename = "./logs/" APPLICATION_NAME ".txt";
     Logger::fp = fopen(filename.c_str(), "w+");
-    // LOG_DEBUG("Initialized the file.");
-    printf("I've initialized the file.\n");
 }
 
 Logger::~Logger()

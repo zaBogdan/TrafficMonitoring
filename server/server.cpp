@@ -5,22 +5,26 @@
 #include "protocols/TCP.h"
 #include "CPV.h"
 #include "DBHandler.h"
-#include "SocketPair.h"
 #include <signal.h>
 #include <pthread.h>
 pthread_mutex_t mutexArray[THREAD_POOL_SIZE];
+BTruckers::Server::Core::CPV cpv;
+
 
 //this will handle all the connections
 void* threadFunction(void* arg)
 {
     BTruckers::Server::Structures::Thread* threadData = (BTruckers::Server::Structures::Thread*) arg;
     
+    //starting a database connection
+    BTruckers::Server::Core::DBHandler db;
+
     //setting a timeout for processing new clients
     struct timeval tv;
     //this will slow a bit the connection but it's a must...
     tv.tv_sec = 1;
     tv.tv_usec = 0;
-
+    
     //initializing the multiplexing
     fd_set readySockets;
     pthread_mutex_lock(&mutexArray[threadData->idx]);
@@ -72,9 +76,13 @@ void* threadFunction(void* arg)
 
             //here we will handle logic for the command.
             LOG_DEBUG("[ THREAD %d ] Client '%d' send us: '%s'",threadData->idx, threadData->sockets[idx], recvMessage.c_str());
-
-        
-        
+            
+            BTruckers::Shared::Structures::Message request = cpv.Parse(recvMessage); 
+            std::string response = BTruckers::Server::Commands::Handler(request, &db);
+            if(!BTruckers::Shared::Protocols::TCP::Send(threadData->sockets[idx],response))
+            {
+                LOG_ERROR("[ THREAD %d ] Failed to send response to client '%d'",threadData->idx, threadData->sockets[idx]);
+            }
             //end of for loop
         }
         pthread_mutex_unlock(&mutexArray[threadData->idx]);
@@ -94,10 +102,10 @@ int main()
         Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
         LOG_DEBUG("Application is now running in verbose mode...");
     }
+    LOG_DEBUG("Started with pid %d", getpid());
 
-    BTruckers::Server::Core::DBHandler db;
+
     BTruckers::Server::Core::Server server;
-    BTruckers::Server::Core::CPV cpv;
 
     
     BTruckers::Server::Structures::Thread* ThreadInformation = new BTruckers::Server::Structures::Thread[THREAD_POOL_SIZE];
@@ -136,6 +144,7 @@ int main()
         ThreadInformation[correspondingIDXtoMin].sockets.push_back(clientIDX);
         FD_SET(clientIDX,&ThreadInformation[correspondingIDXtoMin].currentSockets);
         pthread_mutex_unlock(&mutexArray[correspondingIDXtoMin]);
+        LOG_INFO("Succes #zabogdan1");
     }
 
     return 0;

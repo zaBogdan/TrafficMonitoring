@@ -24,6 +24,7 @@ namespace BTruckers
                     virtual inline bool& AllowUUIDChanges() = 0;
                     virtual inline const std::string& GetTableName() = 0;
                     virtual inline DB_FIELDS& GetDBFields() = 0;
+                    virtual inline BTruckers::Server::Core::DBHandler* GetConnection() = 0;
 
                     //CRUD
                     bool FindBy(std::string identifier, std::string value);

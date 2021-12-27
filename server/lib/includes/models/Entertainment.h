@@ -24,9 +24,11 @@ namespace BTruckers
                     bool lockClassChanges = false;
                     bool hasBeenInitialized = false;
                     bool allowUUIDChanges = false;
+                    BTruckers::Server::Core::DBHandler* dbConnection = nullptr;
+
                 public:
-                    Entertainment();
-                    Entertainment(std::string identifier, std::string value);
+                    Entertainment(BTruckers::Server::Core::DBHandler* db);
+                    Entertainment(BTruckers::Server::Core::DBHandler* db,std::string identifier, std::string value);
 
                     //override virtual functions
                     bool& IsLocked() override;
@@ -34,6 +36,7 @@ namespace BTruckers
                     bool& AllowUUIDChanges() override;
                     const std::string& GetTableName() override;
                     DB_FIELDS& GetDBFields() override;
+                    BTruckers::Server::Core::DBHandler* GetConnection() override;
             };
         }
     }

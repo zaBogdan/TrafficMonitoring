@@ -170,7 +170,7 @@ bool BTruckers::Server::Models::BaseModel::Execute(std::string sql)
 {
     std::vector<BTruckers::Server::Structures::SQLiteResponse> response;
 
-    if(!BTruckers::Server::Core::DBHandler::Execute(sql.c_str(), response))
+    if(!this->GetConnection()->Execute(sql.c_str(), response))
         return false;
 
     //if we don't need to populate the class we will lea ve it like this.

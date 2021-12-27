@@ -2,15 +2,16 @@
 
 
 //constructors
-BTruckers::Server::Models::Users::Users()
+BTruckers::Server::Models::Users::Users(BTruckers::Server::Core::DBHandler* db)
 {
-
+    this->dbConnection = db;
 }
 
 
 
-BTruckers::Server::Models::Users::Users(std::string identifier, std::string value)
+BTruckers::Server::Models::Users::Users(BTruckers::Server::Core::DBHandler* db, std::string identifier, std::string value)
 {
+    this->dbConnection = db;
     if(!this->FindBy(identifier, value))
     {
         LOG_WARNING("Failed to initialize the class. The user doesn't exists.");
@@ -44,3 +45,16 @@ DB_FIELDS& BTruckers::Server::Models::Users::GetDBFields()
 {
     return this->fields;
 }
+
+BTruckers::Server::Core::DBHandler* BTruckers::Server::Models::Users::GetConnection()
+{
+    return this->dbConnection;
+}
+
+
+
+bool BTruckers::Server::Models::Users::CheckPassword(std::string plainText)
+{
+    return (this->GetField("password") == BTruckers::Server::Core::Tokens::SHA256(plainText));
+}
+

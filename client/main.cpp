@@ -35,14 +35,16 @@ int main(int argc, char *argv[])
     BTruckers::Client::Communcation client(argv[1], atoi(argv[2]));
     BTruckers::Client::Core::CPV cpv;
 
-    // std::string conn = std::to_string(atoi(argv[3]));
 
     do{
         // std::string msg = client.ReadFromCLI();
-        std::string msg = "login zaBogdan:P@ssw0rd1";
+        std::string msg = "login zaBogdan:P@ssw0rd2";
         LOG_DEBUG("The message that we read was %s",msg.c_str());
         msg = cpv.Craft(msg);
         BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), msg);
+        std::string response = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
+        LOG_DEBUG("Response is: %s",response.c_str());
+        close(client.GetClientSocket());
         break;
     }while(true);
 

@@ -1,6 +1,6 @@
 #include "sourceCommands.h"
 
-std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::Message message)
+std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler* db)
 {
     if(!message.success)
         return "fCommand with invalid syntax.";
@@ -18,11 +18,12 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
     switch(crcValue)
     {
         case BTruckers::Server::Enums::CommandsCRC::AUTHENTICATE:
-            response = BTruckers::Server::Commands::HandleAuthenticateCommand(message.payload);
+            response = BTruckers::Server::Commands::Handle::Authentication(db, message.payload);
             break;
 
         default:
             return "fCommand doesn't exist.";
     }
+    LOG_DEBUG("The response for the command is: %s", response.c_str());
     return response;
 }

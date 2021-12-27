@@ -8,3 +8,5 @@ documentation/*
 **/build
 **/*.db
 **/dump
+*logs/*
+*sqlite3

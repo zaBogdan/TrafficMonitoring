@@ -1,6 +1,5 @@
 #include "DBHandler.h"
 
-sqlite3* BTruckers::Server::Core::DBHandler::connection = nullptr;
 std::vector<BTruckers::Server::Structures::SQLiteResponse> BTruckers::Server::Core::DBHandler::nothingToRespondTo = {};
 
 int BTruckers::Server::Core::DBHandler::CallbackFunction(void *instance, int argc, char **argv, char **azColName)
@@ -28,14 +27,17 @@ int BTruckers::Server::Core::DBHandler::CallbackFunction(void *instance, int arg
 bool BTruckers::Server::Core::DBHandler::Execute(const char* sql, std::vector<BTruckers::Server::Structures::SQLiteResponse>& response)
 {
     //checking if we have an active connection to the database
-    if(BTruckers::Server::Core::DBHandler::connection == nullptr)
+    if(this->connection == nullptr)
     {
         LOG_ERROR("You first need to establish a connection to the database");
         return false;
     }
-    
+
     char *zErrMsg = 0;
-    int rc = sqlite3_exec(BTruckers::Server::Core::DBHandler::connection, sql, BTruckers::Server::Core::DBHandler::CallbackFunction, &response, &zErrMsg);
+    // sqlite3_mutex_enter(sqlite3_db_mutex(BTruckers::Server::Core::DBHandler::connection));
+    // LOG_DEBUG("Entering now...");
+    int rc = sqlite3_exec(this->connection, sql, BTruckers::Server::Core::DBHandler::CallbackFunction, &response, nullptr);
+    // sqlite3_mutex_leave(sqlite3_db_mutex(BTruckers::Server::Core::DBHandler::connection));
 
     if(!rc)
         return true;
@@ -83,7 +85,7 @@ std::string BTruckers::Server::Core::DBHandler::PrepareSQL(std::string sql,...)
 //Contructor
 BTruckers::Server::Core::DBHandler::DBHandler()
 {
-    if(BTruckers::Server::Core::DBHandler::connection == nullptr)
+    if(this->connection == nullptr)
     {
         if(!this->InitiateConnection())
         {
@@ -98,14 +100,15 @@ BTruckers::Server::Core::DBHandler::DBHandler()
 //Aid for constructor
 bool BTruckers::Server::Core::DBHandler::InitiateConnection()
 {
-    if(BTruckers::Server::Core::DBHandler::connection != nullptr)
+    if(this->connection != nullptr)
         return true;
 
     char *zErrMsg = 0;
     int rc;
-    rc = sqlite3_open(DATABASE_FILENAME, &BTruckers::Server::Core::DBHandler::connection);
+    // sqlite3_config(SQLITE_CONFIG_MULTITHREAD,SQLITE_OPEN_FULLMUTEX);
+    rc = sqlite3_open(DATABASE_FILENAME, &this->connection);
     if(rc) {
-        LOG_ERROR("Failed to open '%s'. Exiting the app...", sqlite3_errmsg(BTruckers::Server::Core::DBHandler::connection));
+        LOG_ERROR("Failed to open '%s'. Exiting the app...", sqlite3_errmsg(this->connection));
         return false;
     } 
     return true;
@@ -115,5 +118,5 @@ bool BTruckers::Server::Core::DBHandler::InitiateConnection()
 BTruckers::Server::Core::DBHandler::~DBHandler()
 {
     LOG_INFO("Closing the connection to database");
-    sqlite3_close(BTruckers::Server::Core::DBHandler::connection);    
+    sqlite3_close(this->connection);    
 }

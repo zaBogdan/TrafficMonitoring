@@ -2,15 +2,16 @@
 
 
 //constructors
-BTruckers::Server::Models::Entertainment::Entertainment()
+BTruckers::Server::Models::Entertainment::Entertainment(BTruckers::Server::Core::DBHandler* db)
 {
-
+    this->dbConnection = db;
 }
 
 
 
-BTruckers::Server::Models::Entertainment::Entertainment(std::string identifier, std::string value)
+BTruckers::Server::Models::Entertainment::Entertainment(BTruckers::Server::Core::DBHandler* db,std::string identifier, std::string value)
 {
+    this->dbConnection = db;
     if(!this->FindBy(identifier, value))
     {
         LOG_WARNING("Failed to initialize the class. The user doesn't exists.");
@@ -43,4 +44,9 @@ const std::string& BTruckers::Server::Models::Entertainment::GetTableName()
 DB_FIELDS& BTruckers::Server::Models::Entertainment::GetDBFields()
 {
     return this->fields;
+}
+
+BTruckers::Server::Core::DBHandler* BTruckers::Server::Models::Entertainment::GetConnection()
+{
+    return this->dbConnection;
 }
