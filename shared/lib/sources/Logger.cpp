@@ -17,11 +17,13 @@ void Logger::Print(BTruckers::Shared::Enums::LoggingLevel::Type level, const cha
 {
     if(level < Logger::logging_level)
         return;
+    fflush(stdout);
     printf("%s - %s[ %s ] ",BTruckers::Shared::Utils::CurrentDateTime().c_str(),Logger::GetLevelString(level).c_str(), APPLICATION_NAME);
     va_list args;
     va_start(args, fmt);
     vprintf(fmt, args);
     va_end(args);
+    fflush(stdout);
     printf("\n");
 }
 

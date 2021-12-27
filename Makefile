@@ -27,7 +27,7 @@ all: bserver bclient
 
 bserver: 
 	@mkdir -p build
-	${COMPILER} -o build/$@ ${C_FLAGS} ${SERVER_FLAGS} ${CRYPTO_FLAG} ${INCLUDES_SHARED} ${INCLUDES_SERVER} ${LIBS_SERVER} ${SHARED_LIB} server/main.cpp
+	${COMPILER} -o build/$@ ${C_FLAGS} ${SERVER_FLAGS} ${CRYPTO_FLAG} ${INCLUDES_SHARED} ${INCLUDES_SERVER} ${LIBS_SERVER} ${SHARED_LIB} server/server.cpp
 
 bclient: 
 	@mkdir -p build

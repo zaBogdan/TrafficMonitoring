@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <stdlib.h>
 #include "constants.h"
 #include "Logger.h"
 #include "Utils.h"
@@ -18,6 +19,7 @@ namespace BTruckers
             class Tokens;
             class CPV;
             class DBHandler;
+            class SocketPair;
         }
 
         namespace Utils
