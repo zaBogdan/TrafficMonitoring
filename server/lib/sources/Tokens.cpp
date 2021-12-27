@@ -5,12 +5,12 @@ BTruckers::Server::Core::Tokens::Tokens()
 
 }
 
-std::string BTruckers::Server::Core::Tokens::Generate()
+std::string BTruckers::Server::Core::Tokens::Generate(int tokenSize)
 {
-    unsigned char *token = new unsigned char[this->tokenLength+1];
+    unsigned char *token = new unsigned char[tokenSize+1];
     int rc = RAND_bytes(token, sizeof(unsigned char)*sizeof(token));
     std::string hexBytes;
-    for(int i=0;i<this->tokenLength;i++)
+    for(int i=0;i<tokenSize;i++)
     {
         hexBytes += BTruckers::Server::Utils::IntToHex(token[i]);
     }

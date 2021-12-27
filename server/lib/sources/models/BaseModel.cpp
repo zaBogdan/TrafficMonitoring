@@ -7,9 +7,8 @@ bool BTruckers::Server::Models::BaseModel::UpdateField(std::string key, std::str
         LOG_WARNING("This object is currently in read-only mode. Try again later");
         return false;
     }
-    DB_FIELDS fields = this->GetDBFields();
 
-    if(fields.find(key) == fields.end())
+    if(this->GetDBFields().find(key) == this->GetDBFields().end())
     {
         LOG_WARNING("The key you are trying to update is invalid.");
         return false;
@@ -28,8 +27,8 @@ bool BTruckers::Server::Models::BaseModel::UpdateField(std::string key, std::str
     if(key == "password")
         value = BTruckers::Server::Core::Tokens::SHA256(value);
 
-    fields[key].hasChanged = true;
-    fields[key].value = value;
+    this->GetDBFields()[key].hasChanged = true;
+    this->GetDBFields()[key].value = value;
     return true;
 }
 
@@ -200,7 +199,7 @@ bool BTruckers::Server::Models::BaseModel::Populate(BTruckers::Server::Models::B
 
 void BTruckers::Server::Models::BaseModel::Print()
 {
-    LOG_DEBUG("-=-=-=-=-= User Model -=-=-=-=-=");
+    LOG_DEBUG("-=-=-=-=-= Base Model -=-=-=-=-=");
     for(auto field : this->GetDBFields())
     {
         LOG_DEBUG("%s : %s (%s)", 

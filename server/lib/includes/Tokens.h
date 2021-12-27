@@ -16,11 +16,9 @@ namespace BTruckers
         {
             class Tokens
             {
-                private:
-                    const int tokenLength = TOKEN_SIZE;
                 public:
                     Tokens();
-                    std::string Generate();
+                    static std::string Generate(int tokenSize = TOKEN_SIZE);
                     static std::string UUID();
                     static std::string SHA256(std::string string);
             };

@@ -4,6 +4,13 @@
 namespace BTruckers{
     namespace Shared{
         namespace Utils{
+
+            static inline time_t GetUNIXTimestamp()
+            {
+                std::time_t time = std::time(0);
+                return time;
+            }
+
             static inline std::string CurrentDateTime()
             {
                 time_t     now;

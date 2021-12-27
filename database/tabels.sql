@@ -16,6 +16,18 @@ CREATE TABLE multimedia(
     eventType        VARCHAR(128) NOT NULL,
     message        TEXT NOT NULL
 );
+
+DROP TABLE IF EXISTS sessions;
+CREATE TABLE sessions(
+    uuid                    VARCHAR(32) NOT NULL,
+    user_uuid               VARCHAR(32) NOT NULL,
+    identifier              VARCHAR(32) NOT NULL,
+    validator               VARCHAR(32) NOT NULL,
+    expiration_timestamp    VARCHAR(32) NOT NULL,
+    creation_timestamp      VARCHAR(32) NOT NULL
+);
+
+
 INSERT INTO multimedia(uuid, timestamp, eventType, message)
 VALUES ("5e05ee71-3fc0-4dee-aa44-6c73ddb1634f", "1640257949", "2", "The gas price is plm");
 

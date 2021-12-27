@@ -8,3 +8,4 @@
 #define INCIDENT_COMMAND "Incident"
 #define AUTHENTICATE_COMMAND "Authenticate"
 #define FAILEDRESPONSE_COMMAND "CommandFailed"
+#define SETTOKENS_COMMAND "SetTokens"

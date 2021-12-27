@@ -3,6 +3,7 @@
 #include "BTRShared.h"
 #include "PrimitiveTypes.h"
 #include "models/Users.h"
+#include "models/Tokens.h"
 
 namespace BTruckers
 {

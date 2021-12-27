@@ -1,6 +1,7 @@
 #pragma once
 #include "BTRCommon.h"
 
+
 namespace BTruckers
 {
     namespace Server
