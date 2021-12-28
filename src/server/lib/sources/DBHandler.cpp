@@ -34,8 +34,12 @@ bool BTruckers::Server::Core::DBHandler::Execute(const char* sql, std::vector<BT
     }
 
     char *zErrMsg = 0;
-    int rc = sqlite3_exec(this->connection, sql, BTruckers::Server::Core::DBHandler::CallbackFunction, &response, nullptr);
 
+    int rc;
+    do{
+        //solving the busy return of sqlite3.
+        rc = sqlite3_exec(this->connection, sql, BTruckers::Server::Core::DBHandler::CallbackFunction, &response, nullptr);
+    }while(rc==5);
     if(!rc)
         return true;
 
@@ -102,7 +106,7 @@ bool BTruckers::Server::Core::DBHandler::InitiateConnection()
 
     char *zErrMsg = 0;
     int rc;
-    // sqlite3_config(SQLITE_CONFIG_MULTITHREAD,SQLITE_OPEN_FULLMUTEX);
+    // sqlite3_config(SQLITE_CONFIG_MULTITHREAD, );
     rc = sqlite3_open(DATABASE_FILENAME, &this->connection);
     if(rc) {
         LOG_ERROR("Failed to open '%s'. Exiting the app...", sqlite3_errmsg(this->connection));

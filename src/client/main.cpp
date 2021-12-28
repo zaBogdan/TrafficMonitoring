@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
         Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
         LOG_DEBUG("Application is now running in verbose mode...");
     }
-    srand (time(NULL));
 
     LOG_DEBUG("Starting to initiate connection to the server");
 
@@ -38,20 +37,17 @@ int main(int argc, char *argv[])
 
     do{
         // std::string msg = client.ReadFromCLI();
-        // std::string msg = "login zaBogdan:P@ssw0rd2";
-        std::string msg = argv[3];
+        std::string msg = "login zaBogdan:P@ssw0rd2";
         LOG_DEBUG("The message that we read was %s",msg.c_str());
         msg = cpv.Craft(msg);
         BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), msg);
+        if(msg == "")
+            continue;
         std::string response = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
         LOG_DEBUG("Response is: %s",response.c_str());
-        close(client.GetClientSocket());
         break;
     }while(true);
-
+//do an internal state management for this
+// |SetTokens:d{sidentifier:39A26E12AE3765A5,svalidator:9F5DA3705AD54E29}
     return 0;
 }
-/*
-I should have two threads, or processes (to be decided...?)
-
-*/

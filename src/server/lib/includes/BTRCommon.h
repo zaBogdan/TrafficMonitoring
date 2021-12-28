@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <sys/socket.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "constants.h"
 #include "Logger.h"
 #include "Utils.h"

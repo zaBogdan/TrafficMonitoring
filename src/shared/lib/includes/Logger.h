@@ -11,6 +11,10 @@
 #define APPLICATION_NAME "SHARED"
 #endif
 
+#ifndef DUMP_LOGS_TO
+#define DUMP_LOGS_TO "../logs/"
+#endif
+
 #define LOG_CRITICAL(...) Logger::Print(BTruckers::Shared::Enums::LoggingLevel::CRITICAL, __VA_ARGS__);
 #define LOG_ERROR(...) Logger::Print(BTruckers::Shared::Enums::LoggingLevel::ERROR, __VA_ARGS__);
 #define LOG_WARNING(...) Logger::Print(BTruckers::Shared::Enums::LoggingLevel::WARNING, __VA_ARGS__);

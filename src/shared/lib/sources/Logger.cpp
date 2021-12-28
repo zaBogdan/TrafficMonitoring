@@ -6,7 +6,12 @@ FILE* Logger::fp = nullptr;
 
 Logger::Logger()
 {
-    std::string filename = "./logs/" APPLICATION_NAME ".txt";
+    if(Logger::fp != nullptr)
+    {
+        LOG_WARNING("You can't have two logger classes");
+        return;
+    }
+    std::string filename = DUMP_LOGS_TO APPLICATION_NAME ".txt";
     Logger::fp = fopen(filename.c_str(), "w+");
 }
 
