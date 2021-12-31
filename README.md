@@ -12,6 +12,6 @@ To make it easier, I've setup a script that will help you run everything. Use ca
 ./run server
 
 //to compile and run the client use
-./run client
+./run client <ip> <port>
 ```
 

@@ -6,16 +6,21 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-namespace BTruckers{
-    namespace Client{
-        class Communcation{
-            private:
-                int clientSocket;
-                bool InitiateConnection(const char* ip, int port);
-            public:
-                Communcation(const char* ip, int port);
-                std::string ReadFromCLI();
-                int GetClientSocket();
-        };
+namespace BTruckers
+{
+    namespace Client
+    {
+        namespace Core
+        {
+            class Communcation{
+                private:
+                    int clientSocket;
+                    bool InitiateConnection(const char* ip, int port);
+                public:
+                    Communcation(const char* ip, int port);
+                    std::string ReadFromCLI();
+                    int GetClientSocket();
+            };
+        }
     }
 }

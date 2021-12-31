@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include "BTRClient.h"
 #include "BTRShared.h"
-// #include "Message.h"
 #include "Client.h"
 #include "CPV.h"
 #include "protocols/TCP.h"
@@ -17,7 +16,7 @@ void printHelp(char* toolName)
 
 int main(int argc, char *argv[])
 {
-    if(argc<2)
+    if(argc<3)
     {
         printHelp(argv[0]);
         return 1;
@@ -31,7 +30,7 @@ int main(int argc, char *argv[])
     LOG_DEBUG("Starting to initiate connection to the server");
 
     //client trying to connect to the server
-    BTruckers::Client::Communcation client(argv[1], atoi(argv[2]));
+    BTruckers::Client::Core::Communcation client(argv[1], atoi(argv[2]));
     BTruckers::Client::Core::CPV cpv;
 
 

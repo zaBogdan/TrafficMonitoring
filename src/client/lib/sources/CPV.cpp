@@ -29,10 +29,10 @@ std::string BTruckers::Client::Core::CPV::Craft(std::string Payload)
         case BTruckers::Client::Enums::CommandsCRC::AUTH:
         case BTruckers::Client::Enums::CommandsCRC::AUTHENTICATE:
         case BTruckers::Client::Enums::CommandsCRC::LOGIN:
-            return BTruckers::Client::Commands::CreateAuthenticateCommand(payload);
+            return BTruckers::Client::Commands::Craft::Authentication(payload);
             
-        case BTruckers::Client::Enums::CommandsCRC::INCIDENT:
-            return BTruckers::Client::Commands::CreateIncidentCommand(payload);
+        // case BTruckers::Client::Enums::CommandsCRC::INCIDENT:
+        //     return BTruckers::Client::Commands::CreateIncidentCommand(payload);
         
         case BTruckers::Shared::Enums::CommandsCRC::RESPONSE:
             return BTruckers::Shared::Commands::CreateResponseCommand(payload);

@@ -10,8 +10,15 @@ namespace BTruckers{
             std::string Handler(BTruckers::Shared::Structures::Message message);
 
             //start commands code
-            std::string CreateAuthenticateCommand(std::string payload);
-            std::string CreateIncidentCommand(std::string payload);
+            namespace Handle
+            {
+                std::string SetTokens(std::string payload);
+            }
+
+            namespace Craft
+            {
+                std::string Authentication(std::string payload);
+            }
             //end commands code
         }
     }

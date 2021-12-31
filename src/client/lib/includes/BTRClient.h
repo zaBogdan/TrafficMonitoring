@@ -16,6 +16,7 @@ namespace BTruckers
         {
             class Communcation;
             class CPV;
+            class StorageBox;
         }
 
         namespace Utils{
