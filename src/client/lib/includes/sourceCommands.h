@@ -2,12 +2,13 @@
 #include "BTRClient.h"
 #include "BTRShared.h"
 #include "PrimitiveTypes.h"
+#include "StorageBox.h"
 
 namespace BTruckers{
     namespace Client{
         namespace Commands{
             //handler
-            std::string Handler(BTruckers::Shared::Structures::Message message);
+            std::string HandleResponse(BTruckers::Shared::Structures::Message message);
 
             //start commands code
             namespace Handle

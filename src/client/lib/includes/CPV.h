@@ -16,7 +16,7 @@ namespace BTruckers
             {
                 public: 
                     CPV() = default;
-                    std::string Craft(std::string payload);
+                    BTruckers::Shared::Structures::Message Craft(std::string payload);
                     BTruckers::Shared::Structures::Message Parse(std::string payload);
                     bool Validate(std::string payload);     
             };

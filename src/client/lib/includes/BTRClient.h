@@ -43,6 +43,8 @@ namespace BTruckers
                     INCIDENT = 0x3d03a11a,
 
                     LOGOUT = 0x35ccf52f,
+
+                    SETTOKEN = 0X31CE86E1,
                 };
             }
             //end enums code

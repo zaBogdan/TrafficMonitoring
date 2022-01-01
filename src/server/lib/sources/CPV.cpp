@@ -1,9 +1,10 @@
 #include "CPV.h"
 
-std::string BTruckers::Server::Core::CPV::Craft(std::string Payload)
+BTruckers::Shared::Structures::Message BTruckers::Server::Core::CPV::Craft(std::string Payload)
 {
+    BTruckers::Shared::Structures::Message data;
     LOG_DEBUG("The payload to be crafted is: %s", Payload.c_str())
-    return Payload;
+    return data;
 }
 
 BTruckers::Shared::Structures::Message BTruckers::Server::Core::CPV::Parse(std::string payload)

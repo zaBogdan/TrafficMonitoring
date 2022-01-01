@@ -35,18 +35,25 @@ int main(int argc, char *argv[])
 
 
     do{
-        // std::string msg = client.ReadFromCLI();
-        std::string msg = "login zaBogdan:P@ssw0rd2";
-        LOG_DEBUG("The message that we read was %s",msg.c_str());
-        msg = cpv.Craft(msg);
-        BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), msg);
-        if(msg == "")
-            continue;
-        std::string response = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
-        LOG_DEBUG("Response is: %s",response.c_str());
+        std::string requestCommand = client.ReadFromCLI();
+        // std::string requestCommand = "login zaBogdan:P@ssw0rd2";
+
+        BTruckers::Shared::Structures::Message msg = cpv.Craft(requestCommand);
+        requestCommand = BTruckers::Client::Commands::HandleResponse(msg);
+
+        if(requestCommand == "")
+            break;
+        
+        BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), requestCommand);
+        
+        std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
+        msg = cpv.Parse(socketResponse);
+
+        std::string response = BTruckers::Client::Commands::HandleResponse(msg);
+        printf("[<] Response: %s\n", response.c_str());
         break;
     }while(true);
-//do an internal state management for this
-// |SetTokens:d{sidentifier:39A26E12AE3765A5,svalidator:9F5DA3705AD54E29}
+
+
     return 0;
 }

@@ -1,51 +1,49 @@
 #include "CPV.h"
 
-std::string BTruckers::Client::Core::CPV::Craft(std::string Payload)
+BTruckers::Shared::Structures::Message BTruckers::Client::Core::CPV::Craft(std::string Payload)
 {
+    BTruckers::Shared::Structures::Message data;
+
     //getting the position between command and payload
     size_t spaceFind = Payload.find(" ");
 
     //splitting them
-    std::string userCmd = Payload.substr(0, spaceFind);
-    std::string payload = Payload.substr(spaceFind+1);
+    data.command = Payload.substr(0, spaceFind);
+    data.payload = Payload.substr(spaceFind+1);
     
     //Doing some normalization:
-    for(auto& c : userCmd)
+    for(auto& c : data.command)
     {
         c = tolower(c);
     }
 
     // here i will get the token from the internal state class
-    // LOG_DEBUG("Token is: %s", token.c_str());
-    
-    // now we should handle each command with their ruleset.  Calculating crc
-    uint32_t crcValue = BTruckers::Shared::Utils::CRCValue(userCmd);
+    data.token.identifier = BTruckers::Client::Core::StorageBox::GetItem("identifier");
+    data.token.validator = BTruckers::Client::Core::StorageBox::GetItem("validator");
 
-    LOG_INFO("Handling command '%s' with the crcValue: 0x%x", userCmd.c_str(), crcValue);
+    data.success = true;
 
-    //getting the right handler
-    switch(crcValue)
-    {
-        case BTruckers::Client::Enums::CommandsCRC::AUTH:
-        case BTruckers::Client::Enums::CommandsCRC::AUTHENTICATE:
-        case BTruckers::Client::Enums::CommandsCRC::LOGIN:
-            return BTruckers::Client::Commands::Craft::Authentication(payload);
-            
-        // case BTruckers::Client::Enums::CommandsCRC::INCIDENT:
-        //     return BTruckers::Client::Commands::CreateIncidentCommand(payload);
-        
-        case BTruckers::Shared::Enums::CommandsCRC::RESPONSE:
-            return BTruckers::Shared::Commands::CreateResponseCommand(payload);
-        default:
-            LOG_ERROR("Command not found. Make sure you spelled it correctly.");
-            return "";
-    }
+    return data;
 }
 
 BTruckers::Shared::Structures::Message BTruckers::Client::Core::CPV::Parse(std::string payload)
 {
-    LOG_DEBUG("The payload to parse is: %s", payload.c_str())
     BTruckers::Shared::Structures::Message data;
+
+    payload = payload.substr(1);
+    size_t splitPosition = payload.find(":");
+
+    if(splitPosition == std::string::npos)
+    {
+        LOG_ERROR("We've received an invalid payload: '%s'", payload.c_str());
+        return data;
+    }
+    
+    data.command = payload.substr(0, splitPosition);
+    data.payload = payload.substr(splitPosition+1);
+
+    data.success = true;
+
     return data;
 }
 

@@ -18,6 +18,7 @@ namespace BTruckers{
                 }
                 return hexString;
             }
+
         }
     }
 }

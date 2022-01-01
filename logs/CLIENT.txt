@@ -1,4 +1,13 @@
-2021/12/28 11:26:03 - [ DEBUG ][ CLIENT ] Application is now running in verbose mode...
-2021/12/28 11:26:03 - [ DEBUG ][ CLIENT ] Starting to initiate connection to the server
-2021/12/28 11:26:03 - [ INFO ][ CLIENT ] Trying to connect to server...
-2021/12/28 11:26:03 - [ DEBUG ][ CLIENT ] Initiating connection now.
+2022/01/01 22:35:05 - [ DEBUG ][ CLIENT ] Application is now running in verbose mode...
+2022/01/01 22:35:05 - [ DEBUG ][ CLIENT ] Starting to initiate connection to the server
+2022/01/01 22:35:05 - [ INFO ][ CLIENT ] Trying to connect to server...
+2022/01/01 22:35:05 - [ DEBUG ][ CLIENT ] Initiating connection now.
+2022/01/01 22:35:05 - [ INFO ][ CLIENT ] Connection with server was successful.
+2022/01/01 22:35:06 - [ INFO ][ CLIENT ] Handling command 'login' with the crcValue: 0xAA08CB10
+2022/01/01 22:35:06 - [ DEBUG ][ CLIENT ] Starting to format the message. Adding the prefix
+2022/01/01 22:35:06 - [ DEBUG ][ CLIENT ] The new message is: 0055|Authenticate:d{susername:zaBogdan,spassword:P@ssw0rd2}
+2022/01/01 22:35:06 - [ DEBUG ][ CLIENT ] Successfully sent to the server
+2022/01/01 22:35:06 - [ DEBUG ][ CLIENT ] Reading the first 4 bytes of the message
+2022/01/01 22:35:06 - [ DEBUG ][ CLIENT ] Reading the next 70 bytes of the message
+2022/01/01 22:35:06 - [ DEBUG ][ CLIENT ] Final message is: |SetTokens:d{sidentifier:777D41A1282E9F10,svalidator:CFFE35D74313F8BD}
+2022/01/01 22:35:06 - [ INFO ][ CLIENT ] Handling command 'SetTokens' with the crcValue: 0x31CE86E1
