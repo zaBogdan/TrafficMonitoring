@@ -68,6 +68,25 @@ namespace BTruckers{
                 }
             }
 
+            namespace IncidentTypes{
+                enum Type: unsigned short{
+                    POLICE_VISIBLE = 10,
+                    POLICE_INVISIBLE = 10,
+
+                    MINOR_ACCIDENT = 20,
+                    MAJOR_ACCIDENT = 21,
+                    
+                    HAZARD_CONSTRUCTION = 30,
+                    HAZARD_WEATHER      = 31,
+                    HAZARD_ROAD_KILL    = 32,
+                    HAZARD_CAR_STOPPED  = 33,
+                    HAZARD_POTHOLE      = 34,
+
+                    TRAFFIC_LITE    = 41,
+                    TRAFFIC_HEAVY   = 42
+                };
+            }
+
             namespace CommandsCRC{
                 enum Type: uint32_t{
                     RESPONSE =  0x3e7b0bfb,

@@ -1,6 +1,6 @@
 #include "sourceCommands.h"
 
-std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Structures::Message message)
+std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Structures::Message message, bool isRequest)
 {
     if(!message.success)
     {
@@ -12,7 +12,7 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
     
     std::string response = "";
 
-    LOG_INFO("Handling command '%s' with the crcValue: 0x%X", message.command.c_str(), crcValue);
+    LOG_DEBUG("Handling command '%s' with the crcValue: 0x%X", message.command.c_str(), crcValue);
 
     switch(crcValue)
     {
@@ -21,14 +21,31 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
         case BTruckers::Client::Enums::CommandsCRC::LOGIN:
             response = BTruckers::Client::Commands::Craft::Authentication(message.payload);
             break;
+
+        case BTruckers::Client::Enums::CommandsCRC::INCIDENT:
+            response = BTruckers::Client::Commands::Craft::ReportIncident(message.payload);
+            break;
+        
         case BTruckers::Client::Enums::CommandsCRC::SETTOKEN:
             response = BTruckers::Client::Commands::Handle::SetTokens(message.payload);
+            break;
+
+        case BTruckers::Client::Enums::CommandsCRC::FAILEDCOMMAND:
+            response = BTruckers::Client::Commands::Handle::CommandFailed(message.payload);
             break;
 
         default:
             LOG_ERROR("Command doesn't exist yet. Check your spelling.");
             response = "";
     }
-
+    if(isRequest)
+    {
+        //here I will add the tokens if they are set.
+        if(message.token.identifier != "" && message.token.validator != "")
+        {
+            response = message.token.identifier + ":" + message.token.validator+ "|" + response;
+        }
+    }
+    LOG_WARNING("The response is: %s", response.c_str());
     return response;
 }

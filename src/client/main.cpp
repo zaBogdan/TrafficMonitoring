@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
         std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
         msg = cpv.Parse(socketResponse);
 
-        std::string response = BTruckers::Client::Commands::HandleResponse(msg);
+        std::string response = BTruckers::Client::Commands::HandleResponse(msg, false);
         printf("[<] Response: %s\n", response.c_str());
         // break;
     }while(true);
