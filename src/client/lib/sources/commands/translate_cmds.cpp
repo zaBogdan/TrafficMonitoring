@@ -26,6 +26,7 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
             break;
 
         default:
+            LOG_ERROR("Command doesn't exist yet. Check your spelling.");
             response = "";
     }
 

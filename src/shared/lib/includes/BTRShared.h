@@ -23,7 +23,7 @@ namespace BTruckers{
         }
 
         namespace Utils{
-            static inline std::string CurrentDateTime();
+            static inline std::string CurrentDateTime(const char* fmt = "%Y/%m/%d %X");
             static inline uint32_t CRCValue(std::string s);
             static inline int CheckResponse(int result, const char *errorMessage);
         }

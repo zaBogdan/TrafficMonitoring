@@ -144,7 +144,6 @@ int main()
         ThreadInformation[correspondingIDXtoMin].sockets.push_back(clientIDX);
         FD_SET(clientIDX,&ThreadInformation[correspondingIDXtoMin].currentSockets);
         pthread_mutex_unlock(&mutexArray[correspondingIDXtoMin]);
-        LOG_INFO("Succes #zabogdan1");
     }
 
     return 0;

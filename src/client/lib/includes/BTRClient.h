@@ -36,15 +36,18 @@ namespace BTruckers
             //start enums code
             namespace CommandsCRC{
                 enum Type: uint32_t{
-                    AUTH = 0xf8deb059,
-                    AUTHENTICATE = 0xe500db4,
-                    LOGIN = 0xaa08cb10,
+                    //craft
+                    AUTH = 0xF8DEB059,
+                    AUTHENTICATE = 0xE500DB4,
+                    LOGIN = 0xAA08CB10,
 
-                    INCIDENT = 0x3d03a11a,
+                    INCIDENT = 0x3D03A11A,
 
-                    LOGOUT = 0x35ccf52f,
+                    LOGOUT = 0x35CCF52F,
 
+                    //parse
                     SETTOKEN = 0X31CE86E1,
+                    FAILEDCOMMAND = 0x33C9541B,
                 };
             }
             //end enums code

@@ -11,14 +11,14 @@ namespace BTruckers{
                 return time;
             }
 
-            static inline std::string CurrentDateTime()
+            static inline std::string CurrentDateTime(const char* fmt)
             {
                 time_t     now;
                 struct tm  *timeStruct;
                 char       buf[80];
                 time(&now);
                 timeStruct = localtime(&now);
-                strftime(buf, sizeof(buf), "%Y/%m/%d %X", timeStruct);
+                strftime(buf, sizeof(buf), fmt, timeStruct);
                 return buf;
             }
 

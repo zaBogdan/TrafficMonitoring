@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
         printHelp(argv[0]);
         return 1;
     }
+
     if(DEBUG_MODE == true)
     {
         Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
@@ -29,7 +30,7 @@ int main(int argc, char *argv[])
 
     LOG_DEBUG("Starting to initiate connection to the server");
 
-    //client trying to connect to the server
+    // client trying to connect to the server
     BTruckers::Client::Core::Communcation client(argv[1], atoi(argv[2]));
     BTruckers::Client::Core::CPV cpv;
 
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
         requestCommand = BTruckers::Client::Commands::HandleResponse(msg);
 
         if(requestCommand == "")
-            break;
+            continue;
         
         BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), requestCommand);
         
@@ -51,7 +52,7 @@ int main(int argc, char *argv[])
 
         std::string response = BTruckers::Client::Commands::HandleResponse(msg);
         printf("[<] Response: %s\n", response.c_str());
-        break;
+        // break;
     }while(true);
 
 
