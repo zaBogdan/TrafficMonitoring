@@ -10,7 +10,11 @@ namespace BTruckers
     namespace Server
     {
         namespace Commands{
+            //public crc
+            static const std::vector<uint32_t> publicRoutes = {0xE500DB4};
+
             //handler
+            uint32_t CheckAuthentication(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db);
             std::string Handler(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db);
 
 

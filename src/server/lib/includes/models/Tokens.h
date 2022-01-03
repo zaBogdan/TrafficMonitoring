@@ -41,7 +41,7 @@ namespace BTruckers
 
                     //custom functions
                     bool SetTime(int sessionDuration = 86400);
-                    // bool CheckPassword(std::string plainText);
+                    bool VerifyToken(std::string validator);
             };
         }
     }

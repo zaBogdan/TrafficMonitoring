@@ -59,4 +59,9 @@ bool BTruckers::Server::Models::Tokens::SetTime(int sessionDuration)
     return true;
 }
 
+bool BTruckers::Server::Models::Tokens::VerifyToken(std::string validator)
+{
+    return this->GetField("validator") == BTruckers::Server::Core::Tokens::SHA256(std::string(APPLICATION_SECRET) + validator);
+}
+
 

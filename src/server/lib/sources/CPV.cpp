@@ -26,8 +26,19 @@ BTruckers::Shared::Structures::Message BTruckers::Server::Core::CPV::Parse(std::
     if(lastSeparatorPosition != 0)
     {
         LOG_DEBUG("Starting to parse the tokens");
-        // std::string tokens = 
-        //trim the string also to be formated right and leave it |Command
+        std::string tokens = payload.substr(1, lastSeparatorPosition-1);
+        payload = payload.substr(lastSeparatorPosition);
+
+        size_t splitPos = tokens.find(":");
+
+        if(splitPos == std::string::npos)
+        {
+            LOG_ERROR("Invalid token format");
+            return msg;
+        }
+
+        msg.token.identifier = tokens.substr(0, splitPos);
+        msg.token.validator = tokens.substr(splitPos+1);
     }
 
     //remove the |

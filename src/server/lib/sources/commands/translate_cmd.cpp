@@ -1,19 +1,21 @@
 #include "sourceCommands.h"
 
+
 std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler* db)
 {
     if(!message.success)
-        return "fCommand with invalid syntax.";
+        return BTruckers::Server::Commands::Craft::CommandFailed("Command with invalid syntax.");
 
-    uint32_t crcValue = BTruckers::Shared::Utils::CRCValue(message.command);
 
-    message.print();
+    
+    uint32_t crcValue = BTruckers::Server::Commands::CheckAuthentication(message, db);
+    //checking if the user needs to be authenticated 
+    if(!crcValue)
+    {
+        return BTruckers::Server::Commands::Craft::CommandFailed("You need to be authenticated to use this route.");
+    }
     LOG_INFO("Handling command '%s' with the crcValue: 0x%x", message.command.c_str(), crcValue);
     
-    //here I should check if the crcValue is in the list of "public" commands
-    //todo
-        // return "fYou need to be authenticated to use this route.";
-
     std::string response = "";
     switch(crcValue)
     {
