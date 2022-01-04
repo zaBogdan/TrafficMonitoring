@@ -14,13 +14,17 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
     {
         return BTruckers::Server::Commands::Craft::CommandFailed("You need to be authenticated to use this route.");
     }
-    LOG_INFO("Handling command '%s' with the crcValue: 0x%x", message.command.c_str(), crcValue);
+    LOG_INFO("Handling command '%s' with the crcValue: 0x%X", message.command.c_str(), crcValue);
     
     std::string response = "";
     switch(crcValue)
     {
         case BTruckers::Server::Enums::CommandsCRC::AUTHENTICATE:
             response = BTruckers::Server::Commands::Handle::Authentication(db, message.payload);
+            break;
+        
+        case BTruckers::Server::Enums::CommandsCRC::INCIDENT:
+            response = BTruckers::Server::Commands::Handle::Incident(db, message.payload);
             break;
 
         default:

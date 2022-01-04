@@ -68,7 +68,7 @@ namespace BTruckers
                 {
                     AUTHENTICATE = 0xE500DB4,
 
-                    INCIDENT = 0x3d03a11a,
+                    INCIDENT = 0x3D03A11A,
 
                     LOGOUT = 0x35ccf52f,
                 };

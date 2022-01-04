@@ -25,7 +25,8 @@ namespace BTruckers
             namespace Handle
             {
                 std::string Authentication(BTruckers::Server::Core::DBHandler *db, std::string payload);
-                std::string TokenValidation(BTruckers::Server::Core::DBHandler *db, std::string payload);
+                std::string Incident(BTruckers::Server::Core::DBHandler *db, std::string payload);
+
             }
             //end handle code
 
@@ -35,15 +36,6 @@ namespace BTruckers
                 std::string SetToken(BTruckers::Server::Core::DBHandler *db, std::string payload);
                 std::string CommandFailed(std::string payload);
             }
-            //end handle code
-
-            // std::string HandleAuthenticateCommand(std::string payload);
-            
-            // std::string HandleValidateTokensCommand(std::string payload);
-            // std::string ParseIncidentCommand(std::string payload);
-            
-            // std::string HandleAuthenticateCommand(std::string payload);
-
             //end commands code
         }
     }

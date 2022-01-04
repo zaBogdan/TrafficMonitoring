@@ -71,7 +71,7 @@ namespace BTruckers{
             namespace IncidentTypes{
                 enum Type: unsigned short{
                     POLICE_VISIBLE = 10,
-                    POLICE_INVISIBLE = 10,
+                    POLICE_INVISIBLE = 11,
 
                     MINOR_ACCIDENT = 20,
                     MAJOR_ACCIDENT = 21,
@@ -85,6 +85,36 @@ namespace BTruckers{
                     TRAFFIC_LITE    = 41,
                     TRAFFIC_HEAVY   = 42
                 };
+                inline const char* GetType(unsigned short v)
+                {
+                    switch(v)
+                    {
+                        case POLICE_INVISIBLE:
+                            return "Hidden police";
+                        case POLICE_VISIBLE:
+                            return "Visible police";
+                        case MINOR_ACCIDENT:
+                            return "Minor accident on road";
+                        case MAJOR_ACCIDENT:
+                            return "Major road accident";
+                        case HAZARD_CONSTRUCTION:
+                            return "Road is in construction";
+                        case HAZARD_WEATHER:
+                            return "Heavy weather on the road";
+                        case HAZARD_ROAD_KILL:
+                            return "Dead body on the road";
+                        case HAZARD_CAR_STOPPED:
+                            return "A car has stopped on the road";
+                        case HAZARD_POTHOLE:
+                            return "Visible pothole on the road";
+                        case TRAFFIC_LITE:
+                            return "Lite traffic";
+                        case TRAFFIC_HEAVY:
+                            return "Heave traffic";
+                        default:
+                            return "";
+                    }
+                }
             }
 
             namespace CommandsCRC{

@@ -13,7 +13,6 @@ Logger::Logger()
     }
     std::string filename = DUMP_LOGS_TO APPLICATION_NAME;
     filename += "-"+BTruckers::Shared::Utils::CurrentDateTime("%F-%X") + ".txt";
-    printf("Filename is : %s\n", filename.c_str());
     Logger::fp = fopen(filename.c_str(), "w+");
 }
 
