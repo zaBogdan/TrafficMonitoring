@@ -3,6 +3,7 @@
 #include "BTRShared.h"
 #include "PrimitiveTypes.h"
 #include "models/Users.h"
+#include "models/Incidents.h"
 #include "models/Tokens.h"
 
 namespace BTruckers
@@ -14,7 +15,7 @@ namespace BTruckers
             static const std::vector<uint32_t> publicRoutes = {0xE500DB4};
 
             //handler
-            uint32_t CheckAuthentication(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db);
+            uint32_t CheckAuthentication(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user);
             std::string Handler(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db);
 
 
@@ -24,8 +25,11 @@ namespace BTruckers
             //start handle code
             namespace Handle
             {
+                //public routes
                 std::string Authentication(BTruckers::Server::Core::DBHandler *db, std::string payload);
-                std::string Incident(BTruckers::Server::Core::DBHandler *db, std::string payload);
+                
+                //private routes
+                std::string Incident(BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user, std::string payload);
 
             }
             //end handle code
@@ -35,6 +39,7 @@ namespace BTruckers
             {
                 std::string SetToken(BTruckers::Server::Core::DBHandler *db, std::string payload);
                 std::string CommandFailed(std::string payload);
+                std::string CommandSuccess(std::string payload);
             }
             //end commands code
         }

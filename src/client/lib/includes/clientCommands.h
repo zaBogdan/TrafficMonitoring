@@ -14,7 +14,7 @@ namespace BTruckers{
             namespace Handle
             {
                 std::string SetTokens(std::string payload);
-                std::string CommandFailed(std::string payload);
+                std::string SimpleResponse(std::string payload);
             }
 
             namespace Craft

@@ -44,7 +44,12 @@ BTruckers::Shared::Structures::KeyValue PrimiteTypes::FromInteger(std::string da
     size_t hasKey = data.find(TYPE_SEPARATOR);
     if(hasKey == std::string::npos)
     {
-        pair.number = std::stoi(data.substr(1));
+        try{
+            pair.number = std::stoi(data.substr(1));
+        }catch(...){
+            pair.number = 0;
+            return pair;
+        }   
         return pair;
     }
     pair.key = data.substr(1, hasKey-1);

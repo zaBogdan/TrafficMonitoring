@@ -1,7 +1,7 @@
 #include "sourceCommands.h"
 
 
-uint32_t BTruckers::Server::Commands::CheckAuthentication(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db)
+uint32_t BTruckers::Server::Commands::CheckAuthentication(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user)
 {
     uint32_t crcValue = BTruckers::Shared::Utils::CRCValue(message.command);
 
@@ -26,6 +26,8 @@ uint32_t BTruckers::Server::Commands::CheckAuthentication(BTruckers::Shared::Str
     //checking the validator
     if(!token.VerifyToken(message.token.validator))
         return 0;
+
+    user->FindBy("uuid", token.GetField("user_uuid"));
         
     return crcValue;
 }

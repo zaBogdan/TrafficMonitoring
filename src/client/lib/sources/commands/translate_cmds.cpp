@@ -1,4 +1,4 @@
-#include "sourceCommands.h"
+#include "clientCommands.h"
 
 std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Structures::Message message, bool isRequest)
 {
@@ -31,8 +31,10 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
             break;
 
         case BTruckers::Client::Enums::CommandsCRC::FAILEDCOMMAND:
-            response = BTruckers::Client::Commands::Handle::CommandFailed(message.payload);
+        case BTruckers::Client::Enums::CommandsCRC::SUCCESSCOMMAND:
+            response = BTruckers::Client::Commands::Handle::SimpleResponse(message.payload);
             break;
+
 
         default:
             LOG_ERROR("Command doesn't exist yet. Check your spelling.");

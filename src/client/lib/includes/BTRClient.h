@@ -48,6 +48,7 @@ namespace BTruckers
                     //parse
                     SETTOKEN = 0X31CE86E1,
                     FAILEDCOMMAND = 0x33C9541B,
+                    SUCCESSCOMMAND = 0x2BA9B036
                 };
             }
             //end enums code

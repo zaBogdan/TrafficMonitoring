@@ -4,7 +4,7 @@
 #include "VirtualCPV.h"
 #include "Logger.h"
 #include "sharedCommands.h"
-#include "sourceCommands.h"
+#include "clientCommands.h"
 
 namespace BTruckers
 {

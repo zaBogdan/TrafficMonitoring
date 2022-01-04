@@ -6,9 +6,9 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
     if(!message.success)
         return BTruckers::Server::Commands::Craft::CommandFailed("Command with invalid syntax.");
 
-
+    BTruckers::Server::Models::Users user(db);
     
-    uint32_t crcValue = BTruckers::Server::Commands::CheckAuthentication(message, db);
+    uint32_t crcValue = BTruckers::Server::Commands::CheckAuthentication(message, db, &user);
     //checking if the user needs to be authenticated 
     if(!crcValue)
     {
@@ -24,7 +24,7 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
             break;
         
         case BTruckers::Server::Enums::CommandsCRC::INCIDENT:
-            response = BTruckers::Server::Commands::Handle::Incident(db, message.payload);
+            response = BTruckers::Server::Commands::Handle::Incident(db,&user, message.payload);
             break;
 
         default:

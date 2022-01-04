@@ -1,3 +1,11 @@
+DROP TABLE IF EXISTS incidents;
+CREATE TABLE incidents(
+    uuid            VARCHAR(32) NOT NULL,
+    incident_type   VARCHAR(3) NOT NULL,
+    timestamp       VARCHAR(60) NOT NULL,
+    location        VARCHAR(20) NOT NULL,
+    reporter_uuid   VARCHAR(32) NOT NULL
+);
 DROP TABLE IF EXISTS users;
 CREATE TABLE users(
     uuid            VARCHAR(32) NOT NULL,
