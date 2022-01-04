@@ -31,7 +31,7 @@ namespace BTruckers
         namespace Commands{
             //goto: sourceCommands for full function list.
         }
-
+    
         namespace Enums {
             //start enums code
             namespace CommandsCRC{

@@ -13,7 +13,7 @@ directories:
 	@mkdir -p $(BUILD_DIRECTORY)/models
 
 build: $(OBJECT_SOURCES)
-	@${AR} rvs $(BASE_ROOT)/build/libs/server.a $^
+	@${AR} rs $(BASE_ROOT)/build/libs/server.a $^
 
 $(BUILD_DIRECTORY)/%.o: $(SOURCES_DIRECTORY)/%.cpp
 	@${COMPILER} -o $@ $(INCLUDES_SERVER) $(INCLUDES_SHARED) $(C_FLAGS) -c $<

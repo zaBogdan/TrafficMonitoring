@@ -7,7 +7,7 @@
 
 name=$1
 echo "[ COMPILER ] Compilation started..."
-time make b$name
+time make $name
 [[ $? -ne 0 ]] && {
     echo "[ COMPILER ] Failed to compile the project"
     exit 1;

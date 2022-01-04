@@ -11,7 +11,7 @@ directories:
 	@mkdir -p $(BUILD_DIRECTORY)/commands
 
 build: $(OBJECT_SOURCES)
-	@${AR} rvs $(BASE_ROOT)/build/libs/shared.a $^
+	@${AR} rs $(BASE_ROOT)/build/libs/shared.a $^
 
 $(BUILD_DIRECTORY)/%.o: $(SOURCES_DIRECTORY)/%.cpp
 	@${COMPILER} -o $@ $(INCLUDES_SHARED) $(C_FLAGS) -c $<
