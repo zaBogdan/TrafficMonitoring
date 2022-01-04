@@ -9,11 +9,12 @@ std::string BTruckers::Server::Commands::Handle::Incident(BTruckers::Server::Cor
         return BTruckers::Server::Commands::Craft::CommandFailed("Invalid incident type");
     }   
 
-    if(BTruckers::Shared::Enums::IncidentTypes::GetType(type) == "")
+    if(BTruckers::Shared::Enums::IncidentTypes::GetType(type)[0] == '\0')
         return BTruckers::Server::Commands::Craft::CommandFailed("Invalid incident type");
 
     //now we will update the incident in the database. 
 
     LOG_DEBUG("The payload is: %s", payload.c_str());
-    return "hello world";
+    LOG_DEBUG("I am the king of the world");
+    return BTruckers::Server::Commands::Craft::CommandFailed("Failed to update the database");
 }

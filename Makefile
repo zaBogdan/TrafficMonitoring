@@ -35,15 +35,15 @@ directories:
 	@mkdir -p $(BASE_ROOT)/build/shared
 	@mkdir -p $(BASE_ROOT)/build/libs
 
-client: shared
+client: directories shared
 	@$(MAKE) -C src/client -f client.mk all
 	@${COMPILER} -o $(BASE_ROOT)/build/bclient ${C_FLAGS} ${CLIENT_FLAGS} ${CRYPTO_FLAG} $(INCLUDES_CLIENT) $(INCLUDES_SHARED) $(BUILD_CLIENT) $(BUILD_SHARED) src/client/main.cpp
 
-server: shared
+server: directories shared
 	@$(MAKE) -C src/server -f server.mk all
 	@${COMPILER} -o $(BASE_ROOT)/build/bserver ${C_FLAGS} ${SERVER_FLAGS} ${CRYPTO_FLAG} $(INCLUDES_SERVER) $(INCLUDES_SHARED) $(BUILD_SERVER) $(BUILD_SHARED) src/server/server.cpp
 
-shared: 
+shared: directories
 	@$(MAKE) -C src/shared -f shared.mk all
 
 cleanup:
