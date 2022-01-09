@@ -48,6 +48,6 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
             response = message.token.identifier + ":" + message.token.validator+ "|" + response;
         }
     }
-    LOG_WARNING("The response is: %s", response.c_str());
+    LOG_DEBUG("The response is: %s", response.c_str());
     return response;
 }

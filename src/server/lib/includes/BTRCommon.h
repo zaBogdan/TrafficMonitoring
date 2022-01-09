@@ -22,6 +22,9 @@ namespace BTruckers
             class CPV;
             class DBHandler;
             class SocketPair;
+            // add a function that will write some text to all the sockets
+            //the text will be decided at calltime (it must be a dict of some type)
+            //for simplicity add event1,2,3 etc. (to not implement an array)
         }
 
         namespace Utils
