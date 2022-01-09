@@ -22,6 +22,8 @@ namespace BTruckers
             class CPV;
             class DBHandler;
             class SocketPair;
+
+            //continuing the namespace after structures
             // add a function that will write some text to all the sockets
             //the text will be decided at calltime (it must be a dict of some type)
             //for simplicity add event1,2,3 etc. (to not implement an array)
@@ -52,13 +54,20 @@ namespace BTruckers
                 int count = 0;
                 std::vector<BTruckers::Shared::Structures::KeyValue> values;
             };
+            
+            struct SocketData
+            {
+                int socketId;
+                std::string userUUID;
+            };
+
             struct Thread
             {
                 int idx = 0;
                 int count = 0;
                 int serverSocket = 0;
                 fd_set currentSockets;
-                std::vector<int> sockets;
+                std::vector<SocketData> sockets;
             };
         }
 

@@ -16,7 +16,7 @@ namespace BTruckers
 
             //handler
             uint32_t CheckAuthentication(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user);
-            std::string Handler(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db);
+            std::string Handler(BTruckers::Shared::Structures::Message& message, BTruckers::Server::Core::DBHandler *db);
 
 
             //start commands code

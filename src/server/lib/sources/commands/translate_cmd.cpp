@@ -1,7 +1,7 @@
 #include "sourceCommands.h"
 
 
-std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler* db)
+std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::Message& message, BTruckers::Server::Core::DBHandler* db)
 {
     if(!message.success)
         return BTruckers::Server::Commands::Craft::CommandFailed("Command with invalid syntax.");
@@ -9,11 +9,13 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
     BTruckers::Server::Models::Users user(db);
     
     uint32_t crcValue = BTruckers::Server::Commands::CheckAuthentication(message, db, &user);
-    //checking if the user needs to be authenticated 
+    //checking authentication 
     if(!crcValue)
     {
         return BTruckers::Server::Commands::Craft::CommandFailed("You need to be authenticated to use this route.");
     }
+    
+    // user.GetField("uuid");
     LOG_INFO("Handling command '%s' with the crcValue: 0x%X", message.command.c_str(), crcValue);
     
     std::string response = "";

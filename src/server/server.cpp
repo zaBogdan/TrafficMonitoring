@@ -11,6 +11,11 @@ pthread_mutex_t mutexArray[THREAD_POOL_SIZE];
 BTruckers::Server::Core::CPV cpv;
 
 
+void* BroadcasterThread(void* arg)
+{
+
+}
+
 //this will handle all the connections
 void* threadFunction(void* arg)
 {
@@ -56,32 +61,36 @@ void* threadFunction(void* arg)
         for(int idx=0;idx<threadData->count;idx++)
         {
             //this wasn't the socket that hit so we continue
-            if(!FD_ISSET(threadData->sockets[idx], &threadData->currentSockets))
+            if(!FD_ISSET(threadData->sockets[idx].socketId, &threadData->currentSockets))
                 continue;
 
-            LOG_DEBUG("[ THREAD %d ] Client '%d' is ready.",threadData->idx, threadData->sockets[idx]);
-            std::string recvMessage = BTruckers::Shared::Protocols::TCP::Receive(threadData->sockets[idx]); 
+            LOG_DEBUG("[ THREAD %d ] Client '%d' is ready.",threadData->idx, threadData->sockets[idx].socketId);
+            std::string recvMessage = BTruckers::Shared::Protocols::TCP::Receive(threadData->sockets[idx].socketId); 
             
             //in case the client doesn't have anything more to tell us.
             if(recvMessage == "")
             {
-                LOG_INFO("[ THREAD %d ] Ended the connection with client '%d'.",threadData->idx, threadData->sockets[idx]);
-                close(threadData->sockets[idx]);
-                FD_CLR(threadData->sockets[idx], &threadData->currentSockets);
-                idx--;
-                threadData->count--;
+                LOG_INFO("[ THREAD %d ] Ended the connection with client '%d'.",threadData->idx, threadData->sockets[idx].socketId);
+                close(threadData->sockets[idx].socketId);
+                FD_CLR(threadData->sockets[idx].socketId, &threadData->currentSockets);
                 threadData->sockets.erase(threadData->sockets.begin()+idx);
+                threadData->count--;
+                idx--;
                 continue;
             }
 
             //here we will handle logic for the command.
-            LOG_DEBUG("[ THREAD %d ] Client '%d' send us: '%s'",threadData->idx, threadData->sockets[idx], recvMessage.c_str());
+            LOG_DEBUG("[ THREAD %d ] Client '%d' send us: '%s'",threadData->idx, threadData->sockets[idx].socketId, recvMessage.c_str());
             
-            BTruckers::Shared::Structures::Message request = cpv.Parse(recvMessage); 
+            BTruckers::Shared::Structures::Message request = cpv.Parse(recvMessage);
+            // std::string userUUID = ""; 
             std::string response = BTruckers::Server::Commands::Handler(request, &db);
-            if(!BTruckers::Shared::Protocols::TCP::Send(threadData->sockets[idx],response))
+            //getting an internal state for the broadcaster function
+            // threadData->sockets[idx].userUUID = request.userUUID;
+
+            if(!BTruckers::Shared::Protocols::TCP::Send(threadData->sockets[idx].socketId,response))
             {
-                LOG_ERROR("[ THREAD %d ] Failed to send response to client '%d'",threadData->idx, threadData->sockets[idx]);
+                LOG_ERROR("[ THREAD %d ] Failed to send response to client '%d'",threadData->idx, threadData->sockets[idx].socketId);
             }
             //end of for loop
         }
@@ -124,6 +133,13 @@ int main()
         }
     }
 
+    pthread_t broadcasterThread;
+    if(pthread_create(&broadcasterThread, nullptr, &BroadcasterThread, (void*) (ThreadInformation))!=0)
+    {
+        LOG_CRITICAL("Failed to create broadcaster thread. Exiting.");
+        exit(-1);
+    }
+
     while(true)
     {
         int clientIDX = server.InitiateConnectionWithClient();
@@ -140,8 +156,11 @@ int main()
         }
         LOG_INFO("New client connection: %d and sending to to thread %d", clientIDX, ThreadInformation[correspondingIDXtoMin].idx);
         pthread_mutex_lock(&mutexArray[correspondingIDXtoMin]);
+        BTruckers::Server::Structures::SocketData newSock;
+        newSock.socketId = clientIDX;
+        newSock.userUUID = "";
         ThreadInformation[correspondingIDXtoMin].count++;
-        ThreadInformation[correspondingIDXtoMin].sockets.push_back(clientIDX);
+        ThreadInformation[correspondingIDXtoMin].sockets.push_back(newSock);
         FD_SET(clientIDX,&ThreadInformation[correspondingIDXtoMin].currentSockets);
         pthread_mutex_unlock(&mutexArray[correspondingIDXtoMin]);
     }
