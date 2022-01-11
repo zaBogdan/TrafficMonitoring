@@ -57,7 +57,7 @@ void* BroadcasterThread(void* arg)
             }
             pthread_mutex_unlock(&mutexArray[ThreadInformation[idx].idx]);
         }
-        sleep(5);
+        sleep(60);
     }
 
     return nullptr;

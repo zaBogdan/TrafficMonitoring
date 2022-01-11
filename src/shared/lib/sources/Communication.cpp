@@ -42,7 +42,6 @@ std::string BTruckers::Shared::Protocols::TCP::Receive(int socket)
         }
         return "";
     }
-    LOG_CRITICAL("The response of read is: %d", respCode);
 
     messagePrefix[4] = '\0'; //makeing it a valid cstring
 

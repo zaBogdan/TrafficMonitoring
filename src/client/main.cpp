@@ -1,11 +1,19 @@
 #include <stdlib.h>
 #include "BTRClient.h"
 #include "BTRShared.h"
+#include "sensors/SpeedSensor.h"
 #include "Client.h"
 #include "CPV.h"
 #include "protocols/TCP.h"
 #include <ctime>
 #include <iostream>
+volatile sig_atomic_t sendMetrics = false;
+
+
+void handleAlarm( int sig ) {
+    sendMetrics = true;
+}
+
 
 void printHelp(char* toolName)
 {
@@ -16,6 +24,7 @@ void printHelp(char* toolName)
 
 int main(int argc, char *argv[])
 {
+    signal(SIGALRM, handleAlarm);
     if(argc<3)
     {
         printHelp(argv[0]);
@@ -34,25 +43,37 @@ int main(int argc, char *argv[])
     BTruckers::Client::Core::Communcation client(argv[1], atoi(argv[2]));
     BTruckers::Client::Core::CPV cpv;
 
+    //initializing the sensors
+    BTruckers::Client::Sensors::Speed speedSensor;
+
     fd_set readySockets, copySockets;
     FD_ZERO(&readySockets);
     FD_SET(fileno(stdin), &readySockets);
     FD_SET(client.GetClientSocket(), &readySockets);
     uint8_t FDSetSize = std::max(fileno(stdin), client.GetClientSocket())+1;
 
-    while(true)
+    bool stillRunning = true, alarmFail = false;
+    //setting the first alaram in 1 second
+    alarm(1);
+    while(stillRunning)
     {
-        bool stillRunning = true;
+        alarmFail = false;
         copySockets = readySockets;
         printf("[>] Enter a command: ");
         fflush(stdout);
         int ret = select(FDSetSize, &copySockets, NULL, NULL, NULL);
         if(ret < 0){
-            LOG_ERROR("Select failed... uninting the client.");
-            break;
+            if(errno == EINTR)
+            {
+                LOG_DEBUG("Select failed because of an alarm");
+                alarmFail = true;
+            }else{
+                LOG_ERROR("Select failed with code %d... uninting the client.", ret);
+                break;
+            }
         }
 
-        for(int idx = 0; idx < FDSetSize; ++idx)
+        for(int idx = 0; idx < FDSetSize && !alarmFail; ++idx)
         {
             if(!FD_ISSET(idx, &copySockets))
                 continue;
@@ -67,25 +88,32 @@ int main(int argc, char *argv[])
 
                 continue;
             }
-
+            printf("\n");
             LOG_DEBUG("[ %d ] Reading from server socket.", idx);
             std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(idx);
             if(socketResponse == "")
             {
+                LOG_WARNING("Lost connection with server... warm shutdown started.");
+                //check if we lost server connection
                 stillRunning = false;
             }
+            fflush(stderr);
             LOG_DEBUG("[ %d ] Response is: %s",idx, socketResponse.c_str());
-
-
         }
 
-        //check if we lost server connection
-        if(!stillRunning) break;
 
-
-        //if flag set, write the speed to the server
+        //checking alarm trigger
+        if(!sendMetrics)
+            continue;
+        sendMetrics = false;
+        
+        //alarm logic
+        LOG_DEBUG("Received an ALARM signal. Sending the metrics now...");
+        speedSensor.Read();
+        //send the data now.
 
         //schedule 1 min alarm to send data.
+        alarm(5);
     }
 
     LOG_INFO("Uninitializing the client...");

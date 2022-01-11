@@ -1,6 +1,8 @@
 #pragma once
 #include <cstring>
 #include <string>
+#include <random>
+#include <ctime>
 #include "BTRShared.h"
 #include "constants.h"
 #include "Logger.h"
@@ -32,6 +34,10 @@ namespace BTruckers
             //goto: sourceCommands for full function list.
         }
     
+        namespace Sensors {
+            
+        }
+
         namespace Enums {
             //start enums code
             namespace CommandsCRC{

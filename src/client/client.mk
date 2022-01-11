@@ -13,6 +13,7 @@ all: directories build
 directories:
 	@mkdir -p $(BUILD_DIRECTORY)
 	@mkdir -p $(BUILD_DIRECTORY)/commands
+	@mkdir -p $(BUILD_DIRECTORY)/sensors
 
 build: $(OBJECT_SOURCES)
 	@${AR} rs $(BASE_ROOT)/build/libs/client.a $^
