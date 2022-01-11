@@ -4,7 +4,7 @@
 uint32_t BTruckers::Server::Commands::CheckAuthentication(BTruckers::Shared::Structures::Message message, BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user)
 {
     uint32_t crcValue = BTruckers::Shared::Utils::CRCValue(message.command);
-
+    LOG_DEBUG("CRC value is :%d", crcValue);
     for(auto route : BTruckers::Server::Commands::publicRoutes)
     {
         if(crcValue == route)

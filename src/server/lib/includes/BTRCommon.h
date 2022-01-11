@@ -60,7 +60,7 @@ namespace BTruckers
 
                     INCIDENT = 0x3D03A11A,
                     
-                    BROADCAST = 0x9BF17CF5,
+                    BROADCAST = 0x1900FE56,
 
                     LOGOUT = 0x35ccf52f,
                 };
