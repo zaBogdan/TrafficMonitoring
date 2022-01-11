@@ -13,7 +13,7 @@ BTruckers::Server::Core::Server::Server(int PORT, int BACKLOG)
 }
 BTruckers::Server::Core::Server::~Server()
 {
-
+    close(this->serverSocket);
 }
 
 int BTruckers::Server::Core::Server::InitiateConnectionWithClient()
