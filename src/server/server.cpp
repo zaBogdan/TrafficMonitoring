@@ -8,12 +8,54 @@
 #include <signal.h>
 #include <pthread.h>
 pthread_mutex_t mutexArray[THREAD_POOL_SIZE];
+pthread_mutex_t globalMutex = PTHREAD_MUTEX_INITIALIZER;
+BTruckers::Server::Structures::Thread* ThreadInformation;
 BTruckers::Server::Core::CPV cpv;
-
+std::vector<BTruckers::Server::Structures::BroadcasterMessages> messages;
 
 void* BroadcasterThread(void* arg)
 {
+    //starting a database connection
+    BTruckers::Server::Core::DBHandler db;
 
+    LOG_DEBUG("[BROADCASTER] Initialized.");
+
+    BTruckers::Server::Structures::BroadcasterMessages demoMSG;
+    demoMSG.message = "Hello dear truckers. Welcome to the server.";
+    demoMSG.cond = BTruckers::Server::Enums::BroadcastConditions::NONE;
+    messages.push_back(demoMSG);
+    
+    BTruckers::Shared::Structures::Message msg;
+    msg.userUUID = APPLICATION_SECRET;
+    msg.command = "Broadcast";
+    msg.success = true;
+    while(true)
+    {
+        break;
+        // for(auto& broad_msg : messages)
+        // {
+        //     msg.payload = broad_msg.message;
+        //     // broad_msg.message = BTruckers::Server::Commands::Handler(&msg, db);
+        //     LOG_DEBUG("[BROADCASTER] We will broadcast: %s", broad_msg.message.c_str());
+        // }
+
+        // for(int idx = 0; idx < THREAD_POOL_SIZE; ++idx)
+        // {
+        //     BTruckers::Server::Utils::CheckResponse(pthread_mutex_lock(&mutexArray[ThreadInformation[idx].idx]), "Failed to acquire lock in broadcaster thread.");
+        //     for(int i = 0; i < ThreadInformation[idx].count; ++i)
+        //     {
+        //         LOG_DEBUG("[BROADCASTER] The threads are: %d", ThreadInformation[idx].sockets[i].socketId);
+        //         std::string response = BTruckers::Server::Commands::Handler(msg, &db);
+        //         LOG_DEBUG("[BROADCASTER] The response is: %s", response.c_str());
+        //         // if(!BTruckers::Shared::Protocols::TCP::Send(ThreadInformation[idx].sockets[i].socketId,response))
+        //         // {
+        //         //     LOG_ERROR("[ BROADCASTER ] Failed to send message to client with socket '%d'",ThreadInformation[idx].sockets[i].socketId);
+        //         // }
+        //     }
+        //     pthread_mutex_unlock(&mutexArray[ThreadInformation[idx].idx]);
+        // }
+        sleep(5);
+    }
 }
 
 //this will handle all the connections
@@ -86,7 +128,8 @@ void* threadFunction(void* arg)
             // std::string userUUID = ""; 
             std::string response = BTruckers::Server::Commands::Handler(request, &db);
             //getting an internal state for the broadcaster function
-            // threadData->sockets[idx].userUUID = request.userUUID;
+            threadData->sockets[idx].userUUID = request.userUUID;
+            LOG_CRITICAL("[ THREAD %d ] User uuid is: %s",threadData->idx, threadData->sockets[idx].userUUID.c_str());
 
             if(!BTruckers::Shared::Protocols::TCP::Send(threadData->sockets[idx].socketId,response))
             {
@@ -117,12 +160,16 @@ int main()
     BTruckers::Server::Core::Server server;
 
     
-    BTruckers::Server::Structures::Thread* ThreadInformation = new BTruckers::Server::Structures::Thread[THREAD_POOL_SIZE];
     pthread_t threadPool[THREAD_POOL_SIZE];
+    ThreadInformation = new BTruckers::Server::Structures::Thread[THREAD_POOL_SIZE];
 
     for(int idx=0;idx<THREAD_POOL_SIZE;idx++)
     {
-        pthread_mutex_init(&mutexArray[idx], NULL);
+        if(pthread_mutex_init(&mutexArray[idx], NULL) != 0)
+        {
+            LOG_CRITICAL("Failed to create a lock. Exiting.");
+            exit(-1);
+        }
 
         ThreadInformation[idx].idx = idx;
         ThreadInformation[idx].serverSocket = server.getServerSocket();

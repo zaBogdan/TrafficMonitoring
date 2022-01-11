@@ -34,33 +34,14 @@ int main(int argc, char *argv[])
     BTruckers::Client::Core::Communcation client(argv[1], atoi(argv[2]));
     BTruckers::Client::Core::CPV cpv;
 
-    std::vector<std::string> requests = {"login zaBogdan:P@ssw0rd2", "incident 20"};
+    // std::vector<std::string> requests = {"login zaBogdan:P@ssw0rd2", "incident 20"};
 
-    for(auto request : requests)
-    {
-        // std::string requestCommand = client.ReadFromCLI();
-        LOG_DEBUG("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-        LOG_DEBUG("Command is: %s", request.c_str());
-        std::string requestCommand = request;
-
-        BTruckers::Shared::Structures::Message msg = cpv.Craft(requestCommand);
-        requestCommand = BTruckers::Client::Commands::HandleResponse(msg);
-
-        if(requestCommand == "")
-            continue;
-        
-        BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), requestCommand);
-        
-        std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
-        msg = cpv.Parse(socketResponse);
-
-        std::string response = BTruckers::Client::Commands::HandleResponse(msg, false);
-        printf("[<] Response: %s\n", response.c_str());
-    }
-
-    // do{
-    //     std::string requestCommand = client.ReadFromCLI();
-    //     // std::string requestCommand = "login zaBogdan:P@ssw0rd2";
+    // for(auto request : requests)
+    // {
+    //     // std::string requestCommand = client.ReadFromCLI();
+    //     LOG_DEBUG("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+    //     LOG_DEBUG("Command is: %s", request.c_str());
+    //     std::string requestCommand = request;
 
     //     BTruckers::Shared::Structures::Message msg = cpv.Craft(requestCommand);
     //     requestCommand = BTruckers::Client::Commands::HandleResponse(msg);
@@ -75,8 +56,27 @@ int main(int argc, char *argv[])
 
     //     std::string response = BTruckers::Client::Commands::HandleResponse(msg, false);
     //     printf("[<] Response: %s\n", response.c_str());
-    //     // break;
-    // }while(true);
+    // }
+
+    do{
+        std::string requestCommand = client.ReadFromCLI();
+        // std::string requestCommand = "login zaBogdan:P@ssw0rd2";
+
+        BTruckers::Shared::Structures::Message msg = cpv.Craft(requestCommand);
+        requestCommand = BTruckers::Client::Commands::HandleResponse(msg);
+
+        if(requestCommand == "")
+            continue;
+        
+        BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), requestCommand);
+        
+        std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
+        msg = cpv.Parse(socketResponse);
+
+        std::string response = BTruckers::Client::Commands::HandleResponse(msg, false);
+        printf("[<] Response: %s\n", response.c_str());
+        // break;
+    }while(true);
 
 
     return 0;

@@ -11,6 +11,8 @@ Logger::Logger()
         LOG_WARNING("You can't have two logger classes");
         return;
     }
+    setbuf(stdout,NULL);
+    setbuf(stderr,NULL);
     std::string filename = DUMP_LOGS_TO APPLICATION_NAME;
     filename += "-"+BTruckers::Shared::Utils::CurrentDateTime("%F-%X") + ".txt";
     Logger::fp = fopen(filename.c_str(), "w+");

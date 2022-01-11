@@ -4,6 +4,9 @@ BTruckers::Shared::Structures::Message BTruckers::Client::Core::CPV::Craft(std::
 {
     BTruckers::Shared::Structures::Message data;
 
+    if(Payload == "")
+        return data;
+        
     //getting the position between command and payload
     size_t spaceFind = Payload.find(" ");
 
@@ -29,6 +32,9 @@ BTruckers::Shared::Structures::Message BTruckers::Client::Core::CPV::Craft(std::
 BTruckers::Shared::Structures::Message BTruckers::Client::Core::CPV::Parse(std::string payload)
 {
     BTruckers::Shared::Structures::Message data;
+
+    if(payload == "")
+        return data;
 
     payload = payload.substr(1);
     size_t splitPosition = payload.find(":");

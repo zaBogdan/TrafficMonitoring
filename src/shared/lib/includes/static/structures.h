@@ -10,8 +10,7 @@ namespace BTruckers{
 
                 struct Message {
                     Tokens token;
-                    std::string command="", payload="";
-                    // , userUUID = "";
+                    std::string command="", payload="", userUUID = "";
                     bool success = false;
 
                     void print()

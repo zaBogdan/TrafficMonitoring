@@ -22,11 +22,6 @@ namespace BTruckers
             class CPV;
             class DBHandler;
             class SocketPair;
-
-            //continuing the namespace after structures
-            // add a function that will write some text to all the sockets
-            //the text will be decided at calltime (it must be a dict of some type)
-            //for simplicity add event1,2,3 etc. (to not implement an array)
         }
 
         namespace Utils
@@ -34,6 +29,12 @@ namespace BTruckers
             static inline std::string IntToHex(int x);
             static inline int CheckResponse(int result, const char *errorMessage);
             static inline void SignalHandler(int signal);
+        }
+
+        namespace Broadcast
+        {
+            void BroadcastMessage(std::string cmd, std::string payload, uint8_t cond);
+            bool IsConditionSatisfied(std::string uuid, BTruckers::Server::Core::DBHandler *db);
         }
 
         namespace Commands
@@ -45,6 +46,36 @@ namespace BTruckers
         {
             //insert all the database models that are to be used
             class Users;
+        }
+
+
+        namespace Enums
+        {
+            //start enums code
+            namespace CommandsCRC
+            {
+                enum Type: uint32_t
+                {
+                    AUTHENTICATE = 0xE500DB4,
+
+                    INCIDENT = 0x3D03A11A,
+                    
+                    BROADCAST = 0x9BF17CF5,
+
+                    LOGOUT = 0x35ccf52f,
+                };
+            }
+
+            namespace BroadcastConditions
+            {
+                enum Type: uint8_t
+                {
+                    NONE = 0,
+                    SELECTED_ENTERTAINMENT = 1,
+
+                };
+            }
+            //end enums code
         }
 
         namespace Structures
@@ -69,26 +100,13 @@ namespace BTruckers
                 fd_set currentSockets;
                 std::vector<SocketData> sockets;
             };
+
+            struct BroadcasterMessages{
+                std::string message;
+                Enums::BroadcastConditions::Type cond;
+            };
         }
 
-        namespace Enums
-        {
-            //start enums code
-            namespace CommandsCRC
-            {
-                enum Type: uint32_t
-                {
-                    AUTHENTICATE = 0xE500DB4,
-
-                    INCIDENT = 0x3D03A11A,
-
-                    LOGOUT = 0x35ccf52f,
-                };
-            }
-            //end enums code
-        }
-        
-        
         
         //end server code
     }
