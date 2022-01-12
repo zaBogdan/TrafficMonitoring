@@ -33,6 +33,10 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
             response = BTruckers::Server::Commands::Handle::ClientMetrics(db, &user, message.payload);
             break;
 
+        case BTruckers::Server::Enums::CommandsCRC::LOGOUT:
+            response = BTruckers::Server::Commands::Handle::Logout(db, message.token.identifier);
+            break;
+
         case BTruckers::Server::Enums::CommandsCRC::BROADCAST:
             //extra safety check (to be sure users will not be able to broadcast)
             if(message.token.validator != APPLICATION_SECRET)

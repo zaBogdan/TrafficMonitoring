@@ -53,13 +53,14 @@ namespace BTruckers
                 enum Type: uint32_t
                 {
                     AUTHENTICATE = 0xE500DB4,
-
                     INCIDENT = 0x3D03A11A,
-                    
                     BROADCAST = 0x1900FE56,
                     CLIENTMETRICS = 0x446FCBC4,
+                    LOGOUT = 0x35CCF52F,
 
-                    LOGOUT = 0x35ccf52f,
+                    //to be implemented
+                    CHANGEOPTION = 0x8C6E5161,
+                    REGISTER = 0x5FF94014,
                 };
             }
 

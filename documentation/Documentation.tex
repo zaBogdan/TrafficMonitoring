@@ -32,7 +32,7 @@
 \section{Introducere}
 Aplicația de monitorizare a traficului constă în două componete cheie: un client și un server, ambele implementate concurent. Clientul are capacitatea de a procesa mesajele venite de la server și de a transmite informații in mod simultan, fără a fi nevoie să se aștepte terminarea unei cereri. Totodată acesta \textbf{simulează} doi sensori: unul de viteză și unul de locație. Aceștia vor fi interogați la un interval regulat de timp pe care fiecare client îl va putea seta, în funcție de preferință, iar informațiile vor fi trimise către server. Pe baza datelor primite, serverul va returna incidentele din trafic (dacă există in regiunea sa), limita de viteză pe secțiunea de drum și va modifica ultima locație a utilizatorului în baza de date.
 
-Serverul are posibilitatea de a suporta mai mulți clienți simultan, datorită implementării concurente. La un interval regulat de timp, acesta va trimite informații către toți clienții (care au selectată opțiunea) despre vreme, evenimente sportive și ultimele prețuri la combustibil. În cazul în care este raportat un incident, serverul va notifica toți utilizatorilor din regiunea în care s-a produs despre eveniment.   
+Serverul are posibilitatea de a suporta mai mulți clienți simultan, datorită implementării concurente. La un interval regulat de timp, acesta va trimite informații către toți clienții (care au selectată opțiunea) despre vreme, evenimente sportive și ultimele prețuri la combustibil. În cazul în care este raportat un incident, serverul va notifica toți utilizatorilor aflați în proximitate producerii evenimentului.   
 
 Având imaginea de ansamblu, detaliile privind implementarea și arhitectura aplicației vor fi prezentate în urmatoarele secțiuni, iar la final voi propune și anumite imbunătățiri pe partea de securitate și performanță a aplicației. 
 \section{Tehnologii utilizate}
@@ -43,7 +43,7 @@ Comunicarea dintre client/clienți și server este realizată prin  \textbf{Tran
 Pentru a putea ține o anumită evidență a datelor, atât a utilizatorilor, a evenimentelor media, incidente rutiere, limite de viteză șamd. aplicația utilizează o bază de date, \textbf{sqlite3} ce asigură persistența și stocarea datelor. Folosindu-se de limbajul SQL, abstractizările la nivelul implementării sunt relativ ușor de făcut, scurtând timpul de implementare.
 
 \subsection{Securitate}
-Din motive de securitate, în momentul în care conexiunea între client și server s-a stabilit, vom creea un nou context de tipul SSL, transmitând astfel datele criptate. Pentru acesta vom folosi librăria \textit{OpenSSL} din C++. Totodată stocarea parolele în plain-text nu este o soluție bună pentru zilele noastre, astfel că din aceeași librarie vom folosi agoritmul de hashing \textbf{SHA-256}.
+Din motive de securitate, în momentul în care conexiunea între client și server s-a stabilit, vom aveam un set limitat de comenzi pe care un utilizator neautentificat le poate utiliza. Totodată stocarea parolele în plain-text nu este o soluție bună pentru zilele noastre, astfel că din aceeași vom folosi agoritmul de hashing \textbf{SHA-256}.
 
 \subsection{Simularea Senzorilor}
 În încercarea de a simula un mediu cât mai realist, am adăugat un feature prin care se pot simula doi senzori, unul de viteză și unul de locație, strâns legați între ei. Aceștia pot fi citiți, returnând date cu un anumit nivel de corență între ele.
@@ -54,22 +54,21 @@ Din motive de securitate, în momentul în care conexiunea între client și ser
 
 Pentru a putea explica diagrama de mai jos vom împărții în două secțiuni: clientul și serverul
 \subsection{Arhitectura Clientului}
-După cum se poate observa încă din diagramă clientul este bazat pe o arhitectură concurentă, având următoarele caracteristici:
+Deși clientul nu are o arhitectură concurentă în adevăratul sens al cuvântului, acesta suportă mai multe operații aproximativ simultan, prin folosirea funcției select și a alertelor. Următorii pași explică cum funcționează clientul:
 \begin{enumerate}
-    \item Inițial părintele încearcă să stabilească o conexiune cu serverul, folosind socket-uri. 
-    \item Dacă serverul acceptă conexiunea, în client se va forma un nou thread care va folosi socketul părinte sa trimită informațiile despre viteză și locație, în timp ce părintele va putea să trimită și să primească informații rutiere sau media.  
-    \item La un interval de timp prestabilit se vor trimite informațiile despre viteză și locație
+    \item Inițial părintele încearcă să stabilească o conexiune cu serverul, folosind socket-uri. (pasul 1)
+    \item Dacă serverul acceptă conexiunea, clientul porneste un loop care va rula, cel mult atata timp cat serverul este deschis, asteptand atat date de la server cât și date de tip I/O. Implementarea acesta este posibilă întrucât într-un sistem UNIX citirea I/O este realizată tot printr-un fișier. 
+    \item La un interval de timp prestabilit se vor trimite informațiile despre viteză și locație (pasul 8)
     \item La un alt interval de timp, clientul va primi informații media (dacă a selectat această opțiune)
-    \item Daca un client raportează un incident serverul îl va procesa și va încerca să facă boardcast la toți clienții aflați în aria în care s-a raportat incidentul. După cum se poate observa in pașii 6 și respectiv 6' informația nu este transmisă la toți clienții.
+    \item Daca un client raportează un incident serverul îl va procesa și va încerca să facă boardcast la toți clienții. Modul în care evenimentul aceasta se întamplă poate să fie urmărit pe diagrama de mai sus, urmărind pașii de la 4 la 7.
 \end{enumerate}
 \subsection{Arhitectura Serverului}
 Severul folosește tot o arhitectură concurentă, prin care reușește să suportate atât mai multe conexiuni simultan, cât și să răspundă la mai mulți clienți în același timp.
 \begin{enumerate}
-    \item Prin \textbf{multiplexarea I/O} se vor monitoriza descriptorii socketurilor asociate clienților remote, creându-se un nou proces la momentul în care o cerere noua ajunge. Astfel putem suporta mai multe cereri simultan.
-    \item Primul pas prin care o cerere trece este procesul de autentificare, urmând ca mai apoi să fie validată comanda, iar în final să se încerce procesarea informației. 
-    \item Pentru validarea autentificării folosim tokenuri generate random, care sunt stocate în baza de date și sunt atribuite unui utilizator. Pentru a putea evita orice fel de manipulare a datelor, tokenul este format din două componente: Identificatorul (care se află stocat în plain text în baza de date) și Validatorul (care se află într-o formă \textbf{hashed}, utilizatorul având singura copie a acestuia.)
-    \item Dacă autentificarea a avut success se va verifică dacă comanda dată de utilizator există, iar în caz afirmativ se va executa logica. 
-    \item În final, indiferent de rezultatul execuției, serverul va trimite un răspuns clientului, urmând ca mai apoi să fie închis procesul ce s-a ocupat de răspuns.
+    \item La deschiderea serverului se formează un thread pool de N threaduri (numarul fiind stabilit încă din timpul compilării) și un thread care va fi folosit pe post de broadcaster.
+    \item Când un client încearcă să se conecteze la server, threadul principal va accepta conexiunea și va alege thread-ul cel mai puțin utilizat (cu cele mai puține conexiuni) după care îl va adăuga în lista lui.
+    \item Threadurile care aparțin thread poll-ului folosesc \textbf{Multiplexarea I/O} realizată cu ajutorul funcției select. Totodată pentru a ne asigura că orice conexiune nouă este acceptată cât mai repede, selectul are un timeout de o secundă. 
+    \item Threadul care se ocupă de funcția de broadcast folosește atât alarme, cât și conditional wait. Pentru a nu solicita inutil sistemul, thread-ul de broadcast rulează doar atunci când: un element a fost adăugat în coada de mesaje, sau o dată la 60 de secunde, când transmite informații media tuturor clienților.
 \end{enumerate}
 \section{Detalii de implementare}
 Întrucât am menționat destul de explicit modul în care se tratează cererile și cum este implementat clientul și serverul, în următoarele secțiuni voi detalia particularitățile aplicației.
@@ -82,7 +81,8 @@ Pentru a putea comunica între client și server am implementat următorul forma
         \item Începe cu \textbar 
         \item (opțional) Urmează un sir de lungime de lungime 33 definit sub forma \(<Identifier>:<Validator>\) (doar pentru comenzile care necesită autentificare). Atât validatorul, cât și identificatorul au o lungime fixă de 16 caractere fiecare. La finalul celor 33 de caractere se va afla un \textbar, urmând mesajul propriu-zis.
         \item În continuare avem o operație care va fi mereu trată ca \textbf{string} ce se termină în '\textbf{:}' (aceasta poate lua un număr fix de valori)
-        \item Se citește un char care poate sa fie: \textbf{a} (array), \textbf{i} (int), \textbf{s} (string), \textbf{c} (coordonates),\textbf{d} (dict) \textbf{n} (null - parsarea se operește aici, nu avem payload).
+        \item Se citește un char care poate sa fie: 
+         \textbf{i} (int), \textbf{s} (string), \textbf{c} (coordonates),\textbf{d} (dict).
         \item Și în final avem valoarea (ce se va extinde până la final, dat de lungime) - în cazul în care primul caracter citit nu a fost \textbf{n}.
     \end{enumerate}
     Un exemplu pentru o comandă ce nu necesită ca utilizatorul să fie autentificat ar fi: 
@@ -112,87 +112,104 @@ Folosind această metodă de transmitere a datelor, putem să asigurăm atât va
         payload: "d{itype:1,cplace:[47.1731307,27.574399]}"
     }    
 \end{lstlisting}
-Acum, cel mai mult ne interesează fieldul \textbf{command}. Pe baza lui, putem afla dacă comanda există, dacă necesită autentificare sau nu. În final, dacă trece de cele două verificări, putem începe să parsăm \textbf{payload-ul} și să facem validările de tip, specifice fiecărei comenzi. 
+Acum, cel mai mult ne interesează fieldul \textbf{command}. Pe baza lui,vom calcula valoarea CRC, după care vom  putea afla dacă comanda există și dacă necesită autentificare sau nu. În final, dacă trece de cele două verificări, putem începe să parsăm \textbf{payload-ul} și să facem validările de tip, specifice fiecărei comenzi. 
 
 \subsection{Simularea senzorilor}
 În încercarea de a face o migrare a aplicației cât mai ușoară către un scenariu realist, am implementat doi senzori care generează date random, în următorul mod:
 \vspace{0.5cm}
 \begin{lstlisting}
     //SpeedSensor.h
-    #include <cstdlib>
-    #include <ctime>
-
-    class SpeedSensor : public Sensor{
+    class Speed
+    {
         private:
-            int currentSpeed;
-            Update();
+            int speedData;
+            
+            void Update();
         public:
-            SpeedSensor();
-            Read();
-    }
+            Speed();
+            int Read();
+    };
 
     //SpeedSensor.cpp
-    SpeedSensor::SpeedSensor(){
+    BTruckers::Client::Sensors::Speed::Speed()
+    {
+        LOG_INFO("Initializing hardware SPEED sensor.");
         std::srand(std::time(nullptr));
-        //maxium car speed will be 200km/h
-        this->currentSpeed = std::rand()%200;
+        this->speedData = 50 + std::rand() % 30;
     }
-    SpeedSensor::Read()
+
+    int BTruckers::Client::Sensors::Speed::Read()
     {
-        //we will first update the speed 
         this->Update();
-        //then return the new one
-        return this->currentSpeed;
+        return this->speedData;
     }
-    SpeedSensor::Update()
+
+    void BTruckers::Client::Sensors::Speed::Update()
     {
-        //the maximum difference that can happen
-        int maximumSpeedDifference = std::rand()%50;
-        //decide weather it will be increasing or 
-        //decreasing speed
-        this->currentSpeed = MAX(0,this->currentSpeed + 
-                    std::rand()%maximumSpeedDifference - 
-                    std::rand()%maximumSpeedDifference);
-    
+        std::srand(std::time(nullptr));
+        int maxSpeedDiff = 1 + std::rand()%15;
+        //here we can have a maxium of +-16 kmh. 
+        //we decide this value randomly
+        this->speedData = std::max(0,
+            this->speedData - 
+            std::rand() % maxSpeedDiff +
+            std::rand() % maxSpeedDiff 
+        );
     }
 \end{lstlisting}
 Iar senzorul de viteză va avea aproximativ aceeași implementare, singura modificare fiind că vom calcula distanța parcursă bazată pe viteza de la momemntul în care citim din senzor. 
 
 \subsection{Baza de date}
-Întrucât avem nevoie de persistența datelor, acestea trebuiesc salvate într-o bază de date. În schimb, pentru a putea să avem access la date și să realizăm operațiile standard (\textbf{CRUD}) trebuie să facem o clasă care acționează pe post de Wrapper la API-ul de \textit{sqlite3}. Funcțiile pe care le vor moșteni clasele sunt definite astfel:
+Întrucât avem nevoie de persistența datelor, acestea trebuiesc salvate într-o bază de date. În schimb, pentru a putea să avem access la date și să realizăm operațiile standard (\textbf{CRUD}) trebuie să facem o clasă care acționează pe post de Wrapper la API-ul de \textit{sqlite3}. Folosind clasa descrisă mai jos, reușim ca implementarea unui nou tabel sa fie facută într-un timp foarte scurt, focusându-ne mai mult pe logica de implementat pentru fiecare tabel, și nu pe aspectele de bază. Astfel că funcțiile pe care le vor moșteni clasele sunt definite astfel:
 
 \begin{lstlisting}
-    //SQLWrapper.h
-    class SQLWrapper{
-        private:
-            //fiecare clasa va avea un UUID
-            std::string UUID = "";
-            SQLWrapper();
-        public:
-            //va update fieldurile clasei
-            virtual bool Find(
-                    std::string key, 
-                    std::string value) = 0;
-            //va modifica adauga o linie baza de date 
-            //cu variabilele nenule din clasa
-            virtual bool Insert() = 0;
-            //va updata linia din clasa cu variabilele
-            //nenule din clasa
-            virtual bool Update() = 0;
-            //va sterge linia din tabel cu UUID-ul din 
-            //clasa
-            virtual bool Delete() = 0;            
-    }
+    //models/BaseModel.h
+    class BaseModel
+{
+private:
+    
+    static bool Populate(BaseModel& current, SQLiteResponse& data);
+    bool Execute(std::string sql);
+
+public:
+
+    //virtual functions to override
+    virtual inline bool& IsLocked() = 0;
+    virtual inline bool& IsInitialized() = 0;
+    virtual inline bool& AllowUUIDChanges() = 0;
+    virtual inline const std::string& GetTableName() = 0;
+    virtual inline DB_FIELDS& GetDBFields() = 0;
+    virtual inline BTruckers::Server::Core::DBHandler* GetConnection() = 0;
+
+    //CRUD
+    bool FindBy(std::string identifier, std::string value);
+    bool Create();
+    bool Update();
+    bool Delete();
+    bool GetRowsCount();
+
+    //Update field
+    bool UpdateField(std::string key, std::string value);
+    std::string GetField(std::string key);
+
+    //print the variables
+    void Print();
+
+};
 \end{lstlisting}
 
-Astfel, toate tabelele din baza noastră de date vor avea o clasă ce va asigura funcțiile esențiale. Obiectele vor fi populate cu date la inițializare, sau chiar ulterior, folosind funcția Find();
+\subsection{Clientul}
+Deși flow-ul de pe client a fost explicat destul de bine, partea de client mai are nevoie de câteva explicații. Prin urmare, pentru a putea trimite și primi informații simultan, folosim instrucțiunea select, care citește I/O doar când apăsăm tasta ENTER (ceea ce ne scapă de problemele de tipul un utilizator scrie mai încet, a început să scrie și a uitat altceva). Totodată la lista de descriptori pe care selectul o urmărește, adăugam si socket-ul serverului, pentru a putea citi imediat informația. Prin această metodă garantăm că putem scrie și citi fără a avea blocaje.
+
+Totuși a mai rămas o problemă. Clientul trebuie să transmită o dată la 60 de secunde date despre locația și viteza sa. Aceasta paote să fie ușor remediată folosind o alarmă. Dacă setăm o dată la 60 de secunde o alarmă, selectul va returna EINTR și noi vom putea implementa logica aferentă alarmei.
+
 
 \section{Concluzii}
 Aplicația \textbf{Monitorizarea Traficului} implementează un set de funcționalități destul de minimalist, existând loc de îmbunătățiri atât pe partea de securitate cât și pe cea de performanță a aplicației. 
 
 În primul rând, pentru a putea să scalăm aplicația ar trebui modificată baza de date din \textbf{sqlite3} într-o bază de date de tipul NoSQL (precum MongoDB), iar pentru stocarea datelor de autentificare (token-urile) ar trebui folosit un in-memory database precum Redis (întrucât necesită un număr relativ mare de interogări, mai precis este strâns legat de numărul de cereri pe care le face utilizatorul).
 
-În al doilea rând, generarea unor thread-uri pentru fiecare cerere poate deveni destul de exhaustivă, astfel că nu am putea scala prea mult aplicația fără a a avea probleme majore. O implementare mai bună ar fi prin folosirea unor thread poll-uri, articol ce poate fi regăsit la punctul 3 din Bibliografie. 
+În al doilea rând, modul în care transmitem informațiile între client și server este prea particular pentru a se putea scala bine. Trecerea către un format de tipul JSON/XML este o necesitate. Un al aspect, destul de important, este și că folosim o conexiune necriptată. Aceasta, în schimb, se poate rezolva destul de ușor folosind OpenSSL.
 
 În final, pe partea de securitate a aplicației, am putea implementa JSON Web Tokens folosind diferite Key Set-uri, ceea ce ar ajuta foarte mult la scalarea aplicației, în cazul în care ne-am dori mai multe servere să fie pornite simultan.
 \section{Bibliografie}

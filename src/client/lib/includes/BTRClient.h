@@ -48,22 +48,20 @@ namespace BTruckers
                     LOGIN = 0xAA08CB10,
                     INCIDENT = 0x3D03A11A,
                     METRICS = 0x228AAAE7,
+                    LOGOUT = 0x35CCF52F,
+                    HELP = 0x8875CAC,
 
 
                     //to implement on server
-                    LOGOUT = 0x35CCF52F,
-                    INVALIDATETOKENS = 0x19DD9A6E,
-                    HELP = 0x8875CAC,
                     ENABLE_PREFERANCE = 0xF3A0C832,
                     DISABLE_PREFERANCE = 0x4F454D51,
                     GETSETTINGS = 0x88E1016,
                     SETSETTINGS = 0x16A1A75F,
-
-                    //implement
                     REGISTER = 0x5FF94014,
 
                     
                     //parse
+                    INVALIDATETOKENS = 0x94EE425,
                     SETTOKEN = 0X31CE86E1,
                     FAILEDCOMMAND = 0x33C9541B,
                     SUCCESSCOMMAND = 0x2BA9B036,

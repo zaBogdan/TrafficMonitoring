@@ -33,6 +33,7 @@ namespace BTruckers
                 //private routes
                 std::string Incident(BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user, std::string payload);
                 std::string ClientMetrics(BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user, std::string payload);
+                std::string Logout(BTruckers::Server::Core::DBHandler *db, std::string payload);
 
             }
             //end handle code
@@ -44,6 +45,7 @@ namespace BTruckers
                 std::string CommandFailed(std::string payload);
                 std::string CommandSuccess(std::string payload);
                 std::string Broadcast(std::string payload);
+                std::string InvalidateTokens(std::string payload);
             }
             //end commands code
         }
