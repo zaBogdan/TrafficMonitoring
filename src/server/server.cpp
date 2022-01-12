@@ -6,62 +6,98 @@
 #include "CPV.h"
 #include "DBHandler.h"
 #include <signal.h>
-#include <pthread.h>
 pthread_mutex_t mutexArray[THREAD_POOL_SIZE];
 pthread_mutex_t globalMutex = PTHREAD_MUTEX_INITIALIZER;
 BTruckers::Server::Structures::Thread* ThreadInformation;
 BTruckers::Server::Core::CPV cpv;
 std::vector<BTruckers::Server::Structures::BroadcasterMessages> messages;
+volatile sig_atomic_t broadcastToClients = false;
+
+void broadcasterAlarm( int sig ) {
+    //just to avoid warnings
+    sig = sig;
+    broadcastToClients = true;
+    pthread_cond_signal(&BTruckers::Server::Core::Broadcaster::waitForData);
+}
 
 void* BroadcasterThread(void* arg)
 {
     //just to avoid warnings
     arg = (void*) arg;
-
+    signal(SIGALRM, broadcasterAlarm);
 
     //starting a database connection
     BTruckers::Server::Core::DBHandler db;
 
     LOG_DEBUG("[BROADCASTER] Initialized.");
 
-    BTruckers::Server::Structures::BroadcasterMessages demoMSG;
-    demoMSG.message = "Hello dear truckers. Welcome to the server.";
-    demoMSG.cond = BTruckers::Server::Enums::BroadcastConditions::NONE;
-    messages.push_back(demoMSG);
-    
-    demoMSG.message = "We are the best waze ever!";
-    demoMSG.cond = BTruckers::Server::Enums::BroadcastConditions::SELECTED_ENTERTAINMENT;
-    messages.push_back(demoMSG);
-
     BTruckers::Shared::Structures::Message msg;
     msg.token.identifier = APPLICATION_SECRET;
     msg.token.validator = APPLICATION_SECRET;
     msg.command = "Broadcast";
     msg.success = true;
+    alarm(20);
+
     while(true)
     {
-        msg.payload = "";
-        for(auto broad_msg : messages)
+        pthread_mutex_lock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
+        if(BTruckers::Server::Core::Broadcaster::broadcasterQueue.empty())
         {
-            msg.payload = msg.payload + std::to_string(broad_msg.cond) + broad_msg.message + "|";
+            pthread_cond_wait(&BTruckers::Server::Core::Broadcaster::waitForData,&BTruckers::Server::Core::Broadcaster::broadcasterLock);
         }
+        pthread_mutex_unlock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
+        pthread_mutex_lock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
+        while(!BTruckers::Server::Core::Broadcaster::broadcasterQueue.empty())
+        {
+            LOG_DEBUG("Got message on queue: %s", BTruckers::Server::Core::Broadcaster::broadcasterQueue.front().c_str());
+            BTruckers::Server::Core::Broadcaster::broadcasterQueue.pop();
+        }
+        pthread_mutex_unlock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
 
-        for(int idx = 0; idx < THREAD_POOL_SIZE; ++idx)
+        if(broadcastToClients)
         {
-            BTruckers::Server::Utils::CheckResponse(pthread_mutex_lock(&mutexArray[ThreadInformation[idx].idx]), "Failed to acquire lock in broadcaster thread.");
-            for(int i = 0; i < ThreadInformation[idx].count; ++i)
-            {
-                LOG_DEBUG("[BROADCASTER] The threads are: %d", ThreadInformation[idx].sockets[i].socketId);
-                std::string response = BTruckers::Server::Commands::Handler(msg, &db);
-                LOG_DEBUG("[BROADCASTER] The response is: %s", response.c_str());
-                if(!BTruckers::Shared::Protocols::TCP::Send(ThreadInformation[idx].sockets[i].socketId,response))
-                {
-                    LOG_ERROR("[ BROADCASTER ] Failed to send message to client with socket '%d'",ThreadInformation[idx].sockets[i].socketId);
-                }
-            }
-            pthread_mutex_unlock(&mutexArray[ThreadInformation[idx].idx]);
+            broadcastToClients = false;
+            LOG_DEBUG("We will append some messages to the queue!");
+            
+            
+            
+            alarm(20);
         }
-        sleep(5);
+    // BTruckers::Server::Structures::BroadcasterMessages demoMSG;
+    // demoMSG.message = "Hello dear truckers. Welcome to the server.";
+    // demoMSG.cond = BTruckers::Server::Enums::BroadcastConditions::NONE;
+    // messages.push_back(demoMSG);
+    
+    // demoMSG.message = "We are the best waze ever!";
+    // demoMSG.cond = BTruckers::Server::Enums::BroadcastConditions::SELECTED_ENTERTAINMENT;
+    // messages.push_back(demoMSG);
+        // msg.payload = "";
+        // for(auto broad_msg : messages)
+        // {
+        //     msg.payload = msg.payload + std::to_string(broad_msg.cond) + broad_msg.message + "|";
+        // }
+
+        // for(int idx = 0; idx < THREAD_POOL_SIZE; ++idx)
+        // {
+        //     BTruckers::Server::Utils::CheckResponse(pthread_mutex_lock(&mutexArray[ThreadInformation[idx].idx]), "Failed to acquire lock in broadcaster thread.");
+        //     for(int i = 0; i < ThreadInformation[idx].count; ++i)
+        //     {
+        //         LOG_DEBUG("[BROADCASTER] The threads are: %d", ThreadInformation[idx].sockets[i].socketId);
+        //         if(ThreadInformation[idx].sockets[i].userUUID == "")
+        //         {
+        //             LOG_DEBUG("[BROADCASTER] User is not logged in. Skipping...");
+        //             continue;
+        //         }
+        //         std::string response = BTruckers::Server::Commands::Handler(msg, &db);
+        //         LOG_DEBUG("[BROADCASTER] The response is: %s", response.c_str());
+        //         if(!BTruckers::Shared::Protocols::TCP::Send(ThreadInformation[idx].sockets[i].socketId,response))
+        //         {
+        //             LOG_ERROR("[ BROADCASTER ] Failed to send message to client with socket '%d'",ThreadInformation[idx].sockets[i].socketId);
+        //         }
+        //     }
+        //     pthread_mutex_unlock(&mutexArray[ThreadInformation[idx].idx]);
+        // }
+        // sleep(5);
     }
 
     return nullptr;

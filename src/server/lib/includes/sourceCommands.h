@@ -5,6 +5,7 @@
 #include "models/Users.h"
 #include "models/Incidents.h"
 #include "models/Tokens.h"
+#include "Broadcaster.h"
 
 namespace BTruckers
 {

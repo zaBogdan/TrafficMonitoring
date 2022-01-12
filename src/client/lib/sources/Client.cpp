@@ -11,6 +11,11 @@ BTruckers::Client::Core::Communcation::Communcation(const char* ip, int port)
     LOG_INFO("Connection with server was successful.");
 }
 
+BTruckers::Client::Core::Communcation::~Communcation()
+{
+    close(this->GetClientSocket());
+}
+
 bool BTruckers::Client::Core::Communcation::InitiateConnection(const char* ip, int port)
 {
     BTruckers::Shared::Utils::CheckResponse(this->clientSocket = socket(AF_INET, SOCK_STREAM, 0),"Failed to create a socket");

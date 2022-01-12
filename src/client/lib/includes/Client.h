@@ -18,6 +18,7 @@ namespace BTruckers
                     bool InitiateConnection(const char* ip, int port);
                 public:
                     Communcation(const char* ip, int port);
+                    ~Communcation();
                     std::string ReadFromCLI();
                     int GetClientSocket();
             };

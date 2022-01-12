@@ -36,5 +36,6 @@ std::string BTruckers::Server::Commands::Handle::Incident(BTruckers::Server::Cor
     newIncident.UpdateField("location", PrimiteTypes::ToCoordinates(cords));
     newIncident.Create();
 
+    BTruckers::Server::Core::Broadcaster::PushMessageToQueue("'"+modifiedType+"' incident has been reported near you!");
     return BTruckers::Server::Commands::Craft::CommandSuccess("Your report of '"+ modifiedType +"' has been successfully registered.");
 }

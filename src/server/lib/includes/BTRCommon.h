@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <pthread.h>
 #include "constants.h"
 #include "Logger.h"
 #include "Utils.h"
@@ -22,6 +23,7 @@ namespace BTruckers
             class CPV;
             class DBHandler;
             class SocketPair;
+            class Broadcaster;
         }
 
         namespace Utils
@@ -29,12 +31,6 @@ namespace BTruckers
             static inline std::string IntToHex(int x);
             static inline int CheckResponse(int result, const char *errorMessage);
             static inline void SignalHandler(int signal);
-        }
-
-        namespace Broadcast
-        {
-            void BroadcastMessage(std::string cmd, std::string payload, uint8_t cond);
-            bool IsConditionSatisfied(std::string uuid, BTruckers::Server::Core::DBHandler *db);
         }
 
         namespace Commands
@@ -47,7 +43,6 @@ namespace BTruckers
             //insert all the database models that are to be used
             class Users;
         }
-
 
         namespace Enums
         {
