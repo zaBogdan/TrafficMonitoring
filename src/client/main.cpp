@@ -8,12 +8,21 @@
 #include "protocols/TCP.h"
 #include <ctime>
 #include <iostream>
+pthread_mutex_t globalMutexLock;
+const int stdinId = fileno(stdin);
 volatile sig_atomic_t sendMetrics = false;
-
 
 void handleAlarm( int sig ) {
     sig = sig;
     sendMetrics = true;
+}
+
+void* IOThread(void* arg)
+{
+    //just avoid the warnings
+    arg = (void*) arg;
+
+    return nullptr;
 }
 
 
@@ -44,16 +53,33 @@ int main(int argc, char *argv[])
     // client trying to connect to the server
     BTruckers::Client::Core::Communcation client(argv[1], atoi(argv[2]));
     BTruckers::Client::Core::CPV cpv;
-
+    BTruckers::Shared::Structures::Message msg;
+    
     //initializing the sensors
     BTruckers::Client::Sensors::Speed speedSensor;
     BTruckers::Client::Sensors::GPS gpsSensor;
 
+    char sendMessage[60];
+
+    //initializing I/O thread
+    pthread_t ioThread;
+    if(pthread_create(&ioThread, nullptr, &IOThread, nullptr))
+    {
+        if(pthread_mutex_init(&globalMutexLock, NULL) != 0)
+        {
+            LOG_CRITICAL("Failed to create a lock. Exiting.");
+            exit(-1);
+        }
+
+        LOG_CRITICAL("Failed to create I/O thread. Exiting.");
+        exit(-1);
+    }
+
     fd_set readySockets, copySockets;
     FD_ZERO(&readySockets);
-    FD_SET(fileno(stdin), &readySockets);
+    FD_SET(stdinId, &readySockets);
     FD_SET(client.GetClientSocket(), &readySockets);
-    uint8_t FDSetSize = std::max(fileno(stdin), client.GetClientSocket())+1;
+    uint8_t FDSetSize = std::max(stdinId, client.GetClientSocket())+1;
 
     bool stillRunning = true, alarmFail = false;
     //setting the first alaram in 1 second
@@ -81,30 +107,37 @@ int main(int argc, char *argv[])
             if(!FD_ISSET(idx, &copySockets))
                 continue;
             
-            if(idx == fileno(stdin))
+            if(idx == stdinId)
             {
                 //if we are reading some user input we will send it to another thread
                 LOG_DEBUG("Reading user input");
                 std::string requestCommand = client.ReadFromCLI();
 
+                sprintf(sendMessage, "io %d", idx);
                 LOG_DEBUG("[ %d ] Request is: %s",idx, requestCommand.c_str());
+                LOG_DEBUG("Message is: %s", sendMessage);
 
                 continue;
             }
+            //if we don't have anything to read, the server broadcasted to us. 
             printf("\n");
             LOG_DEBUG("[ %d ] Reading from server socket.", idx);
             std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(idx);
+            
+            //check if we lost server connection
             if(socketResponse == "")
             {
                 LOG_WARNING("Lost connection with server... warm shutdown started.");
-                //check if we lost server connection
                 stillRunning = false;
             }
-            fflush(stderr);
-            LOG_DEBUG("[ %d ] Response is: %s",idx, socketResponse.c_str());
+            
+            msg = cpv.Parse(socketResponse);
+
+            std::string response = BTruckers::Client::Commands::HandleResponse(msg, false);
+            printf("[<] Response: %s\n", response.c_str());
         }
 
-
+        printf("\n");
         //checking alarm trigger
         if(!sendMetrics)
             continue;
@@ -113,11 +146,15 @@ int main(int argc, char *argv[])
         //alarm logic
         LOG_DEBUG("Received an ALARM signal. Sending the metrics now...");
         speedSensor.Read();
-        gpsSensor.Read();
+        std::pair<long long, long long> gpsData = gpsSensor.Read();
         //send the data now.
+        sprintf(sendMessage, "metrics %d %lld %lld", speedSensor.Read(),gpsData.first, gpsData.second);
+        LOG_DEBUG("Message is: %s", sendMessage);
+        
+
 
         //schedule 1 min alarm to send data.
-        alarm(5);
+        alarm(20);
     }
 
     LOG_INFO("Uninitializing the client...");
@@ -148,7 +185,6 @@ int main(int argc, char *argv[])
         // std::string requestCommand = client.ReadFromCLI();
     //     // std::string requestCommand = "login zaBogdan:P@ssw0rd2";
 
-    //     BTruckers::Shared::Structures::Message msg = cpv.Craft(requestCommand);
     //     requestCommand = BTruckers::Client::Commands::HandleResponse(msg);
 
     //     if(requestCommand == "")
@@ -157,10 +193,6 @@ int main(int argc, char *argv[])
     //     BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), requestCommand);
         
     //     std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
-    //     msg = cpv.Parse(socketResponse);
-
-    //     std::string response = BTruckers::Client::Commands::HandleResponse(msg, false);
-    //     printf("[<] Response: %s\n", response.c_str());
     //     // break;
     // }while(true);
     return 0;

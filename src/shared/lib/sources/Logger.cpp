@@ -3,6 +3,7 @@
 
 unsigned int Logger::logging_level = BTruckers::Shared::Enums::LoggingLevel::INFO;
 FILE* Logger::fp = nullptr;
+pthread_mutex_t Logger::loggerMutexLock = PTHREAD_MUTEX_INITIALIZER;
 
 Logger::Logger()
 {
@@ -11,6 +12,13 @@ Logger::Logger()
         LOG_WARNING("You can't have two logger classes");
         return;
     }
+
+    if(pthread_mutex_init(&Logger::loggerMutexLock, NULL) != 0)
+    {
+        LOG_CRITICAL("Failed to create logger mutex lock. Exiting.");
+        exit(-1);
+    }
+
     setbuf(stdout,NULL);
     setbuf(stderr,NULL);
     std::string filename = DUMP_LOGS_TO APPLICATION_NAME;
@@ -50,17 +58,25 @@ void Logger::Print(BTruckers::Shared::Enums::LoggingLevel::Type level, const cha
         return;
 
     fflush(stdout);
+    pthread_mutex_lock(&Logger::loggerMutexLock);
     printf("%s - %s[ %s ] ",BTruckers::Shared::Utils::CurrentDateTime().c_str(),Logger::GetLevelString(level).c_str(), APPLICATION_NAME);
+    pthread_mutex_unlock(&Logger::loggerMutexLock);
     va_list args;
     va_start(args, fmt);
+    pthread_mutex_lock(&Logger::loggerMutexLock);
     vprintf(fmt, args);
+    pthread_mutex_unlock(&Logger::loggerMutexLock);
     va_end(args);
     fflush(stdout);
     printf("\n");
 
+    pthread_mutex_lock(&Logger::loggerMutexLock);
     fprintf(Logger::fp, "%s - %s[ %s ] ",BTruckers::Shared::Utils::CurrentDateTime().c_str(),Logger::GetLevelString(level).c_str(), APPLICATION_NAME);
+    pthread_mutex_unlock(&Logger::loggerMutexLock);
     va_start(args, fmt);
+    pthread_mutex_lock(&Logger::loggerMutexLock);
     vfprintf(Logger::fp,fmt, args);
+    pthread_mutex_unlock(&Logger::loggerMutexLock);
     va_end(args);
     fprintf(Logger::fp,"\n");
 }

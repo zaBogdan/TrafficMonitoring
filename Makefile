@@ -6,7 +6,7 @@ BASE_ROOT = $(shell pwd)
 ROOT_DIR = ./src
 
 #FLAGS
-CLIENT_FLAGS = -D "__CLIENT__"
+CLIENT_FLAGS = -D "__CLIENT__" -lpthread
 SERVER_FLAGS = -D "__SERVER__" -lsqlite3  -lpthread
 
 # includes folder

@@ -2,6 +2,8 @@
 #include "BTRShared.h"
 #include <cstdarg>
 #include <cstddef>
+#include <pthread.h>
+
 
 #if defined(__CLIENT__)
 #define APPLICATION_NAME "CLIENT"
@@ -24,6 +26,7 @@
 
 class Logger{
     private:
+        static pthread_mutex_t loggerMutexLock;
         static FILE *fp;
         static unsigned int logging_level;
         static std::string GetLevelString(BTruckers::Shared::Enums::LoggingLevel::Type level);
