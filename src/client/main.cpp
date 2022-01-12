@@ -11,7 +11,23 @@
 pthread_mutex_t globalMutexLock;
 const int stdinId = fileno(stdin);
 volatile sig_atomic_t sendMetrics = false;
+bool stillRunning = true;
 
+void HandleSignal(int sig)
+{
+    switch(sig)
+    {
+        case SIGINT:
+        case SIGKILL:
+        case SIGTERM:
+            stillRunning = false;
+            alarm(1);
+            LOG_INFO("Warm shutdown procedure started.");
+            break;
+        default:
+            LOG_INFO("Signal not supported yet");
+    }
+}
 void handleAlarm( int sig ) {
     sig = sig;
     sendMetrics = true;
@@ -38,6 +54,7 @@ void printHelp(char* toolName)
 int main(int argc, char *argv[])
 {
     signal(SIGALRM, handleAlarm);
+    signal(SIGINT, HandleSignal);
     if(argc<3)
     {
         printHelp(argv[0]);
@@ -56,7 +73,7 @@ int main(int argc, char *argv[])
     BTruckers::Client::Core::Communcation client(argv[1], atoi(argv[2]));
     BTruckers::Client::Core::CPV cpv;
     BTruckers::Shared::Structures::Message msg;
-    
+
     //initializing the sensors
     BTruckers::Client::Sensors::Speed speedSensor;
     BTruckers::Client::Sensors::GPS gpsSensor;
@@ -69,7 +86,7 @@ int main(int argc, char *argv[])
     FD_SET(client.GetClientSocket(), &readySockets);
     uint8_t FDSetSize = std::max(stdinId, client.GetClientSocket())+1;
 
-    bool stillRunning = true, alarmFail = false, firstRun = true;
+    bool alarmFail = false, firstRun = true;
     //setting the first alaram in 1 second
     alarm(1);
     while(stillRunning)
@@ -133,10 +150,10 @@ int main(int argc, char *argv[])
             }
         }
 
-        printf("\n");
         //checking alarm trigger
         if(!sendMetrics)
             continue;
+        printf("\n");
 
         //if we are not authenticated we will not send the metrics
         if(BTruckers::Client::Core::StorageBox::GetItem("identifier") == "")
@@ -144,11 +161,9 @@ int main(int argc, char *argv[])
         
         //alarm logic
         LOG_DEBUG("Received an ALARM signal. Sending the metrics now...");
-        speedSensor.Read();
         BTruckers::Shared::Structures::Cords gpsData = gpsSensor.Read();
         //send the data now.
         sprintf(sendMessage, "metrics %d %.6f %.6f", speedSensor.Read(),gpsData.longitute, gpsData.latitude);
-        LOG_INFO("Message is: %s", sendMessage);
         
         if(!SendMessageToServer(sendMessage, &client, &cpv))
         {
@@ -160,6 +175,7 @@ int main(int argc, char *argv[])
         alarm(60);
     }
 
-    LOG_INFO("Uninitializing the client...");
+    LOG_INFO("Uniniting the client...");
+    BTruckers::Client::Core::StorageBox::DumpToFile();
     return 0;
 }

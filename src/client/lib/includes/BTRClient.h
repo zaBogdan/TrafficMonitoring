@@ -46,12 +46,13 @@ namespace BTruckers
                     AUTH = 0xF8DEB059,
                     AUTHENTICATE = 0xE500DB4,
                     LOGIN = 0xAA08CB10,
-
                     INCIDENT = 0x3D03A11A,
-
-                    LOGOUT = 0x35CCF52F,
-
                     METRICS = 0x228AAAE7,
+
+                    //implement
+                    LOGOUT = 0x35CCF52F,
+                    ENABLE_PREFERANCE = 0xF3A0C832,
+                    DISABLE_PREFERANCE = 0x4F454D51,
 
                     
                     //parse

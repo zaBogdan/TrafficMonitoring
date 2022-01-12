@@ -3,6 +3,7 @@
 #include "BTRShared.h"
 #include "PrimitiveTypes.h"
 #include "StorageBox.h"
+#include "sensors/GPSSensor.h"
 
 namespace BTruckers{
     namespace Client{

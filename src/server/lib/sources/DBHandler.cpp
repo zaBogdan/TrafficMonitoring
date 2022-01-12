@@ -90,11 +90,13 @@ BTruckers::Server::Core::DBHandler::DBHandler()
     {
         if(!this->InitiateConnection())
         {
+            LOG_CRITICAL("Failed to initiation connection with database.");
             exit(12);
         }
         LOG_INFO("Connection to the database '%s' established successfully.", DATABASE_FILENAME);
     }else{
         LOG_WARNING("You can't initiate two connections of DBHandler!");
+        exit(1);
     }
 }
 

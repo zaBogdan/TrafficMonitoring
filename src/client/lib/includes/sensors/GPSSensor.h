@@ -10,12 +10,12 @@ namespace BTruckers
             class GPS
             {
                 private:
-                    BTruckers::Shared::Structures::Cords position;
-
-                    void Update();
+                    static BTruckers::Shared::Structures::Cords position;
+                    static bool isInit;
+                    static void Update();
                 public:
                     GPS();
-                    BTruckers::Shared::Structures::Cords Read();
+                    static BTruckers::Shared::Structures::Cords Read();
             };
         }
     }

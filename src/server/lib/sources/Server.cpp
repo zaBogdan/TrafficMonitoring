@@ -7,7 +7,7 @@ BTruckers::Server::Core::Server::Server(int PORT, int BACKLOG)
     if(!this->Setup(PORT, BACKLOG))
     {
         LOG_CRITICAL("Failed to start the server. Exiting");
-        exit(-1);
+        exit(1);
     }
     LOG_INFO("Started listening on port %d!",PORT);
 }
