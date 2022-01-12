@@ -32,7 +32,6 @@ BTruckers::Shared::Structures::Message BTruckers::Client::Core::CPV::Craft(std::
 BTruckers::Shared::Structures::Message BTruckers::Client::Core::CPV::Parse(std::string payload)
 {
     BTruckers::Shared::Structures::Message data;
-
     if(payload == "")
         return data;
 

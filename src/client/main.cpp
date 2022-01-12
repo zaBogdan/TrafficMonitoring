@@ -17,14 +17,16 @@ void handleAlarm( int sig ) {
     sendMetrics = true;
 }
 
-void* IOThread(void* arg)
+bool SendMessageToServer(std::string msg, BTruckers::Client::Core::Communcation* client, BTruckers::Client::Core::CPV* cpv)
 {
-    //just avoid the warnings
-    arg = (void*) arg;
-
-    return nullptr;
+    if(msg == "")
+        return false;
+    BTruckers::Shared::Structures::Message pMsg = cpv->Craft(msg);
+    std::string requestMsg = BTruckers::Client::Commands::HandleResponse(pMsg);
+    if(requestMsg == "")
+        return false;
+    return BTruckers::Shared::Protocols::TCP::Send(client->GetClientSocket(), requestMsg);
 }
-
 
 void printHelp(char* toolName)
 {
@@ -42,11 +44,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if(DEBUG_MODE == true)
-    {
-        Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
-        LOG_DEBUG("Application is now running in verbose mode...");
-    }
+    // if(DEBUG_MODE == true)
+    // {
+    //     Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
+    //     LOG_DEBUG("Application is now running in verbose mode...");
+    // }
 
     LOG_DEBUG("Starting to initiate connection to the server");
 
@@ -60,20 +62,6 @@ int main(int argc, char *argv[])
     BTruckers::Client::Sensors::GPS gpsSensor;
 
     char sendMessage[60];
-
-    //initializing I/O thread
-    pthread_t ioThread;
-    if(pthread_create(&ioThread, nullptr, &IOThread, nullptr))
-    {
-        if(pthread_mutex_init(&globalMutexLock, NULL) != 0)
-        {
-            LOG_CRITICAL("Failed to create a lock. Exiting.");
-            exit(-1);
-        }
-
-        LOG_CRITICAL("Failed to create I/O thread. Exiting.");
-        exit(-1);
-    }
 
     fd_set readySockets, copySockets;
     FD_ZERO(&readySockets);
@@ -113,10 +101,10 @@ int main(int argc, char *argv[])
                 LOG_DEBUG("Reading user input");
                 std::string requestCommand = client.ReadFromCLI();
 
-                sprintf(sendMessage, "io %d", idx);
-                LOG_DEBUG("[ %d ] Request is: %s",idx, requestCommand.c_str());
-                LOG_DEBUG("Message is: %s", sendMessage);
-
+                if(!SendMessageToServer(requestCommand, &client, &cpv))
+                {
+                    LOG_WARNING("Failed to send message '%s' to the server", requestCommand.c_str());
+                }
                 continue;
             }
             //if we don't have anything to read, the server broadcasted to us. 
@@ -151,7 +139,10 @@ int main(int argc, char *argv[])
         sprintf(sendMessage, "metrics %d %lld %lld", speedSensor.Read(),gpsData.first, gpsData.second);
         LOG_DEBUG("Message is: %s", sendMessage);
         
-
+        if(!SendMessageToServer(sendMessage, &client, &cpv))
+        {
+            LOG_WARNING("Failed to send message '%s' to the server", sendMessage);
+        }
 
         //schedule 1 min alarm to send data.
         alarm(20);

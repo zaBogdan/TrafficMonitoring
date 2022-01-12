@@ -11,7 +11,6 @@ BTruckers::Client::Sensors::Speed::Speed()
 int BTruckers::Client::Sensors::Speed::Read()
 {
     this->Update();
-    LOG_INFO("New speed is: %d", this->speedData);
     return this->speedData;
 }
 

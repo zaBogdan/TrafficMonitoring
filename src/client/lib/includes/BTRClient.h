@@ -51,6 +51,8 @@ namespace BTruckers
 
                     LOGOUT = 0x35CCF52F,
 
+                    METRICS = 0x228AAAE7,
+
                     //parse
                     SETTOKEN = 0X31CE86E1,
                     FAILEDCOMMAND = 0x33C9541B,

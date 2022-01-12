@@ -12,3 +12,4 @@
 #define FAILEDRESPONSE_COMMAND "CommandFailed"
 #define SUCCESSRESPONSE_COMMAND "CommandSuccess"
 #define SETTOKENS_COMMAND "SetTokens"
+#define SENDMETRICS_COMMAND "SendMetrics"

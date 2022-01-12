@@ -21,6 +21,7 @@ namespace BTruckers{
             {
                 std::string Authentication(std::string payload);
                 std::string ReportIncident(std::string payload);
+                std::string SendMetrics(std::string payload);
             }
             //end commands code
         }
