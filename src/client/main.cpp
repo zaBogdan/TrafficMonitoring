@@ -123,7 +123,10 @@ int main(int argc, char *argv[])
             msg = cpv.Parse(socketResponse);
 
             std::string response = BTruckers::Client::Commands::HandleResponse(msg, false);
-            printf("[<] Response: %s\n", response.c_str());
+            if(response != BROADCAST_COMMAND)
+            {
+                printf("[<] Response: %s\n", response.c_str());
+            }
         }
 
         printf("\n");

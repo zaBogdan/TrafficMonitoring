@@ -34,6 +34,10 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
             response = BTruckers::Client::Commands::Handle::SetTokens(message.payload);
             break;
 
+        case BTruckers::Client::Enums::CommandsCRC::BROADCAST:
+            response = BTruckers::Client::Commands::Handle::Broadcast(message.payload);
+            break;
+
         case BTruckers::Client::Enums::CommandsCRC::FAILEDCOMMAND:
         case BTruckers::Client::Enums::CommandsCRC::SUCCESSCOMMAND:
             response = BTruckers::Client::Commands::Handle::SimpleResponse(message.payload);
