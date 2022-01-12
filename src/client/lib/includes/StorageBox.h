@@ -20,7 +20,6 @@ namespace BTruckers
                 public:
                     static bool SetItem(std::string key, std::string value);
                     static std::string GetItem(std::string key);
-
                     static void DumpToFile();
                     //this will work only on debug.
                     static void Print();

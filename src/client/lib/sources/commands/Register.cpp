@@ -1,27 +1,29 @@
 #include "clientCommands.h"
 
-std::string BTruckers::Client::Commands::Craft::Authentication(std::string payload)
+std::string BTruckers::Client::Commands::Craft::Register(std::string payload)
 {
-    size_t splitPosition = payload.find(":");
+    size_t splitPosition = payload.find(" ");
+    std::vector<std::string> parameters;
+    
+    while(splitPosition != std::string::npos)
+    {
+        parameters.push_back(payload.substr(0, splitPosition));
+        payload = payload.substr(splitPosition+1);
+        splitPosition = payload.find(" ");
+    }
 
-    //if the payload can't be splitted we will just return
-    if(splitPosition == std::string::npos)
-        return "";
+    parameters.push_back(payload);
 
-    //splitting them
-    std::string username = payload.substr(0, splitPosition);
-    std::string password = payload.substr(splitPosition+1);
-
-    //transforming to string
-    username = PrimiteTypes::ToString(username, "username");
-    password = PrimiteTypes::ToString(password, "password");
-
-    //getting the dictionary
-    std::vector<std::string> finalDict {username, password};
-    std::string dict = PrimiteTypes::ToDict(finalDict);
+    //setting the fields
+    parameters[0] = PrimiteTypes::ToString(parameters[0], "username");
+    parameters[1] = PrimiteTypes::ToString(parameters[1], "password");
+    parameters[2] = PrimiteTypes::ToString(parameters[2], "firstname");
+    parameters[3] = PrimiteTypes::ToString(parameters[3], "lastname");
+    parameters[4] = PrimiteTypes::ToString(parameters[4], "company");
+    parameters[5] = PrimiteTypes::ToString(parameters[5], "email");
 
     //finally build the command 
-    std::string command = std::string(AUTHENTICATE_COMMAND) + std::string(":") + dict;
+    std::string command = std::string(REGISTER_COMMAND) + std::string(":") + PrimiteTypes::ToDict(parameters);
 
     //and that's the end.
     return command;

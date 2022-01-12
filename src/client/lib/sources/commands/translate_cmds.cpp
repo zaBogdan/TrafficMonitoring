@@ -7,7 +7,7 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
         LOG_ERROR("There was something wrong with the response message.");
         return "";
     }
-
+    message.print();
     uint32_t crcValue = BTruckers::Shared::Utils::CRCValue(message.command);
     
     std::string response = "";
@@ -20,6 +20,10 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
         case BTruckers::Client::Enums::CommandsCRC::AUTHENTICATE:
         case BTruckers::Client::Enums::CommandsCRC::LOGIN:
             response = BTruckers::Client::Commands::Craft::Authentication(message.payload);
+            break;
+
+        case BTruckers::Client::Enums::CommandsCRC::REGISTER:
+            response = BTruckers::Client::Commands::Craft::Register(message.payload);
             break;
 
         case BTruckers::Client::Enums::CommandsCRC::INCIDENT:
@@ -38,6 +42,31 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
             response = BTruckers::Client::Commands::Handle::Broadcast(message.payload);
             break;
 
+        case BTruckers::Client::Enums::CommandsCRC::LOGOUT:
+            response = BTruckers::Client::Commands::Craft::Logout(message.payload);
+            break;
+
+        case BTruckers::Client::Enums::CommandsCRC::INVALIDATETOKENS:
+            response = BTruckers::Client::Commands::Handle::InvalidateTokens(message.payload);
+            break;
+
+        case BTruckers::Client::Enums::CommandsCRC::ENABLE_PREFERANCE:
+        case BTruckers::Client::Enums::CommandsCRC::DISABLE_PREFERANCE:
+            response = BTruckers::Client::Commands::Craft::SwitchPreference(message.command,message.payload);
+            break;
+
+        case BTruckers::Client::Enums::CommandsCRC::HELP:
+            response = BTruckers::Client::Commands::Craft::Help(message.payload);
+            break;
+
+        case BTruckers::Client::Enums::CommandsCRC::GETSETTINGS:
+            response = BTruckers::Client::Commands::Craft::GetSettings(message.payload);
+            break;
+
+        case BTruckers::Client::Enums::CommandsCRC::SETSETTINGS:
+            response = BTruckers::Client::Commands::Handle::SetSettings(message.payload);
+            break;
+
         case BTruckers::Client::Enums::CommandsCRC::FAILEDCOMMAND:
         case BTruckers::Client::Enums::CommandsCRC::SUCCESSCOMMAND:
             response = BTruckers::Client::Commands::Handle::SimpleResponse(message.payload);
@@ -48,7 +77,9 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
             LOG_ERROR("Command doesn't exist yet. Check your spelling.");
             response = "";
     }
-    if(isRequest)
+    if(response == "Help")
+        return response;
+    if(isRequest && response != "")
     {
         //here I will add the tokens if they are set.
         if(message.token.identifier != "" && message.token.validator != "")

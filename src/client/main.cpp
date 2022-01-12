@@ -41,6 +41,8 @@ bool SendMessageToServer(std::string msg, BTruckers::Client::Core::Communcation*
     std::string requestMsg = BTruckers::Client::Commands::HandleResponse(pMsg);
     if(requestMsg == "")
         return false;
+    if(requestMsg == "Help")
+        return true;
     return BTruckers::Shared::Protocols::TCP::Send(client->GetClientSocket(), requestMsg);
 }
 
