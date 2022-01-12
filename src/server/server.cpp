@@ -29,17 +29,21 @@ void* BroadcasterThread(void* arg)
     demoMSG.cond = BTruckers::Server::Enums::BroadcastConditions::NONE;
     messages.push_back(demoMSG);
     
+    demoMSG.message = "We are the best waze ever!";
+    demoMSG.cond = BTruckers::Server::Enums::BroadcastConditions::SELECTED_ENTERTAINMENT;
+    messages.push_back(demoMSG);
+
     BTruckers::Shared::Structures::Message msg;
-    msg.userUUID = APPLICATION_SECRET;
+    msg.token.identifier = APPLICATION_SECRET;
+    msg.token.validator = APPLICATION_SECRET;
     msg.command = "Broadcast";
     msg.success = true;
     while(true)
     {
-        for(auto& broad_msg : messages)
+        msg.payload = "";
+        for(auto broad_msg : messages)
         {
-            msg.payload = broad_msg.message;
-            // broad_msg.message = BTruckers::Server::Commands::Handler(&msg, db);
-            LOG_DEBUG("[BROADCASTER] We will broadcast: %s", broad_msg.message.c_str());
+            msg.payload = msg.payload + std::to_string(broad_msg.cond) + broad_msg.message + "|";
         }
 
         for(int idx = 0; idx < THREAD_POOL_SIZE; ++idx)
@@ -57,7 +61,7 @@ void* BroadcasterThread(void* arg)
             }
             pthread_mutex_unlock(&mutexArray[ThreadInformation[idx].idx]);
         }
-        sleep(10);
+        sleep(5);
     }
 
     return nullptr;

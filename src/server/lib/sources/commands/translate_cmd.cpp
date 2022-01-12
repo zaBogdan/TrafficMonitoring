@@ -31,7 +31,7 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
 
         case BTruckers::Server::Enums::CommandsCRC::BROADCAST:
             //extra safety check (to be sure users will not be able to broadcast)
-            if(message.userUUID != APPLICATION_SECRET)
+            if(message.token.validator != APPLICATION_SECRET)
                 break;
             response = BTruckers::Server::Commands::Craft::Broadcast(message.payload);
             break;

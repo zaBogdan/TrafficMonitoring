@@ -44,11 +44,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // if(DEBUG_MODE == true)
-    // {
-    //     Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
-    //     LOG_DEBUG("Application is now running in verbose mode...");
-    // }
+    if(DEBUG_MODE == true)
+    {
+        Logger::SetLoggingLevel(BTruckers::Shared::Enums::LoggingLevel::DEBUG);
+        LOG_DEBUG("Application is now running in verbose mode...");
+    }
 
     LOG_DEBUG("Starting to initiate connection to the server");
 
@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
         printf("[>] Enter a command: ");
         fflush(stdout);
         int ret = select(FDSetSize, &copySockets, NULL, NULL, NULL);
+        printf("\n");
         if(ret < 0){
             if(errno == EINTR)
             {
@@ -130,6 +131,9 @@ int main(int argc, char *argv[])
         if(!sendMetrics)
             continue;
         sendMetrics = false;
+        //if we are not authenticated we will not send the metrics
+        if(BTruckers::Client::Core::StorageBox::GetItem("identifier") == "")
+            continue;
         
         //alarm logic
         LOG_DEBUG("Received an ALARM signal. Sending the metrics now...");

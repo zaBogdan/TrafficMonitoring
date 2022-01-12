@@ -15,6 +15,8 @@ uint32_t BTruckers::Server::Commands::CheckAuthentication(BTruckers::Shared::Str
     if(message.token.identifier == "" || message.token.validator == "")
         return 0;
 
+    if(message.token.identifier ==  APPLICATION_SECRET)
+        return crcValue;
 
     BTruckers::Server::Models::Tokens token (db, "identifier", message.token.identifier);
     token.Print();

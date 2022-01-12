@@ -53,10 +53,12 @@ namespace BTruckers
 
                     METRICS = 0x228AAAE7,
 
+                    
                     //parse
                     SETTOKEN = 0X31CE86E1,
                     FAILEDCOMMAND = 0x33C9541B,
                     SUCCESSCOMMAND = 0x2BA9B036
+                    BROADCAST = 0x1900FE56,
                 };
             }
             //end enums code
