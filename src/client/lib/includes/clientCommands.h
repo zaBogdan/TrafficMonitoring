@@ -15,6 +15,7 @@ namespace BTruckers{
             {
                 std::string SetTokens(std::string payload);
                 std::string SimpleResponse(std::string payload);
+                std::string Broadcast(std::string payload);
             }
 
             namespace Craft
