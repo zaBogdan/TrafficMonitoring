@@ -24,9 +24,7 @@ int BTruckers::Server::Core::Server::InitiateConnectionWithClient()
 
     memset(&client, 0, sizeof(client));
     
-    
     BTruckers::Server::Utils::CheckResponse(clientSocket = accept(this->serverSocket, (struct sockaddr*) &client,(socklen_t*) &clientSocket), "Failed to accept client connection");
-
     return clientSocket;
 }
 

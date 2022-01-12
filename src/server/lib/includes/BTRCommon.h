@@ -8,7 +8,6 @@
 #include <pthread.h>
 #include "constants.h"
 #include "Logger.h"
-#include "Utils.h"
 
 namespace BTruckers
 {
@@ -24,6 +23,7 @@ namespace BTruckers
             class DBHandler;
             class SocketPair;
             class Broadcaster;
+            static volatile bool serverRunning = true;
         }
 
         namespace Utils
@@ -108,3 +108,5 @@ namespace BTruckers
         //end server code
     }
 }
+
+#include "Utils.h"

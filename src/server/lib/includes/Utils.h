@@ -1,6 +1,7 @@
 #pragma once
 #include "BTRCommon.h"
-
+#include <signal.h>
+#include "Broadcaster.h"
 
 namespace BTruckers
 {
@@ -25,7 +26,6 @@ namespace BTruckers
                 if(result == ERROR_SOCKET)
                 {
                     LOG_ERROR(errorMessage);
-                    exit(result);
                 }
                 return result;
             }
@@ -35,15 +35,13 @@ namespace BTruckers
                 switch(signal)
                 {
                     case SIGINT:
-                        LOG_INFO("Received SIGINT. Starting the shutdown procedure...");
-                        exit(0);
-
                     case SIGKILL:
-                        LOG_INFO("Received SIGKILL. Starting the shutdown procedure...");
-                        exit(0);
                     case SIGTERM:
-                        LOG_INFO("Received SIGTERM. Starting the shutdown procedure...");
-                        exit(0);
+                        LOG_INFO("Received SIGINT. Starting the shutdown procedure...");
+                        BTruckers::Server::Core::serverRunning = false;
+                        pthread_cond_signal(&BTruckers::Server::Core::Broadcaster::waitForData);
+                        break;
+
                     default:
                         LOG_INFO("The signal '%d' isn't yet treated.", signal);
                 }

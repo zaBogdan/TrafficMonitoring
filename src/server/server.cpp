@@ -30,7 +30,7 @@ void* BroadcasterThread(void* arg)
     //starting a database connection
     BTruckers::Server::Core::DBHandler db;
 
-    LOG_DEBUG("[BROADCASTER] Initialized.");
+    LOG_INFO("[BROADCASTER] Initialized.");
 
     BTruckers::Shared::Structures::Message msg;
     msg.token.identifier = APPLICATION_SECRET;
@@ -39,7 +39,7 @@ void* BroadcasterThread(void* arg)
     msg.success = true;
     alarm(1);
 
-    while(true)
+    while(BTruckers::Server::Core::serverRunning)
     {
         msg.payload = "";
         pthread_mutex_lock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
@@ -48,17 +48,9 @@ void* BroadcasterThread(void* arg)
             pthread_cond_wait(&BTruckers::Server::Core::Broadcaster::waitForData,&BTruckers::Server::Core::Broadcaster::broadcasterLock);
         }
         pthread_mutex_unlock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
-        pthread_mutex_lock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
-        while(!BTruckers::Server::Core::Broadcaster::broadcasterQueue.empty())
-        {
-            LOG_DEBUG("Got message on queue: %s", BTruckers::Server::Core::Broadcaster::broadcasterQueue.front().c_str());
-            BTruckers::Server::Core::Broadcaster::broadcasterQueue.pop();
-        }
-        pthread_mutex_unlock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
 
         if(broadcastToClients)
         {
-            
             LOG_DEBUG("We will append some messages to the queue!");
             BTruckers::Server::Models::Entertainment::AddToBroadcasterQueue(&db);
         }
@@ -71,19 +63,20 @@ void* BroadcasterThread(void* arg)
         }
         pthread_mutex_unlock(&BTruckers::Server::Core::Broadcaster::broadcasterLock);
 
+        if(msg.payload == "")
+            continue; 
+            
         for(int idx = 0; idx < THREAD_POOL_SIZE; ++idx)
         {
             BTruckers::Server::Utils::CheckResponse(pthread_mutex_lock(&mutexArray[ThreadInformation[idx].idx]), "Failed to acquire lock in broadcaster thread.");
             for(int i = 0; i < ThreadInformation[idx].count; ++i)
             {
-                LOG_DEBUG("[BROADCASTER] The threads are: %d", ThreadInformation[idx].sockets[i].socketId);
                 if(ThreadInformation[idx].sockets[i].userUUID == "")
                 {
-                    LOG_DEBUG("[BROADCASTER] User is not logged in. Skipping...");
+                    LOG_DEBUG("[ BROADCASTER ] User on socket %d is not logged in. Skipping...", ThreadInformation[idx].sockets[i].socketId);
                     continue;
                 }
                 std::string response = BTruckers::Server::Commands::Handler(msg, &db);
-                LOG_DEBUG("[BROADCASTER] The response is: %s", response.c_str());
                 if(!BTruckers::Shared::Protocols::TCP::Send(ThreadInformation[idx].sockets[i].socketId,response))
                 {
                     LOG_ERROR("[ BROADCASTER ] Failed to send message to client with socket '%d'",ThreadInformation[idx].sockets[i].socketId);
@@ -96,10 +89,11 @@ void* BroadcasterThread(void* arg)
         if(broadcastToClients)
         {
             broadcastToClients = false;
-            alarm(5);
+            alarm(60);
         }
     }
 
+    LOG_INFO("[ BROADCASTER ] Thread is now closing...");
     return nullptr;
 }
 
@@ -126,9 +120,9 @@ void* threadFunction(void* arg)
     //here i don t have to include the server socket because it will be managed 
     //on the main thread(which will only accept and fwd to a thread from the poll)
     fflush(stdout);
-    LOG_DEBUG("[ THREAD %d ] I'm initialized now.", threadData->idx);
+    LOG_INFO("[ THREAD %d ] I'm initialized now.", threadData->idx);
    
-    while(true)
+    while(BTruckers::Server::Core::serverRunning)
     {
         //copy for select.
         pthread_mutex_lock(&mutexArray[threadData->idx]);
@@ -184,6 +178,15 @@ void* threadFunction(void* arg)
         }
         pthread_mutex_unlock(&mutexArray[threadData->idx]);
     }
+
+    LOG_INFO("[ THREAD %d ] Warm shutdown started...", threadData->idx);
+    for(int idx = 0; idx<threadData->count; ++idx)
+    {
+        close(threadData->sockets[idx].socketId);
+    }
+
+    LOG_INFO("[ THREAD %d ] Shutdown complete...", threadData->idx);
+    close(threadData->serverSocket);
     return nullptr;
 }
 
@@ -232,10 +235,13 @@ int main()
         exit(-1);
     }
 
-    while(true)
+    while(BTruckers::Server::Core::serverRunning)
     {
         int clientIDX = server.InitiateConnectionWithClient();
         
+        if(clientIDX == -1)
+            continue; 
+            
         //we want to add this client to the least used thread.
         int minValue=100000, correspondingIDXtoMin=0;
         for(int idx=0;idx<THREAD_POOL_SIZE;idx++)
@@ -257,5 +263,17 @@ int main()
         pthread_mutex_unlock(&mutexArray[correspondingIDXtoMin]);
     }
 
+    LOG_INFO("[ MAIN ] Warm shutdown started. Waiting for all threads to finish...");
+
+    pthread_join(broadcasterThread, NULL);
+    LOG_DEBUG("Broadcaster thread finished...");
+
+    for(int idx=0;idx<THREAD_POOL_SIZE;idx++)
+    {
+        pthread_join(threadPool[idx], NULL);
+        LOG_DEBUG("Thread %d finished",idx);
+    }
+
+    LOG_INFO("Bye bye :D");
     return 0;
 }

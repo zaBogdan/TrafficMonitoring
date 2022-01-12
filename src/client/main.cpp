@@ -69,14 +69,18 @@ int main(int argc, char *argv[])
     FD_SET(client.GetClientSocket(), &readySockets);
     uint8_t FDSetSize = std::max(stdinId, client.GetClientSocket())+1;
 
-    bool stillRunning = true, alarmFail = false;
+    bool stillRunning = true, alarmFail = false, firstRun = true;
     //setting the first alaram in 1 second
     alarm(1);
     while(stillRunning)
     {
         alarmFail = false;
         copySockets = readySockets;
-        printf("[>] Enter a command: ");
+        if(!firstRun)
+        {
+            printf("[>] Enter a command: ");
+        }
+        firstRun = false;
         fflush(stdout);
         int ret = select(FDSetSize, &copySockets, NULL, NULL, NULL);
         printf("\n");
@@ -133,9 +137,7 @@ int main(int argc, char *argv[])
         //checking alarm trigger
         if(!sendMetrics)
             continue;
-        sendMetrics = false;
-        //schedule 1 min alarm to send data.
-        alarm(3);
+
         //if we are not authenticated we will not send the metrics
         if(BTruckers::Client::Core::StorageBox::GetItem("identifier") == "")
             continue;
@@ -153,6 +155,9 @@ int main(int argc, char *argv[])
             LOG_WARNING("Failed to send message '%s' to the server", sendMessage);
         }
 
+        sendMetrics = false;
+        //schedule 1 min alarm to send data.
+        alarm(60);
     }
 
     LOG_INFO("Uninitializing the client...");
