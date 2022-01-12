@@ -50,3 +50,28 @@ BTruckers::Server::Core::DBHandler* BTruckers::Server::Models::Entertainment::Ge
 {
     return this->dbConnection;
 }
+
+//custom code
+
+//to be improved...
+void BTruckers::Server::Models::Entertainment::AddToBroadcasterQueue(BTruckers::Server::Core::DBHandler* db)
+{
+    Entertainment en(db);
+    en.GetRowsCount();
+    int rowsCount = std::stoi(en.GetField("rowcount"));
+    std::srand(time(NULL));
+    int startFrom = 1+ rand() % 3;
+    while(startFrom < rowsCount)
+    {
+        en.FindBy("rowid", std::to_string(startFrom));
+        if(en.GetField("uuid") == "")
+        {
+            ++startFrom;
+            ++rowsCount;
+        }
+        
+        BTruckers::Server::Core::Broadcaster::PushMessageToQueue(std::to_string(BTruckers::Server::Enums::BroadcastConditions::SELECTED_ENTERTAINMENT) + en.GetField("message"));
+
+        startFrom += 4;
+    }
+}

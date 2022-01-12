@@ -28,6 +28,10 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
         case BTruckers::Server::Enums::CommandsCRC::INCIDENT:
             response = BTruckers::Server::Commands::Handle::Incident(db,&user, message.payload);
             break;
+        
+        case BTruckers::Server::Enums::CommandsCRC::CLIENTMETRICS:
+            response = BTruckers::Server::Commands::Handle::ClientMetrics(db, &user, message.payload);
+            break;
 
         case BTruckers::Server::Enums::CommandsCRC::BROADCAST:
             //extra safety check (to be sure users will not be able to broadcast)

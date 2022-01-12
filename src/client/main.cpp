@@ -134,6 +134,8 @@ int main(int argc, char *argv[])
         if(!sendMetrics)
             continue;
         sendMetrics = false;
+        //schedule 1 min alarm to send data.
+        alarm(3);
         //if we are not authenticated we will not send the metrics
         if(BTruckers::Client::Core::StorageBox::GetItem("identifier") == "")
             continue;
@@ -141,57 +143,18 @@ int main(int argc, char *argv[])
         //alarm logic
         LOG_DEBUG("Received an ALARM signal. Sending the metrics now...");
         speedSensor.Read();
-        std::pair<long long, long long> gpsData = gpsSensor.Read();
+        BTruckers::Shared::Structures::Cords gpsData = gpsSensor.Read();
         //send the data now.
-        sprintf(sendMessage, "metrics %d %lld %lld", speedSensor.Read(),gpsData.first, gpsData.second);
-        LOG_DEBUG("Message is: %s", sendMessage);
+        sprintf(sendMessage, "metrics %d %.6f %.6f", speedSensor.Read(),gpsData.longitute, gpsData.latitude);
+        LOG_INFO("Message is: %s", sendMessage);
         
         if(!SendMessageToServer(sendMessage, &client, &cpv))
         {
             LOG_WARNING("Failed to send message '%s' to the server", sendMessage);
         }
 
-        //schedule 1 min alarm to send data.
-        alarm(20);
     }
 
     LOG_INFO("Uninitializing the client...");
-    // std::vector<std::string> requests = {"login zaBogdan:P@ssw0rd2", "incident 20"};
-
-    // for(auto request : requests)
-    // {
-    //     LOG_DEBUG("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
-    //     LOG_DEBUG("Command is: %s", request.c_str());
-    //     std::string requestCommand = request;
-
-    //     BTruckers::Shared::Structures::Message msg = cpv.Craft(requestCommand);
-    //     requestCommand = BTruckers::Client::Commands::HandleResponse(msg);
-
-    //     if(requestCommand == "")
-    //         continue;
-        
-    //     BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), requestCommand);
-        
-        // std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
-    //     msg = cpv.Parse(socketResponse);
-
-    //     std::string response = BTruckers::Client::Commands::HandleResponse(msg, false);
-    //     printf("[<] Response: %s\n", response.c_str());
-    // }
-
-    // do{
-        // std::string requestCommand = client.ReadFromCLI();
-    //     // std::string requestCommand = "login zaBogdan:P@ssw0rd2";
-
-    //     requestCommand = BTruckers::Client::Commands::HandleResponse(msg);
-
-    //     if(requestCommand == "")
-    //         continue;
-        
-    //     BTruckers::Shared::Protocols::TCP::Send(client.GetClientSocket(), requestCommand);
-        
-    //     std::string socketResponse = BTruckers::Shared::Protocols::TCP::Receive(client.GetClientSocket());
-    //     // break;
-    // }while(true);
     return 0;
 }

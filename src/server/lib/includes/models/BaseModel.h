@@ -31,6 +31,7 @@ namespace BTruckers
                     bool Create();
                     bool Update();
                     bool Delete();
+                    bool GetRowsCount();
 
                     //Update field
                     bool UpdateField(std::string key, std::string value);

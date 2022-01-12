@@ -6,8 +6,8 @@ std::string BTruckers::Client::Commands::Handle::Broadcast(std::string payload)
     printf("\n-=-=-=-=-=-=-=-=-=-= BROADCAST =-=-=-=-=-=-=-=-=-=-\n");
     for(auto msg : broadcastedMessages)
     {
-        if(msg.key == "optional" && BTruckers::Client::Core::StorageBox::GetItem("optionalBroadcasts") == "")
-            continue;
+        // if(msg.key == "optional" && BTruckers::Client::Core::StorageBox::GetItem("optionalBroadcasts") == "")
+        //     continue;
         if(msg.value == "")
             continue;
         printf("----> %s\n", msg.value.c_str());

@@ -48,6 +48,13 @@ namespace BTruckers
                         LOG_INFO("The signal '%d' isn't yet treated.", signal);
                 }
             }
+
+            static inline int GetSpeedLimit(int currentSpeed)
+            {
+                int possibleLimits[6] = {30, 50, 70, 90, 130};
+                std::srand(currentSpeed);
+                return possibleLimits[std::rand()%6];
+            }
         }
     }
 }

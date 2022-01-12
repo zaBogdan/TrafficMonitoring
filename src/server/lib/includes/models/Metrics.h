@@ -2,7 +2,6 @@
 #include "BTRCommon.h"
 #include "DBHandler.h"
 #include "models/BaseModel.h"
-#include "Broadcaster.h"
 #include <unordered_map>
 
 namespace BTruckers
@@ -11,16 +10,16 @@ namespace BTruckers
     {
         namespace Models
         {
-            class Entertainment : public BaseModel
+            class Metrics : public BaseModel
             {
                 private:
-                    const std::string tableName = "multimedia";
+                    const std::string tableName = "metrics";
                     DB_FIELDS fields = {
                         {"uuid", BTruckers::Shared::Structures::TrackChanges{}},
-                        {"timestamp", BTruckers::Shared::Structures::TrackChanges{}},
-                        {"eventType", BTruckers::Shared::Structures::TrackChanges{}},
-                        {"message", BTruckers::Shared::Structures::TrackChanges{}},
-                        {"rowcount", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"user_uuid", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"speed", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"longitude", BTruckers::Shared::Structures::TrackChanges{}},
+                        {"latitude", BTruckers::Shared::Structures::TrackChanges{}},
                     };
                 
                     bool lockClassChanges = false;
@@ -29,8 +28,8 @@ namespace BTruckers
                     BTruckers::Server::Core::DBHandler* dbConnection = nullptr;
 
                 public:
-                    Entertainment(BTruckers::Server::Core::DBHandler* db);
-                    Entertainment(BTruckers::Server::Core::DBHandler* db,std::string identifier, std::string value);
+                    Metrics(BTruckers::Server::Core::DBHandler* db);
+                    Metrics(BTruckers::Server::Core::DBHandler* db,std::string identifier, std::string value);
 
                     //override virtual functions
                     bool& IsLocked() override;
@@ -40,8 +39,8 @@ namespace BTruckers
                     DB_FIELDS& GetDBFields() override;
                     BTruckers::Server::Core::DBHandler* GetConnection() override;
 
+
                     //custom functions
-                    static void AddToBroadcasterQueue(BTruckers::Server::Core::DBHandler* db);
             };
         }
     }

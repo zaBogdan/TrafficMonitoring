@@ -10,13 +10,12 @@ namespace BTruckers
             class GPS
             {
                 private:
-                    long long longitute;
-                    long long latitude;
+                    BTruckers::Shared::Structures::Cords position;
 
                     void Update();
                 public:
                     GPS();
-                    std::pair<long long, long long> Read();
+                    BTruckers::Shared::Structures::Cords Read();
             };
         }
     }

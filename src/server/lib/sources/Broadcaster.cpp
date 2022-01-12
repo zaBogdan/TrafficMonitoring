@@ -24,10 +24,3 @@ void BTruckers::Server::Core::Broadcaster::PushMessageToQueue(std::string messag
     pthread_cond_signal(&waitForData);
     pthread_mutex_unlock(&broadcasterLock);
 }
-// void BTruckers::Server::Broadcaster::PushMessageToQueue(std::string message)
-// {
-//     pthread_mutex_lock(&broadcasterLock);
-//     broadcasterQueue.push(message);
-//     pthread_cond_signal(&waitForData);
-//     pthread_mutex_unlock(&broadcasterLock);
-// }

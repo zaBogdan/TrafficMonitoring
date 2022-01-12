@@ -164,6 +164,12 @@ bool BTruckers::Server::Models::BaseModel::Delete()
     return false;
 }
 
+//get rows
+bool BTruckers::Server::Models::BaseModel::GetRowsCount()
+{
+    return this->Execute("select count(*) as rowcount from "+this->GetTableName());
+}
+
 //some helpers
 bool BTruckers::Server::Models::BaseModel::Execute(std::string sql)
 {

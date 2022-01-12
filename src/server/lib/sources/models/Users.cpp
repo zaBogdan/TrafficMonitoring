@@ -55,6 +55,7 @@ BTruckers::Server::Core::DBHandler* BTruckers::Server::Models::Users::GetConnect
 
 bool BTruckers::Server::Models::Users::CheckPassword(std::string plainText)
 {
+    LOG_DEBUG("Expected password is: %s",BTruckers::Server::Core::Tokens::SHA256(plainText).c_str());
     return (this->GetField("password") == BTruckers::Server::Core::Tokens::SHA256(plainText));
 }
 

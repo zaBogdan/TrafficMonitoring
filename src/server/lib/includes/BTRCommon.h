@@ -31,6 +31,7 @@ namespace BTruckers
             static inline std::string IntToHex(int x);
             static inline int CheckResponse(int result, const char *errorMessage);
             static inline void SignalHandler(int signal);
+            static inline int GetSpeedLimit();
         }
 
         namespace Commands
@@ -56,6 +57,7 @@ namespace BTruckers
                     INCIDENT = 0x3D03A11A,
                     
                     BROADCAST = 0x1900FE56,
+                    CLIENTMETRICS = 0x446FCBC4,
 
                     LOGOUT = 0x35ccf52f,
                 };

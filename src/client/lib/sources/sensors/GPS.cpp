@@ -5,17 +5,17 @@ BTruckers::Client::Sensors::GPS::GPS()
 {
     LOG_INFO("Initializing hardware GPS sensor.");
     
-    this->longitute = 471737992;
-    this->latitude = 275719684;
+    this->position.longitute = 47.1737992;
+    this->position.latitude = 27.5719684;
     
-    LOG_INFO("The GPS metric is: %lld %lld", this->longitute, this->latitude);
+    LOG_INFO("The GPS metric is: %.6f %.6f", this->position.longitute, this->position.latitude);
 }
 
-std::pair<long long, long long> BTruckers::Client::Sensors::GPS::Read()
+BTruckers::Shared::Structures::Cords BTruckers::Client::Sensors::GPS::Read()
 {
     this->Update();
-    LOG_DEBUG("New coords are: %lld,%lld", this->longitute, this->latitude);
-    return std::pair<long long, long long>(this->longitute, this->latitude);
+    LOG_DEBUG("The GPS metric is: %.6f %.6f", this->position.longitute, this->position.latitude);
+    return this->position;
 }
 
 void BTruckers::Client::Sensors::GPS::Update()
@@ -24,10 +24,12 @@ void BTruckers::Client::Sensors::GPS::Update()
     std::srand(std::time(nullptr));
     int randomMovement = 1 + std::rand() % 10;
 
-    this->longitute = this->longitute + ((randomMovement % 2 == 0) ? randomMovement : - randomMovement) * 10000;
+    float data = (float)((randomMovement % 2 == 0) ? randomMovement : - randomMovement) / 100;
+    LOG_DEBUG("The data is: %.6f", data);
+    this->position.longitute = this->position.longitute + data;
     
     randomMovement = 1 + std::rand() % 10;
-    
-    this->latitude = this->latitude + ((randomMovement % 2 == 0) ? randomMovement : - randomMovement) * 10000;
+    data = (float)((randomMovement % 2 == 0) ? randomMovement : - randomMovement) / 100;
+    this->position.latitude = this->position.latitude + data;
 
 }
