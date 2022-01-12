@@ -2,6 +2,7 @@
 #include "BTRClient.h"
 #include "BTRShared.h"
 #include "sensors/SpeedSensor.h"
+#include "sensors/GPSSensor.h"
 #include "Client.h"
 #include "CPV.h"
 #include "protocols/TCP.h"
@@ -11,6 +12,7 @@ volatile sig_atomic_t sendMetrics = false;
 
 
 void handleAlarm( int sig ) {
+    sig = sig;
     sendMetrics = true;
 }
 
@@ -45,6 +47,7 @@ int main(int argc, char *argv[])
 
     //initializing the sensors
     BTruckers::Client::Sensors::Speed speedSensor;
+    BTruckers::Client::Sensors::GPS gpsSensor;
 
     fd_set readySockets, copySockets;
     FD_ZERO(&readySockets);
@@ -110,6 +113,7 @@ int main(int argc, char *argv[])
         //alarm logic
         LOG_DEBUG("Received an ALARM signal. Sending the metrics now...");
         speedSensor.Read();
+        gpsSensor.Read();
         //send the data now.
 
         //schedule 1 min alarm to send data.

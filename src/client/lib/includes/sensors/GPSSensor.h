@@ -10,8 +10,8 @@ namespace BTruckers
             class GPS
             {
                 private:
-                    long long X;
-                    long long Y;
+                    long long longitute;
+                    long long latitude;
 
                     void Update();
                 public:
