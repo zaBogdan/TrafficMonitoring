@@ -60,6 +60,11 @@ void BTruckers::Client::Core::StorageBox::Print()
 
 void BTruckers::Client::Core::StorageBox::DumpToFile()
 {
+    if(GetItem("storage") == "0")
+    {
+        LOG_WARNING("You have your storage turned off! To turn in back on use `enable storage`");
+        return;
+    }
     LOG_INFO("Dumping to 'client.rb' the local storage...");
     std::fstream t;
     std::vector<std::string> data;

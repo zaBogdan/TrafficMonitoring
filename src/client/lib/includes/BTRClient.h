@@ -53,12 +53,10 @@ namespace BTruckers
                     REGISTER = 0x5FF94014,
                     ENABLE_PREFERANCE = 0xF3A0C832,
                     DISABLE_PREFERANCE = 0x4F454D51,
-
+                    SETSETTINGS = 0x694B4ADE,
 
                     //to implement on server
                     GETSETTINGS = 0x88E1016,
-                    SETSETTINGS = 0x694B4ADE,
-
                     
                     //parse
                     INVALIDATETOKENS = 0x94EE425,

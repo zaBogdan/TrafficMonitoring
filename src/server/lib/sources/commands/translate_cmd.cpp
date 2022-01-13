@@ -45,9 +45,9 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
             response = BTruckers::Server::Commands::Handle::ChangeOption(db, &user,message.payload);
             break;
 
-        case BTruckers::Server::Enums::CommandsCRC::CHANGEOPTION:
-            response = BTruckers::Server::Commands::Handle::ChangeOption(db, &user,message.payload);
-            break;
+        // case BTruckers::Server::Enums::CommandsCRC::GET :
+        //     response = BTruckers::Server::Commands::Handle::ChangeOption(db, &user,message.payload);
+        //     break;
 
         case BTruckers::Server::Enums::CommandsCRC::BROADCAST:
             //extra safety check (to be sure users will not be able to broadcast)

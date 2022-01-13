@@ -59,6 +59,7 @@ namespace BTruckers
                     LOGOUT = 0x35CCF52F,
                     CHANGEOPTION = 0x8C6E5161,
                     REGISTER = 0x5FF94014,
+                    // GETSETTINGS 
 
                     //to be implemented
                 };

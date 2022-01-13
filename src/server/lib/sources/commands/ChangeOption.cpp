@@ -12,6 +12,9 @@ std::string BTruckers::Server::Commands::Handle::ChangeOption(BTruckers::Server:
         userPref.UpdateField("user_uuid", user->GetField("uuid"));
     }
 
+    if(data.key != "storage" && data.key != "media")
+        return BTruckers::Server::Commands::Craft::CommandFailed("Unknown option! You can have only 'media' or 'storage'!");
+    
     if(data.key == "storage")
     {
         data.key = "save_storage";
@@ -25,5 +28,6 @@ std::string BTruckers::Server::Commands::Handle::ChangeOption(BTruckers::Server:
     }
     userPref.Print();
 
-    return BTruckers::Server::Commands::Craft::SetSettings(payload);
+    std::vector<std::string> response = {payload};
+    return BTruckers::Server::Commands::Craft::SetSettings(PrimiteTypes::ToDict(response));
 }

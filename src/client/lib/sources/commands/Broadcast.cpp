@@ -8,13 +8,14 @@ std::string BTruckers::Client::Commands::Handle::Broadcast(std::string payload)
     {
         if(msg.key == "optional" && BTruckers::Client::Core::StorageBox::GetItem("media") != "1")
             continue;
+        if(msg.value == "")
+            continue;
+
         ++firstAdvertise;
         if(firstAdvertise == 1)
         {
             printf("\n-=-=-=-=-=-=-=-=-=-= BROADCAST =-=-=-=-=-=-=-=-=-=-\n");
         }
-        if(msg.value == "")
-            continue;
         printf("----> %s\n", msg.value.c_str());
     }
     if(firstAdvertise)
