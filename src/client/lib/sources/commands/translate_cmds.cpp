@@ -59,7 +59,7 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
             response = BTruckers::Client::Commands::Craft::Help(message.payload);
             break;
 
-        case BTruckers::Client::Enums::CommandsCRC::GETSETTINGS:
+        case BTruckers::Client::Enums::CommandsCRC::RESTORE:
             response = BTruckers::Client::Commands::Craft::GetSettings(message.payload);
             break;
 

@@ -14,6 +14,8 @@ std::string BTruckers::Client::Commands::Craft::Help(std::string payload)
     printf("----> Because we all love to have custom preferences you can customize some things:\n");
     printf("--> enable media|storage\n");
     printf("--> disable media|storage\n");
+    printf("----> Sometimes you change your device, to get your data back use:\n");
+    printf("--> restore\n");
     printf("\n");
     printf("-----> Help the community to know about what's happing on the road!\n");
     printf("--> incident <type>\n");

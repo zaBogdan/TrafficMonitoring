@@ -37,6 +37,7 @@ namespace BTruckers
                 std::string ClientMetrics(BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user, std::string payload);
                 std::string Logout(BTruckers::Server::Core::DBHandler *db, std::string payload);
                 std::string ChangeOption(BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user, std::string payload);
+                std::string GetSettings(BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user, std::string payload);
 
             }
             //end handle code

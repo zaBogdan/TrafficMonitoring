@@ -124,7 +124,11 @@ int main(int argc, char *argv[])
                 //if we are reading some user input we will send it to another thread
                 LOG_DEBUG("Reading user input");
                 std::string requestCommand = client.ReadFromCLI();
-
+                if(requestCommand == "exit")
+                {
+                    stillRunning = false;
+                    continue;
+                }
                 if(!SendMessageToServer(requestCommand, &client, &cpv))
                 {
                     LOG_WARNING("Failed to send message '%s' to the server", requestCommand.c_str());
