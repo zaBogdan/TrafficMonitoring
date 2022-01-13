@@ -18,13 +18,21 @@ CREATE TABLE metrics(
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE users(
-    uuid            VARCHAR(32) NOT NULL,
-    username        VARCHAR(60) NOT NULL,
+    uuid            VARCHAR(32) NOT NULL UNIQUE,
+    username        VARCHAR(60) NOT NULL UNIQUE,
     password        VARCHAR(128) NOT NULL,
-    email        VARCHAR(128) NOT NULL,
+    email        VARCHAR(128) NOT NULL UNIQUE,
     firstname        VARCHAR(128),
     lastname        VARCHAR(128),
     company        VARCHAR(128) 
+);
+
+DROP TABLE IF EXISTS users_preferences;
+CREATE TABLE users_preferences(
+    uuid           VARCHAR(32) NOT NULL UNIQUE, 
+    user_uuid           VARCHAR(32) NOT NULL UNIQUE, 
+    media               VARCHAR(2), 
+    save_storage        VARCHAR(2) 
 );
 
 DROP TABLE IF EXISTS multimedia;
@@ -79,4 +87,4 @@ INSERT INTO users(uuid, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, COMPANY)
 VALUES ("4e748142-3844-412e-9737-c068d0d5b667", "zaBogdan", "7a321f481f952fd8fb964ed1d2a5f86b4eaeecf5b6c04b73876dead6b780fd7e", "zabogdan@btruckers.org", "Bogdan", "Zavadovschi", "Wolveszone");
 
 -- INSERT INTO users(uuid, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, COMPANY)
--- VALUES ("6ca8222d-4a25-42f3-9f6a-6a0f6aa396cd", "gigi", "hashed", "gigi@devs.ro", "Gigi", "Camionagiul", "Gigi SRL");
+-- VALUES ("6ca8222d-4a25-42f3-9f6a-6a0f6aa396cd", "bzv", "f7745f4df4394027716de160fb2acd6aac36699576a8be586b75ac09acf6a0df", "bzavadovschi@bitdefender.ro", "Bogdan", "Zavadovschi", "Bitdefender");

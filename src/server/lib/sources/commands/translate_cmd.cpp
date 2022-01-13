@@ -42,7 +42,11 @@ std::string BTruckers::Server::Commands::Handler(BTruckers::Shared::Structures::
             break;
         
         case BTruckers::Server::Enums::CommandsCRC::CHANGEOPTION:
-            response = BTruckers::Server::Commands::Handle::ChangeOption(db, message.payload);
+            response = BTruckers::Server::Commands::Handle::ChangeOption(db, &user,message.payload);
+            break;
+
+        case BTruckers::Server::Enums::CommandsCRC::CHANGEOPTION:
+            response = BTruckers::Server::Commands::Handle::ChangeOption(db, &user,message.payload);
             break;
 
         case BTruckers::Server::Enums::CommandsCRC::BROADCAST:

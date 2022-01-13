@@ -3,11 +3,8 @@
 std::string BTruckers::Client::Commands::Handle::SetSettings(std::string payload)
 {
     //finally build the command 
-    std::vector<BTruckers::Shared::Structures::KeyValue> data = PrimiteTypes::FromDict(payload);
-    for(auto _d : data)
-    {
-        BTruckers::Client::Core::StorageBox::SetItem(_d.key, _d.value);
-    }
+    BTruckers::Shared::Structures::KeyValue data = PrimiteTypes::FromString(payload);
+    BTruckers::Client::Core::StorageBox::SetItem(data.key, data.value);
 
     BTruckers::Client::Core::StorageBox::DumpToFile();
 

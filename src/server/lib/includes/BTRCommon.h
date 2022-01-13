@@ -58,9 +58,9 @@ namespace BTruckers
                     CLIENTMETRICS = 0x446FCBC4,
                     LOGOUT = 0x35CCF52F,
                     CHANGEOPTION = 0x8C6E5161,
+                    REGISTER = 0x5FF94014,
 
                     //to be implemented
-                    REGISTER = 0x5FF94014,
                 };
             }
 

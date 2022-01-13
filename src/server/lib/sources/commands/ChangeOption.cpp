@@ -1,8 +1,29 @@
 #include "sourceCommands.h"
 
-std::string BTruckers::Server::Commands::Handle::ChangeOption(BTruckers::Server::Core::DBHandler *db,std::string payload)
+std::string BTruckers::Server::Commands::Handle::ChangeOption(BTruckers::Server::Core::DBHandler *db, BTruckers::Server::Models::Users *user,std::string payload)
 {
-    payload = PrimiteTypes::FromDict(payload);
+    BTruckers::Shared::Structures::KeyValue data = PrimiteTypes::FromString(payload);
+    BTruckers::Server::Models::Preferences userPref(db);
+
+    bool should_create = false;
+    if(!userPref.FindBy("user_uuid", user->GetField("uuid")))
+    {
+        should_create = true;
+        userPref.UpdateField("user_uuid", user->GetField("uuid"));
+    }
+
+    if(data.key == "storage")
+    {
+        data.key = "save_storage";
+    }
+    userPref.UpdateField(data.key, data.value);
+    if(should_create)
+    {
+        userPref.Create();
+    }else{
+        userPref.Update();
+    }
+    userPref.Print();
 
     return BTruckers::Server::Commands::Craft::SetSettings(payload);
 }

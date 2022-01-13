@@ -51,13 +51,13 @@ namespace BTruckers
                     LOGOUT = 0x35CCF52F,
                     HELP = 0x8875CAC,
                     REGISTER = 0x5FF94014,
+                    ENABLE_PREFERANCE = 0xF3A0C832,
+                    DISABLE_PREFERANCE = 0x4F454D51,
 
 
                     //to implement on server
-                    ENABLE_PREFERANCE = 0xF3A0C832,
-                    DISABLE_PREFERANCE = 0x4F454D51,
                     GETSETTINGS = 0x88E1016,
-                    SETSETTINGS = 0x16A1A75F,
+                    SETSETTINGS = 0x694B4ADE,
 
                     
                     //parse
