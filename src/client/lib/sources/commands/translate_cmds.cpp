@@ -7,7 +7,6 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
         LOG_ERROR("There was something wrong with the response message.");
         return "";
     }
-    message.print();
     uint32_t crcValue = BTruckers::Shared::Utils::CRCValue(message.command);
     
     std::string response = "";
