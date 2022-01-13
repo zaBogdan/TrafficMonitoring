@@ -21,7 +21,8 @@ namespace BTruckers{
                 strftime(buf, sizeof(buf), fmt, timeStruct);
                 return buf;
             }
-
+            
+            //code from https://lxp32.github.io/docs/a-simple-example-crc32-calculation/
             static inline uint32_t CRCValue(std::string s)
             {
                 uint32_t crc=0xFFFFFFFF;
