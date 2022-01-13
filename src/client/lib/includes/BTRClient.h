@@ -55,6 +55,7 @@ namespace BTruckers
                     DISABLE_PREFERANCE = 0x4F454D51,
                     SETSETTINGS = 0x694B4ADE,
                     RESTORE = 0x87D72FFF,
+                    VIEW_SETTINGS = 0xFEFDAB8E,
                     
                     //parse
                     INVALIDATETOKENS = 0x94EE425,

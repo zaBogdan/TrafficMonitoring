@@ -168,7 +168,7 @@ void* threadFunction(void* arg)
             std::string response = BTruckers::Server::Commands::Handler(request, &db);
             //getting an internal state for the broadcaster function
             threadData->sockets[idx].userUUID = request.userUUID;
-            LOG_CRITICAL("[ THREAD %d ] User uuid is: %s",threadData->idx, threadData->sockets[idx].userUUID.c_str());
+            LOG_DEBUG("[ THREAD %d ] User uuid is: %s",threadData->idx, threadData->sockets[idx].userUUID.c_str());
 
             if(!BTruckers::Shared::Protocols::TCP::Send(threadData->sockets[idx].socketId,response))
             {

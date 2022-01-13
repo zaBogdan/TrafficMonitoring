@@ -43,6 +43,21 @@ std::string BTruckers::Server::Commands::Handle::ClientMetrics(BTruckers::Server
         metrics.Update();
     }
     int currentSpeed = std::stoi(speed);
-    std::string response= "Successfully updated the metrics in the database. Current road speed limit is "+ std::to_string(BTruckers::Server::Utils::GetSpeedLimit(currentSpeed))+" km/h!";
+    std::string close_time = std::to_string(BTruckers::Shared::Utils::GetUNIXTimestamp()/1000)+"%";
+    BTruckers::Server::Models::Incidents incident(db);
+
+    std::string speed_limit = std::to_string(BTruckers::Server::Utils::GetSpeedLimit(currentSpeed))+" km/h!";
+    if(incident.FindBy("timestamp", close_time, "LIKE"))
+    {
+        if(incident.GetField("incident_type") == "21")
+        {
+            speed_limit = "30km/h (limited due to major accident!)";
+        }else{
+            speed_limit = speed_limit + " Watch out, an incident has been reported near you!";
+        }
+    }
+
+
+    std::string response= "Successfully updated the metrics in the database. Current road speed limit is "+ speed_limit;
     return BTruckers::Server::Commands::Craft::CommandSuccess(response);
 }

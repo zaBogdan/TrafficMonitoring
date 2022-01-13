@@ -65,6 +65,10 @@ std::string BTruckers::Client::Commands::HandleResponse(BTruckers::Shared::Struc
         case BTruckers::Client::Enums::CommandsCRC::SETSETTINGS:
             response = BTruckers::Client::Commands::Handle::SetSettings(message.payload);
             break;
+        
+        case BTruckers::Client::Enums::CommandsCRC::VIEW_SETTINGS:
+            response = BTruckers::Client::Commands::Craft::ViewSettings(message.payload);
+            break;
 
         case BTruckers::Client::Enums::CommandsCRC::FAILEDCOMMAND:
         case BTruckers::Client::Enums::CommandsCRC::SUCCESSCOMMAND:

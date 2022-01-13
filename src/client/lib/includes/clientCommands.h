@@ -28,6 +28,7 @@ namespace BTruckers{
                 std::string Logout(std::string payload);
                 std::string Register(std::string payload);
                 std::string Help(std::string payload);
+                std::string ViewSettings(std::string payload);
                 std::string SwitchPreference(std::string cmd, std::string payload);
                 std::string GetSettings(std::string payload);
                 std::string SendMetrics(std::string payload);

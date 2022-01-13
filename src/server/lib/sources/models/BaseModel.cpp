@@ -45,10 +45,10 @@ std::string BTruckers::Server::Models::BaseModel::GetField(std::string key)
 }
 
 //The CRUD Operations
-bool BTruckers::Server::Models::BaseModel::FindBy(std::string identifier, std::string value)
+bool BTruckers::Server::Models::BaseModel::FindBy(std::string identifier, std::string value, std::string customWhere)
 {
     std::string sql = BTruckers::Server::Core::DBHandler::PrepareSQL(
-        "SELECT * FROM "+this->GetTableName()+" WHERE "+ identifier + " = '?' LIMIT 1", 
+        "SELECT * FROM "+this->GetTableName()+" WHERE "+ identifier + " " + customWhere +" '?' LIMIT 1", 
         value.c_str());
     if(!this->Execute(sql))
     {

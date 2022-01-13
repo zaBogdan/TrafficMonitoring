@@ -27,7 +27,7 @@ namespace BTruckers
                     virtual inline BTruckers::Server::Core::DBHandler* GetConnection() = 0;
 
                     //CRUD
-                    bool FindBy(std::string identifier, std::string value);
+                    bool FindBy(std::string identifier, std::string value, std::string customWhere = "=");
                     bool Create();
                     bool Update();
                     bool Delete();

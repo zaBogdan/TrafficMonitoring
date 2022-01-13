@@ -16,6 +16,8 @@ std::string BTruckers::Client::Commands::Craft::Help(std::string payload)
     printf("--> disable media|storage\n");
     printf("----> Sometimes you change your device, to get your data back use:\n");
     printf("--> restore\n");
+    printf("----> Forgot your settings? View them!\n");
+    printf("--> view settings\n");
     printf("\n");
     printf("-----> Help the community to know about what's happing on the road!\n");
     printf("--> incident <type>\n");
