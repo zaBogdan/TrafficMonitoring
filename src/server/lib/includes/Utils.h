@@ -26,6 +26,8 @@ namespace BTruckers
                 if(result == ERROR_SOCKET)
                 {
                     LOG_ERROR(errorMessage);
+                    BTruckers::Server::Core::serverRunning = false;
+                    alarm(1);
                 }
                 return result;
             }
@@ -39,7 +41,6 @@ namespace BTruckers
                     case SIGTERM:
                         LOG_INFO("Received SIGINT. Starting the shutdown procedure...");
                         BTruckers::Server::Core::serverRunning = false;
-                        pthread_cond_signal(&BTruckers::Server::Core::Broadcaster::waitForData);
                         break;
 
                     default:

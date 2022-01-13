@@ -57,9 +57,9 @@ namespace BTruckers
                     BROADCAST = 0x1900FE56,
                     CLIENTMETRICS = 0x446FCBC4,
                     LOGOUT = 0x35CCF52F,
+                    CHANGEOPTION = 0x8C6E5161,
 
                     //to be implemented
-                    CHANGEOPTION = 0x8C6E5161,
                     REGISTER = 0x5FF94014,
                 };
             }

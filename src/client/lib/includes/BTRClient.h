@@ -50,6 +50,7 @@ namespace BTruckers
                     METRICS = 0x228AAAE7,
                     LOGOUT = 0x35CCF52F,
                     HELP = 0x8875CAC,
+                    REGISTER = 0x5FF94014,
 
 
                     //to implement on server
@@ -57,7 +58,6 @@ namespace BTruckers
                     DISABLE_PREFERANCE = 0x4F454D51,
                     GETSETTINGS = 0x88E1016,
                     SETSETTINGS = 0x16A1A75F,
-                    REGISTER = 0x5FF94014,
 
                     
                     //parse

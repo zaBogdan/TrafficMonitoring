@@ -264,6 +264,7 @@ int main()
     }
 
     LOG_INFO("[ MAIN ] Warm shutdown started. Waiting for all threads to finish...");
+    pthread_cond_signal(&BTruckers::Server::Core::Broadcaster::waitForData);
 
     pthread_join(broadcasterThread, NULL);
     LOG_DEBUG("Broadcaster thread finished...");
