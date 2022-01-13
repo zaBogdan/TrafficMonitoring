@@ -51,7 +51,7 @@ std::string BTruckers::Server::Core::Tokens::UUID()
     return ss.str();
 }
 
-
+// https://stackoverflow.com/questions/57063250/can-i-create-openssl-ec-key-when-i-have-public-key-in-hex-format-using-c
 std::string BTruckers::Server::Core::Tokens::SHA256(std::string str)
 {
     EVP_MD_CTX* context = EVP_MD_CTX_new();

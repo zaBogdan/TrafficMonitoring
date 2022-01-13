@@ -10,4 +10,4 @@ documentation/*
 **/dump
 *.txt
 *sqlite3
-*sb
+**/.sb
